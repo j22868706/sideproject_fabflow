@@ -1,27 +1,40 @@
-"""Domain model for a wafer lot."""
-
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import StrEnum
+
+from simulator.entities.process_step import ProcessStep
 
 
 class LotPriority(StrEnum):
-    """Supported wafer-lot priority levels."""
+    """Priority level assigned to a wafer lot."""
 
-    NORMAL = "normal"
-    HOT = "hot"
+    NORMAL = "NORMAL"
+    HOT = "HOT"
 
 
-@dataclass(frozen=True)
+class LotStatus(StrEnum):
+    """Current lifecycle state of a wafer lot."""
+
+    CREATED = "CREATED"
+    WAITING = "WAITING"
+    PROCESSING = "PROCESSING"
+    COMPLETED = "COMPLETED"
+
+
+@dataclass
 class Lot:
-    """A simplified wafer lot used by the simulation engine."""
+    """A wafer lot moving through the simulated manufacturing system."""
 
     lot_id: str
-    priority: LotPriority
     arrival_time: float
     due_date: float
+    route: list[ProcessStep] = field(default_factory=list)
+    priority: LotPriority = LotPriority.NORMAL
+    current_step: int = 0
+    status: LotStatus = LotStatus.CREATED
+    started_at: float | None = None
+    completed_at: float | None = None
 
     def __post_init__(self) -> None:
-        """Validate the lot configuration."""
         if not self.lot_id.strip():
             raise ValueError("lot_id must not be empty")
 
@@ -30,3 +43,20 @@ class Lot:
 
         if self.due_date < self.arrival_time:
             raise ValueError("due_date must not be earlier than arrival_time")
+
+    @property
+    def current_process_step(self) -> ProcessStep:
+        if not self.route:
+            raise IndexError("lot does not have a process route")
+
+        if self.current_step >= len(self.route):
+            raise IndexError("lot has completed every process step")
+
+        return self.route[self.current_step]
+
+    @property
+    def cycle_time(self) -> float | None:
+        if self.completed_at is None:
+            return None
+
+        return self.completed_at - self.arrival_time
