@@ -1,14 +1,46 @@
 # FabFlow
 
-FabFlow is a reproducible discrete-event simulation platform for evaluating
+FabFlow is a reproducible discrete-event simulation platform for studying
 wafer-lot dispatching policies and Automated Material Handling System (AMHS)
-constraints in a simplified semiconductor fabrication environment.
+constraints in a simplified semiconductor manufacturing environment.
+
+The project is designed as an intelligent-manufacturing engineering portfolio
+project. It emphasizes deterministic simulation, measurable scheduling
+trade-offs, automated testing, API design, observability, and cloud-native
+deployment.
 
 ## Project Status
 
-FabFlow is under active development. The first milestone establishes the
-project structure, domain terminology, reproducible testing, and a manually
-verified baseline scenario.
+FabFlow is under active development.
+
+The current implementation provides a deterministic, single-machine,
+multi-lot simulation engine built with SimPy. It includes validated domain
+entities, FIFO resource queueing, structured lifecycle events, fixed-seed
+execution, and automated tests.
+
+### Implemented
+
+- `Lot`, `ProcessStep`, `Machine`, and `Queue` domain entities
+- Normal and hot lot priority classifications
+- Lot and machine lifecycle status tracking
+- Single-machine capacity enforcement with SimPy
+- Lot arrival, queueing, processing, and completion events
+- Structured in-memory event logging
+- Fixed-seed simulation execution
+- Deterministic baseline tests
+- Pytest unit tests
+- Ruff linting and formatting
+
+### Planned
+
+- FIFO, Shortest Processing Time, and Critical Ratio policy abstractions
+- Machine failure, repair, and maintenance behavior
+- KPI calculation and policy comparison reports
+- Multiple process stages and machine groups
+- AMHS transportation and stocker constraints
+- FastAPI and PostgreSQL integration
+- Dashboard and observability
+- Docker Compose and Kubernetes deployment
 
 ## Problem Statement
 
@@ -18,7 +50,9 @@ resources. Dispatching decisions affect cycle time, work in process (WIP),
 throughput, equipment utilization, queue waiting time, and on-time delivery.
 
 FabFlow provides a controlled simulation environment for studying these
-trade-offs under repeatable experimental conditions.
+trade-offs under repeatable experimental conditions. The same scenario and
+random seed can be reused across dispatching policies so that results can be
+compared fairly.
 
 ## Goals
 
@@ -41,7 +75,22 @@ trade-offs under repeatable experimental conditions.
 - A dashboard comparing at least two policies
 - Docker Compose services for the API, worker, database, Prometheus, and Grafana
 
-## Architecture
+## Current Simulation Flow
+
+```mermaid
+flowchart LR
+    A[Lot arrives] --> Q[Lot enters queue]
+    Q --> W[Lot requests machine]
+    W --> P[Processing starts]
+    P --> C[Processing completes]
+    C --> D[Lot completes]
+```
+
+The current engine uses a SimPy resource to enforce machine capacity. Lots wait
+for that resource in deterministic FIFO request order. Explicit dispatching
+policy classes will replace this implicit behavior in a later increment.
+
+## Target Architecture
 
 ```mermaid
 flowchart TD
@@ -55,7 +104,32 @@ flowchart TD
     P --> G[Grafana]
 ```
 
-## Repository Structure
+This diagram represents the target MVP architecture. The API, database,
+dashboard, monitoring, and deployment components are not part of the current
+simulation-engine increment.
+
+## Current Repository Structure
+
+```text
+fabflow/
+├── simulator/
+│   ├── engine.py
+│   ├── entities/
+│   │   ├── lot.py
+│   │   ├── machine.py
+│   │   ├── process_step.py
+│   │   └── queue.py
+│   └── events/
+│       └── event.py
+├── tests/
+├── docs/
+│   ├── baseline-scenario.md
+│   └── domain-model.md
+├── pyproject.toml
+└── README.md
+```
+
+## Target Repository Structure
 
 ```text
 fabflow/
@@ -98,26 +172,47 @@ python -m pip install --upgrade pip
 python -m pip install -e ".[dev]"
 ```
 
-### Run the CLI
+### Verify the Project
+
+Run all automated checks before committing changes:
 
 ```bash
-fabflow
-```
-
-### Run Tests
-
-```bash
-pytest
-```
-
-### Run Quality Checks
-
-```bash
-ruff check .
 ruff format --check .
+ruff check .
+pytest -v
 ```
+
+To apply Ruff formatting automatically:
+
+```bash
+ruff format .
+```
+
+### CLI Status
+
+The command-line simulation interface is planned for a later increment. The
+current simulation engine is exercised through automated tests.
+
+## Determinism and Reproducibility
+
+Each simulation engine is initialized with a fixed random seed. The current
+baseline contains no stochastic behavior, so its reproducibility comes from
+fixed inputs and deterministic SimPy event ordering. Later increments will use
+the engine-owned random generator for processing-time variation, machine
+failures, and repairs.
+
+Fair policy comparisons will use the same:
+
+- Random seed
+- Lot arrival sequence
+- Processing-time samples
+- Failure and repair samples
+- Simulation horizon
+- Machine and AMHS configuration
 
 ## Core Metrics
+
+The completed MVP will report:
 
 - Average and P95 cycle time
 - Throughput
@@ -126,6 +221,9 @@ ruff format --check .
 - Machine utilization
 - On-time delivery rate
 - Transport time and delivery-time accuracy
+
+Metric calculation is planned for a later increment. The current engine records
+the timestamps and state transitions needed to derive these measurements.
 
 ## Documentation
 
@@ -159,7 +257,7 @@ dispatching systems.
 
 1. Project foundation and hand-calculated baseline
 2. Deterministic simulation engine
-3. Dispatching policies and equipment reliability
+3. Dispatching policies, equipment reliability, and KPI calculation
 4. AMHS and stocker constraints
 5. FastAPI and PostgreSQL
 6. Dashboard and observability
