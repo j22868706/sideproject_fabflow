@@ -3,7 +3,9 @@ from simulator.entities.process_step import ProcessStep
 from simulator.entities.scenario import MachineConfig, SimulationScenario
 
 
-def create_baseline_scenario(seed: int = 42) -> SimulationScenario:
+def create_baseline_scenario(seed: int = 42, number_of_lots: int = 5) -> SimulationScenario:
+    if number_of_lots <= 0:
+        raise ValueError("number_of_lots must be positive")
     steps = (
         ProcessStep(
             step_id="STEP-LITHO",
@@ -40,7 +42,7 @@ def create_baseline_scenario(seed: int = 42) -> SimulationScenario:
             route=list(steps),
             priority=LotPriority.HOT if index == 0 else LotPriority.NORMAL,
         )
-        for index in range(5)
+        for index in range(number_of_lots)
     )
 
     return SimulationScenario(

@@ -21,6 +21,7 @@ class Machine:
     capacity: int = 1
     status: MachineStatus = MachineStatus.IDLE
     current_lot: Lot | None = None
+    active_lots: list[Lot] = field(default_factory=list)
     busy_time: float = 0.0
     resource: simpy.Resource = field(init=False)
 

@@ -1,5 +1,10 @@
 # FabFlow Domain Model
 
+> The sections below record the original single-machine design. For the current
+> Day 2 engine, scenario model, event fields, capacity semantics, and execution
+> contract, see [Day 2 walkthrough](day2-walkthrough.md). Multi-stage execution
+> and `SimulationScenario` are now implemented; advanced policies and KPIs remain planned.
+
 ## Purpose
 
 This document defines FabFlow's domain language, implemented simulation model,

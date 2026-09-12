@@ -17,3 +17,4 @@ class SimulationEvent:
     lot_id: str
     machine_id: str | None = None
     queue_depth: int | None = None
+    step_id: str | None = None

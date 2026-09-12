@@ -10,10 +10,12 @@ trade-offs, automated testing, API design, visualization, and container deployme
 
 ## Project Status
 
-FabFlow is under active development.
+Day 1 project setup and Day 2 three-stage simulation are implemented and locally
+validated. Day 3 dispatching policies, equipment reliability, and KPI comparison
+are next.
 
-The current implementation provides a deterministic, single-machine,
-multi-lot simulation engine built with SimPy. It includes validated domain
+The current implementation provides a deterministic, multi-stage,
+multi-machine simulation engine built with SimPy. It includes validated domain
 entities, FIFO resource queueing, structured lifecycle events, fixed-seed
 execution, and automated tests.
 
@@ -22,12 +24,14 @@ execution, and automated tests.
 - `Lot`, `ProcessStep`, `Machine`, and `Queue` domain entities
 - `SimulationScenario` and `MachineConfig` for validated experiment inputs
 - `SimulationResult` and immutable `SimulationEvent` records
-- Three-stage scenario creation with four machines and five lots
+- Three-stage execution: Lithography → Etching → Inspection
+- A five-lot scenario preview and a 20-lot executable demo
+- Average cycle time and throughput calculated from simulation results
 - Normal and hot lot priority classifications
 - Lot and machine lifecycle status tracking
-- Single-machine capacity enforcement with SimPy
+- Machine-group FIFO queues and per-machine capacity enforcement with SimPy
 - Lot arrival, queueing, processing, and completion events
-- Structured in-memory event logging
+- Structured in-memory event logging with process-step and machine identifiers
 - Fixed-seed simulation execution
 - Deterministic baseline tests
 - Pytest unit tests
@@ -37,8 +41,7 @@ execution, and automated tests.
 
 - FIFO, Shortest Processing Time, and Critical Ratio policy abstractions
 - Machine failure and repair behavior
-- KPI calculation and policy comparison reports
-- Multiple process stages and machine groups
+- Remaining KPI calculations and policy comparison reports
 - Simplified AMHS transportation
 - FastAPI service
 - Streamlit policy comparison dashboard
@@ -85,12 +88,16 @@ flowchart LR
     Q --> W[Lot requests machine]
     W --> P[Processing starts]
     P --> C[Processing completes]
-    C --> D[Lot completes]
+    C --> N{More route steps?}
+    N -->|Yes| Q
+    N -->|No| D[Lot completes]
 ```
 
-The current engine uses a SimPy resource to enforce machine capacity. Lots wait
-for that resource in deterministic FIFO request order. Explicit dispatching
-policy classes will replace this implicit behavior in a later increment.
+Each station has a shared FIFO queue. The engine assigns waiting lots to
+available capacity slots on eligible machines and uses SimPy resources to
+enforce each machine's capacity. Equal-time requests follow deterministic
+SimPy/input order. A lot completes only after every route step finishes.
+Explicit dispatching policy classes are planned for Day 3.
 
 ## Target Architecture
 
@@ -110,6 +117,10 @@ dashboard, and Docker Compose deployment remain planned.
 
 ```text
 fabflow/
+├── app/
+│   ├── cli.py
+│   └── simulation/
+│       └── demo.py
 ├── simulator/
 │   ├── engine.py
 │   ├── entities/
@@ -125,6 +136,7 @@ fabflow/
 ├── tests/
 ├── docs/
 │   ├── baseline-scenario.md
+│   ├── day2-walkthrough.md
 │   └── domain-model.md
 ├── pyproject.toml
 └── README.md
@@ -211,15 +223,59 @@ and lots. The example contains two Lithography machines, one Etching machine,
 and one Inspection machine, with four Normal lots and one Hot lot. All times
 are synthetic and expressed in minutes.
 
-This command creates and describes the scenario. Executing lots through all
-three stages remains Day 2 work; the current engine executes a single step on
-one machine. Call `create_baseline_scenario()` for fresh lots before each run,
-since the lots stored in a scenario are mutable.
+This command creates and describes the scenario. `SimulationEngine.run_scenario()`
+executes every route step and copies input lots to keep scenario inputs unchanged.
+Use a fresh engine with the scenario seed for each execution.
 
-### CLI Status
+### Run the Three-Stage Demo
 
-The installed `fabflow` command prints project information. The current
-single-machine simulation engine is exercised through automated tests.
+The installed `fabflow` command prints project information. Run the Day 2
+simulation demo with:
+
+```bash
+python -m app.simulation.demo
+```
+
+```text
+Completed lots: 20
+Average cycle time: 70.5 minutes
+Throughput: 6.86 lots/hour
+```
+
+These values are calculated from the 20-lot scenario. Throughput uses the
+observation window from time zero to the last completion (175 minutes).
+Normal and Hot lots currently share FIFO ordering; priority dispatching is
+Day 3 work. Processing times are fixed, with no transport delays or failures.
+See [Day 2 walkthrough](docs/day2-walkthrough.md) for implementation details.
+
+### Run a Scenario in Python
+
+```python
+from simulator.engine import SimulationEngine
+from simulator.scenarios.baseline import create_baseline_scenario
+
+scenario = create_baseline_scenario(seed=42, number_of_lots=20)
+result = SimulationEngine(seed=scenario.seed).run_scenario(scenario)
+
+print(result.average_cycle_time)
+print(result.throughput_per_hour)
+print(result.events[0])
+```
+
+Each engine runs once. `run_scenario()` copies the scenario's lots, allowing
+repeat runs with fresh engines without changing the input scenario.
+
+### Day 2 Validation
+
+Local validation on Python 3.12.14 passes 25 tests, Ruff lint, and Ruff formatting.
+The tests cover route order, arrival and completion timestamps, eligible-machine
+selection, capacity enforcement, overlapping machine activity, final empty
+queues, FIFO ties, and repeatable results without input mutation.
+
+The five-lot scenario has hand-checked completion times of 23, 31, 39, 47, and
+55 minutes, with an average cycle time of 33 minutes. The original single-machine
+baseline remains covered for compatibility. These are local results; remote CI
+status must be checked separately.
 
 ## Determinism and Reproducibility
 
@@ -250,11 +306,13 @@ The completed MVP will report:
 - On-time delivery rate
 - Transport time and delivery-time accuracy
 
-Metric calculation is planned for a later increment. The current engine records
-the timestamps and state transitions needed to derive these measurements.
+Average cycle time and throughput are available on `SimulationResult`. The
+remaining manufacturing KPI calculations are planned for Day 3; transport
+metrics follow with the AMHS model in Day 4.
 
 ## Documentation
 
+- [Day 2 walkthrough](docs/day2-walkthrough.md)
 - [Domain Model](docs/domain-model.md)
 - [Hand-Calculated Baseline Scenario](docs/baseline-scenario.md)
 
@@ -283,8 +341,8 @@ dispatching systems.
 
 ## Roadmap
 
-1. Project foundation, domain models, and three-stage scenario creation
-2. Deterministic three-stage simulation engine
+1. **Implemented:** project foundation, domain models, and three-stage scenario creation
+2. **Implemented:** deterministic three-stage simulation engine
 3. FIFO, SPT, Critical Ratio, equipment reliability, and KPI comparison
 4. Simplified AMHS transportation
 5. FastAPI service with synchronous simulation execution
