@@ -39,3 +39,7 @@ dist/
 # Local databases
 *.db
 *.sqlite3
+
+AGENTS.md
+
+Guideline.txt

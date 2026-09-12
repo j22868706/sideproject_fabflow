@@ -6,8 +6,7 @@ constraints in a simplified semiconductor manufacturing environment.
 
 The project is designed as an intelligent-manufacturing engineering portfolio
 project. It emphasizes deterministic simulation, measurable scheduling
-trade-offs, automated testing, API design, observability, and cloud-native
-deployment.
+trade-offs, automated testing, API design, visualization, and container deployment.
 
 ## Project Status
 
@@ -21,6 +20,9 @@ execution, and automated tests.
 ### Implemented
 
 - `Lot`, `ProcessStep`, `Machine`, and `Queue` domain entities
+- `SimulationScenario` and `MachineConfig` for validated experiment inputs
+- `SimulationResult` and immutable `SimulationEvent` records
+- Three-stage scenario creation with four machines and five lots
 - Normal and hot lot priority classifications
 - Lot and machine lifecycle status tracking
 - Single-machine capacity enforcement with SimPy
@@ -34,13 +36,13 @@ execution, and automated tests.
 ### Planned
 
 - FIFO, Shortest Processing Time, and Critical Ratio policy abstractions
-- Machine failure, repair, and maintenance behavior
+- Machine failure and repair behavior
 - KPI calculation and policy comparison reports
 - Multiple process stages and machine groups
-- AMHS transportation and stocker constraints
-- FastAPI and PostgreSQL integration
-- Dashboard and observability
-- Docker Compose and Kubernetes deployment
+- Simplified AMHS transportation
+- FastAPI service
+- Streamlit policy comparison dashboard
+- Docker Compose deployment for the API and dashboard
 
 ## Problem Statement
 
@@ -60,20 +62,20 @@ compared fairly.
 - Compare dispatching policies using identical scenarios and random seeds.
 - Quantify cycle time, throughput, WIP, utilization, and on-time delivery.
 - Expose experiment creation and results through a FastAPI service.
-- Monitor service health and simulation results with Prometheus and Grafana.
-- Run the complete application with Docker Compose and local Kubernetes.
+- Visualize results and scheduling trade-offs in Streamlit.
+- Run the API and dashboard with Docker Compose.
 
 ## Planned MVP
 
-- At least three process stages with one to three machines per stage
+- Three process stages: Lithography, Etching, and Inspection
+- One to two machines per stage
 - Normal lots and high-priority hot lots
 - Processing, queueing, transport, machine failure, and repair events
 - FIFO, Shortest Processing Time, and Critical Ratio dispatching policies
 - Fixed random seeds for reproducible experiments
-- FastAPI endpoints for scenarios, runs, events, and metrics
-- PostgreSQL persistence
-- A dashboard comparing at least two policies
-- Docker Compose services for the API, worker, database, Prometheus, and Grafana
+- FastAPI endpoints to create runs with scenario inputs and query results, events, and metrics
+- A Streamlit dashboard comparing FIFO, Shortest Processing Time, and Critical Ratio
+- Docker Compose services for the API and Streamlit dashboard
 
 ## Current Simulation Flow
 
@@ -94,19 +96,15 @@ policy classes will replace this implicit behavior in a later increment.
 
 ```mermaid
 flowchart TD
-    U[Web Dashboard] --> API[FastAPI]
-    API --> DB[(PostgreSQL)]
-    API --> Q[Job Queue]
-    Q --> S[SimPy Worker]
-    S --> DB
-    API --> P[Prometheus]
-    S --> P
-    P --> G[Grafana]
+    U[Streamlit Dashboard] --> API[FastAPI]
+    API --> S[SimPy Engine]
+    S --> R[In-memory Results and Events]
+    API --> R
 ```
 
-This diagram represents the target MVP architecture. The API, database,
-dashboard, monitoring, and deployment components are not part of the current
-simulation-engine increment.
+This diagram represents the target MVP architecture. The API will execute
+simulations synchronously and retain results in memory. API endpoints, the
+dashboard, and Docker Compose deployment remain planned.
 
 ## Current Repository Structure
 
@@ -118,9 +116,12 @@ fabflow/
 │   │   ├── lot.py
 │   │   ├── machine.py
 │   │   ├── process_step.py
-│   │   └── queue.py
-│   └── events/
-│       └── event.py
+│   │   ├── queue.py
+│   │   └── scenario.py
+│   ├── events/
+│   │   └── event.py
+│   └── scenarios/
+│       └── baseline.py
 ├── tests/
 ├── docs/
 │   ├── baseline-scenario.md
@@ -136,19 +137,17 @@ fabflow/
 ├── app/
 │   ├── api/              # HTTP endpoints and request validation
 │   ├── core/             # Configuration and shared infrastructure
-│   ├── models/           # API and persistence models
-│   ├── services/         # Application use cases
-│   └── workers/          # Background simulation jobs
+│   ├── models/           # API request and response models
+│   └── services/         # Application use cases
 ├── simulator/
 │   ├── entities/         # Simulation domain entities
 │   ├── events/           # Event definitions and event log
+│   ├── scenarios/        # Reproducible scenario factories
 │   ├── policies/         # Dispatching policies
 │   └── metrics/          # KPI calculations
 ├── dashboard/            # Experiment and comparison interface
-├── deployments/
-│   ├── compose/          # Docker Compose configuration
-│   └── kubernetes/       # Kind/Kubernetes manifests
-├── monitoring/           # Prometheus and Grafana configuration
+├── Dockerfile            # API container
+├── docker-compose.yml    # API and dashboard services
 ├── experiments/          # Controlled experiment definitions
 ├── tests/                # Unit and integration tests
 ├── docs/                 # Architecture and domain documentation
@@ -160,13 +159,13 @@ fabflow/
 
 ### Requirements
 
-- Python 3.11 or newer
+- Python 3.12 (the development and CI baseline)
 - Git
 
 ### Setup
 
 ```bash
-python3 -m venv .venv
+python3.12 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install -e ".[dev]"
@@ -188,10 +187,39 @@ To apply Ruff formatting automatically:
 ruff format .
 ```
 
+### Create the Three-Stage Scenario
+
+After installation, run from the repository root:
+
+```bash
+python -m simulator.scenarios.baseline
+```
+
+Expected output:
+
+```text
+Scenario: three-stage-baseline
+Seed: 42
+Stages: 3
+Machines: 4
+Lots: 5
+Route: Lithography -> Etching -> Inspection
+```
+
+`SimulationScenario` groups the seed, process steps, machine configurations,
+and lots. The example contains two Lithography machines, one Etching machine,
+and one Inspection machine, with four Normal lots and one Hot lot. All times
+are synthetic and expressed in minutes.
+
+This command creates and describes the scenario. Executing lots through all
+three stages remains Day 2 work; the current engine executes a single step on
+one machine. Call `create_baseline_scenario()` for fresh lots before each run,
+since the lots stored in a scenario are mutable.
+
 ### CLI Status
 
-The command-line simulation interface is planned for a later increment. The
-current simulation engine is exercised through automated tests.
+The installed `fabflow` command prints project information. The current
+single-machine simulation engine is exercised through automated tests.
 
 ## Determinism and Reproducibility
 
@@ -243,8 +271,8 @@ complex recipe qualification, and real facility path optimization.
 
 ## Connection to Intelligent Manufacturing
 
-FabFlow demonstrates how discrete-event simulation, scheduling, observability,
-API design, and cloud-native deployment can be combined to evaluate
+FabFlow demonstrates how discrete-event simulation, scheduling, visualization,
+API design, and container deployment can be combined to evaluate
 manufacturing decisions.
 
 The project also explores conceptual similarities between manufacturing
@@ -255,14 +283,24 @@ dispatching systems.
 
 ## Roadmap
 
-1. Project foundation and hand-calculated baseline
-2. Deterministic simulation engine
-3. Dispatching policies, equipment reliability, and KPI calculation
-4. AMHS and stocker constraints
-5. FastAPI and PostgreSQL
-6. Dashboard and observability
-7. Docker and Kubernetes
-8. Controlled experiments and portfolio packaging
+1. Project foundation, domain models, and three-stage scenario creation
+2. Deterministic three-stage simulation engine
+3. FIFO, SPT, Critical Ratio, equipment reliability, and KPI comparison
+4. Simplified AMHS transportation
+5. FastAPI service with synchronous simulation execution
+6. Streamlit dashboard, Docker Compose, and end-to-end demo
+7. Tests, documentation, and portfolio packaging
+
+## Future Work
+
+The following are outside the seven-day MVP:
+
+- PostgreSQL persistence and database migrations
+- Background workers and job queues such as Celery or RQ, with Redis
+- Prometheus and Grafana monitoring
+- Kubernetes and Kind deployment
+- Stocker capacity constraints
+- Advanced scheduling and large-scale performance testing
 
 ## License
 
