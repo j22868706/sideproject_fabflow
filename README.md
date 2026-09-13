@@ -1,240 +1,31 @@
 # FabFlow
 
-FabFlow is a reproducible discrete-event simulation platform for studying
-wafer-lot dispatching policies and Automated Material Handling System (AMHS)
-constraints in a simplified semiconductor manufacturing environment.
+FabFlow is a Python discrete-event simulator for studying dispatching decisions
+in a simplified semiconductor fab. Synthetic wafer lots compete for machine
+capacity across Lithography, Etching, and Inspection. Reproducible experiments
+compare cycle time, throughput, on-time delivery, and equipment utilization.
 
-The project is designed as an intelligent-manufacturing engineering portfolio
-project. It emphasizes deterministic simulation, measurable scheduling
-trade-offs, automated testing, API design, visualization, and container deployment.
+**Day 1–4 are implemented and locally validated:** domain models, multi-stage
+simulation, FIFO/SPT/Critical Ratio dispatching, Hot lot insertion with Normal
+lot aging protection, machine failure/repair, finite AMHS vehicles, and KPI comparison reports.
+API endpoints, a dashboard, and container deployment are scheduled for Day 5–7.
 
-## Project Status
+> This project uses synthetic data and a simplified semiconductor manufacturing
+> model. It does not contain proprietary TSMC manufacturing data.
 
-Day 1 project setup and Day 2 three-stage simulation are implemented and locally
-validated. Day 3 dispatching policies, equipment reliability, and KPI comparison
-are next.
+## Quick Start
 
-The current implementation provides a deterministic, multi-stage,
-multi-machine simulation engine built with SimPy. It includes validated domain
-entities, FIFO resource queueing, structured lifecycle events, fixed-seed
-execution, and automated tests.
-
-### Implemented
-
-- `Lot`, `ProcessStep`, `Machine`, and `Queue` domain entities
-- `SimulationScenario` and `MachineConfig` for validated experiment inputs
-- `SimulationResult` and immutable `SimulationEvent` records
-- Three-stage execution: Lithography → Etching → Inspection
-- A five-lot scenario preview and a 20-lot executable demo
-- Average cycle time and throughput calculated from simulation results
-- Normal and hot lot priority classifications
-- Lot and machine lifecycle status tracking
-- Machine-group FIFO queues and per-machine capacity enforcement with SimPy
-- Lot arrival, queueing, processing, and completion events
-- Structured in-memory event logging with process-step and machine identifiers
-- Fixed-seed simulation execution
-- Deterministic baseline tests
-- Pytest unit tests
-- Ruff linting and formatting
-
-### Planned
-
-- FIFO, Shortest Processing Time, and Critical Ratio policy abstractions
-- Machine failure and repair behavior
-- Remaining KPI calculations and policy comparison reports
-- Simplified AMHS transportation
-- FastAPI service
-- Streamlit policy comparison dashboard
-- Docker Compose deployment for the API and dashboard
-
-## Problem Statement
-
-Semiconductor manufacturing requires production lots to move through multiple
-process stages while competing for limited machines and transportation
-resources. Dispatching decisions affect cycle time, work in process (WIP),
-throughput, equipment utilization, queue waiting time, and on-time delivery.
-
-FabFlow provides a controlled simulation environment for studying these
-trade-offs under repeatable experimental conditions. The same scenario and
-random seed can be reused across dispatching policies so that results can be
-compared fairly.
-
-## Goals
-
-- Build a reproducible discrete-event simulation of lot production and transport.
-- Compare dispatching policies using identical scenarios and random seeds.
-- Quantify cycle time, throughput, WIP, utilization, and on-time delivery.
-- Expose experiment creation and results through a FastAPI service.
-- Visualize results and scheduling trade-offs in Streamlit.
-- Run the API and dashboard with Docker Compose.
-
-## Planned MVP
-
-- Three process stages: Lithography, Etching, and Inspection
-- One to two machines per stage
-- Normal lots and high-priority hot lots
-- Processing, queueing, transport, machine failure, and repair events
-- FIFO, Shortest Processing Time, and Critical Ratio dispatching policies
-- Fixed random seeds for reproducible experiments
-- FastAPI endpoints to create runs with scenario inputs and query results, events, and metrics
-- A Streamlit dashboard comparing FIFO, Shortest Processing Time, and Critical Ratio
-- Docker Compose services for the API and Streamlit dashboard
-
-## Current Simulation Flow
-
-```mermaid
-flowchart LR
-    A[Lot arrives] --> Q[Lot enters queue]
-    Q --> W[Lot requests machine]
-    W --> P[Processing starts]
-    P --> C[Processing completes]
-    C --> N{More route steps?}
-    N -->|Yes| Q
-    N -->|No| D[Lot completes]
-```
-
-Each station has a shared FIFO queue. The engine assigns waiting lots to
-available capacity slots on eligible machines and uses SimPy resources to
-enforce each machine's capacity. Equal-time requests follow deterministic
-SimPy/input order. A lot completes only after every route step finishes.
-Explicit dispatching policy classes are planned for Day 3.
-
-## Target Architecture
-
-```mermaid
-flowchart TD
-    U[Streamlit Dashboard] --> API[FastAPI]
-    API --> S[SimPy Engine]
-    S --> R[In-memory Results and Events]
-    API --> R
-```
-
-This diagram represents the target MVP architecture. The API will execute
-simulations synchronously and retain results in memory. API endpoints, the
-dashboard, and Docker Compose deployment remain planned.
-
-## Current Repository Structure
-
-```text
-fabflow/
-├── app/
-│   ├── cli.py
-│   └── simulation/
-│       └── demo.py
-├── simulator/
-│   ├── engine.py
-│   ├── entities/
-│   │   ├── lot.py
-│   │   ├── machine.py
-│   │   ├── process_step.py
-│   │   ├── queue.py
-│   │   └── scenario.py
-│   ├── events/
-│   │   └── event.py
-│   └── scenarios/
-│       └── baseline.py
-├── tests/
-├── docs/
-│   ├── baseline-scenario.md
-│   ├── day2-walkthrough.md
-│   └── domain-model.md
-├── pyproject.toml
-└── README.md
-```
-
-## Target Repository Structure
-
-```text
-fabflow/
-├── app/
-│   ├── api/              # HTTP endpoints and request validation
-│   ├── core/             # Configuration and shared infrastructure
-│   ├── models/           # API request and response models
-│   └── services/         # Application use cases
-├── simulator/
-│   ├── entities/         # Simulation domain entities
-│   ├── events/           # Event definitions and event log
-│   ├── scenarios/        # Reproducible scenario factories
-│   ├── policies/         # Dispatching policies
-│   └── metrics/          # KPI calculations
-├── dashboard/            # Experiment and comparison interface
-├── Dockerfile            # API container
-├── docker-compose.yml    # API and dashboard services
-├── experiments/          # Controlled experiment definitions
-├── tests/                # Unit and integration tests
-├── docs/                 # Architecture and domain documentation
-├── pyproject.toml
-└── README.md
-```
-
-## Local Development
-
-### Requirements
-
-- Python 3.12 (the development and CI baseline)
-- Git
-
-### Setup
+Requires Python 3.12+ and Git. CI is configured for Python 3.12; the latest local
+validation used Python 3.14.6. Run these commands from the repository root:
 
 ```bash
-python3.12 -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install --upgrade pip
 python -m pip install -e ".[dev]"
-```
-
-### Verify the Project
-
-Run all automated checks before committing changes:
-
-```bash
-ruff format --check .
-ruff check .
-pytest -v
-```
-
-To apply Ruff formatting automatically:
-
-```bash
-ruff format .
-```
-
-### Create the Three-Stage Scenario
-
-After installation, run from the repository root:
-
-```bash
-python -m simulator.scenarios.baseline
-```
-
-Expected output:
-
-```text
-Scenario: three-stage-baseline
-Seed: 42
-Stages: 3
-Machines: 4
-Lots: 5
-Route: Lithography -> Etching -> Inspection
-```
-
-`SimulationScenario` groups the seed, process steps, machine configurations,
-and lots. The example contains two Lithography machines, one Etching machine,
-and one Inspection machine, with four Normal lots and one Hot lot. All times
-are synthetic and expressed in minutes.
-
-This command creates and describes the scenario. `SimulationEngine.run_scenario()`
-executes every route step and copies input lots to keep scenario inputs unchanged.
-Use a fresh engine with the scenario seed for each execution.
-
-### Run the Three-Stage Demo
-
-The installed `fabflow` command prints project information. Run the Day 2
-simulation demo with:
-
-```bash
 python -m app.simulation.demo
 ```
+
+The default 20-lot, three-stage demo produces:
 
 ```text
 Completed lots: 20
@@ -242,124 +33,332 @@ Average cycle time: 70.5 minutes
 Throughput: 6.86 lots/hour
 ```
 
-These values are calculated from the 20-lot scenario. Throughput uses the
-observation window from time zero to the last completion (175 minutes).
-Normal and Hot lots currently share FIFO ordering; priority dispatching is
-Day 3 work. Processing times are fixed, with no transport delays or failures.
-See [Day 2 walkthrough](docs/day2-walkthrough.md) for implementation details.
+This baseline has fixed processing times and no failures. Its last lot finishes
+at minute 175. To preview the five-lot scenario and its four machines:
 
-### Run a Scenario in Python
+```bash
+python -m simulator.scenarios.baseline
+```
+
+The installed `fabflow` command only prints project information. Use the module
+commands above to execute simulations.
+
+## Compare Dispatching Policies
+
+```bash
+python -m app.simulation.compare
+```
+
+Export a Markdown report and JSON containing scenario inputs, the aging
+threshold, unrounded KPIs, completion order, and events:
+
+```bash
+python -m app.simulation.compare --seed 42 \
+  --normal-wait-threshold 60 \
+  --output /tmp/fabflow-comparison.md \
+  --json /tmp/fabflow-comparison.json
+```
+
+The comparison scenario contains 12 lots, including three Hot lots, with varying
+processing times and due dates. It has one machine per stage and random failure
+and repair behavior on the Lithography and Etching machines. Each policy runs
+on fresh copies of the same inputs with the same machine failure calendars.
+
+### Actual Simulation Results
+
+Seed 42, Normal aging threshold 60 minutes. Cycle times are minutes; OTD is the
+on-time delivery rate. These values come from the executable simulation.
+
+| Policy | Average cycle | P95 cycle | Lots/hour | OTD |
+| --- | ---: | ---: | ---: | ---: |
+| FIFO | 39.77 | 69.90 | 8.01 | 41.7% |
+| SPT | 36.37 | 71.74 | 8.70 | 50.0% |
+| Critical Ratio | 40.21 | 66.74 | 8.70 | 41.7% |
+
+SPT achieves the lowest average cycle time and highest OTD in this scenario,
+but has the highest P95 cycle time. Critical Ratio has the lowest P95. These
+results illustrate a trade-off for one workload and seed, not a universal
+ranking of policies.
+
+Each run is observed from time zero through its last completion. Different
+finish times expose policies to different lengths of the same failure calendar;
+this is a finite-workload comparison, not a shared fixed-horizon experiment.
+See the [full generated report](docs/day3-comparison-report.md) for queue,
+WIP, tardiness, utilization, and availability results.
+
+## AMHS Vehicle Comparison (Day 4)
+
+```bash
+python -m app.simulation.amhs
+python -m app.simulation.amhs --output /tmp/fabflow-amhs.md --json /tmp/fabflow-amhs.json
+```
+
+Actual results for 20 lots, three stations, and fixed 5-minute transfers:
+
+| Vehicles | Average transport wait (min) | Average cycle (min) | Lots/hour |
+| ---: | ---: | ---: | ---: |
+| 1 | 53.38 | 142.75 | 5.91 |
+| 3 | 2.62 | 57.05 | 12.90 |
+| 6 | 0.00 | 55.00 | 12.90 |
+
+Increasing from one to three vehicles reduces congestion. From three to six,
+throughput stays the same because Etching becomes the bottleneck, although
+average cycle time still improves. See the [generated report](docs/day4-amhs-report.md)
+and [model and KPI definitions](docs/day4-amhs.md).
+
+Enable transportation on any scenario:
+
+```python
+from dataclasses import replace
+from simulator.entities.transport import TransportConfig
+
+scenario = replace(scenario, transport=TransportConfig(vehicle_count=3, travel_time=5.0))
+```
+
+The default `transport=None` preserves the existing instantaneous transfers.
+AMHS uses a shared FIFO vehicle pool between every pair of route operations;
+Hot lot priority applies to processing queues. A completed operation releases
+its machine before waiting for transport. Initial arrivals and final departures
+require no transport jobs.
+
+## Simulation Model
+
+Each machine group has a shared station queue. When an eligible capacity slot
+becomes available, the dispatcher selects a waiting lot. SimPy resources enforce
+machine capacity, and a lot completes only after every route operation finishes.
+
+```mermaid
+flowchart LR
+    A[Lot arrives] --> Q[Station queue]
+    Q --> D[Available machine slot and dispatch decision]
+    D --> P[Processing]
+    P --> C[Operation completes]
+    C --> N{More operations?}
+    N -->|Yes, AMHS enabled| T[Request transport: wait for vehicle]
+    T --> V[Travel and delivery]
+    V --> Q
+    N -->|Yes, AMHS disabled| Q
+    N -->|No| L[Lot completes]
+    P --> F[Machine fails: pause work]
+    F --> R[Repair: resume remaining work]
+    R --> P
+```
+
+The engine records `LOT_ARRIVED`, `LOT_QUEUED`, `PROCESS_STARTED`,
+`PROCESS_COMPLETED`, `LOT_COMPLETED`, `MACHINE_FAILED`, and `MACHINE_REPAIRED`.
+Event records include timestamps and applicable lot, machine, and step IDs.
+Machine failure/repair events have `lot_id=None`. AMHS adds `TRANSPORT_REQUESTED`,
+`TRANSPORT_STARTED`, and `TRANSPORT_COMPLETED`, linked by transport job ID.
+
+### Dispatching and Hot Lots
+
+The selected base policy applies across all machine groups:
+
+| Policy | Selection rule: lowest value first |
+| --- | --- |
+| FIFO | Entry time into the current station queue |
+| SPT | Processing time of the current operation |
+| Critical Ratio | `(due_date - current_time) / remaining_processing_time` |
+
+CR includes the current and all subsequent operations in remaining work and
+recalculates at every dispatch. Overdue lots have negative ratios. Base policy
+ties use station queue entry time, then enqueue sequence.
+
+The engine wraps the base policy with these priority rules:
+
+1. Normal lots waiting at least the aging threshold are selected in station FIFO order.
+2. Otherwise, Hot lots are selected using the base policy.
+3. Otherwise, remaining Normal lots are selected using the base policy.
+
+The default threshold is 60 minutes and resets at each station entry. It grants
+dispatch precedence, not a guaranteed start deadline: running work, outages,
+and older aged lots can still delay service. Hot insertion does not interrupt
+processing. This is a basic Normal lot starvation safeguard, not a general
+fairness scheduler.
+
+### Machine Failure and Repair
+
+Reliability is optional and disabled in the baseline. `ReliabilityConfig` supports:
+
+- Fixed outages: `outages=((3, 4), (20, 2))` fails at minute 3 for 4 minutes and
+  at minute 20 for 2 minutes.
+- Random reliability: `mtbf=40, mttr=3` samples exponential operational uptime
+  and repair duration with those means, in minutes.
+
+A failure takes the entire machine down, blocks new processing starts, and
+pauses all active capacity slots. Repair resumes remaining work without
+scrapping lots or restarting operations. Productive busy time excludes downtime.
+Random uptime includes idle time and begins again after each repair.
+
+The engine seeds independent machine random streams in sorted machine-ID order.
+Identical scenarios and seeds preserve failure calendars across dispatching
+policies. Same-timestamp events follow deterministic SimPy scheduling order;
+the engine does not batch all events at a timestamp into one dispatch decision.
+
+## Use the Python API
 
 ```python
 from simulator.engine import SimulationEngine
-from simulator.scenarios.baseline import create_baseline_scenario
+from simulator.policies.spt import SPTPolicy
+from simulator.scenarios.comparison import create_comparison_scenario
 
-scenario = create_baseline_scenario(seed=42, number_of_lots=20)
-result = SimulationEngine(seed=scenario.seed).run_scenario(scenario)
+scenario = create_comparison_scenario(seed=42)
+result = SimulationEngine(
+    seed=scenario.seed,
+    policy=SPTPolicy(),
+    normal_wait_threshold=30.0,
+).run_scenario(scenario)
 
-print(result.average_cycle_time)
-print(result.throughput_per_hour)
+print(result.kpis.average_cycle_time)
+print(result.kpis.on_time_delivery_rate)
+print(result.kpis.machines)
 print(result.events[0])
 ```
 
-Each engine runs once. `run_scenario()` copies the scenario's lots, allowing
-repeat runs with fresh engines without changing the input scenario.
+Omitting `policy` uses FIFO with the same Hot lot and aging rules. Thresholds
+must be finite and positive. Create a fresh engine with the scenario seed for
+each run. `run_scenario()` copies input lots so the same scenario can be reused.
+The original single-machine `run(lots, machine, queue)` entry point is also
+supported.
 
-### Day 2 Validation
+To enable random reliability on a machine in an existing scenario:
 
-Local validation on Python 3.12.14 passes 25 tests, Ruff lint, and Ruff formatting.
-The tests cover route order, arrival and completion timestamps, eligible-machine
-selection, capacity enforcement, overlapping machine activity, final empty
-queues, FIFO ties, and repeatable results without input mutation.
+```python
+from dataclasses import replace
 
-The five-lot scenario has hand-checked completion times of 23, 31, 39, 47, and
-55 minutes, with an average cycle time of 33 minutes. The original single-machine
-baseline remains covered for compatibility. These are local results; remote CI
-status must be checked separately.
+from simulator.entities.reliability import ReliabilityConfig
+from simulator.scenarios.baseline import create_baseline_scenario
 
-## Determinism and Reproducibility
+scenario = create_baseline_scenario()
+machine = replace(scenario.machines[0], reliability=ReliabilityConfig(mtbf=40, mttr=3))
+scenario = replace(scenario, machines=(machine, *scenario.machines[1:]))
+```
 
-Each simulation engine is initialized with a fixed random seed. The current
-baseline contains no stochastic behavior, so its reproducibility comes from
-fixed inputs and deterministic SimPy event ordering. Later increments will use
-the engine-owned random generator for processing-time variation, machine
-failures, and repairs.
+## KPI Definitions
 
-Fair policy comparisons will use the same:
+`result.kpis` reports metrics over `[0, result.finished_at]`, including idle time
+before the first arrival. All lots complete before the run ends.
 
-- Random seed
-- Lot arrival sequence
-- Processing-time samples
-- Failure and repair samples
-- Simulation horizon
-- Machine and AMHS configuration
+| Metric | Definition |
+| --- | --- |
+| Average cycle time | Mean completion time minus arrival time |
+| P95 cycle time | Nearest-rank 95th percentile of completed lot cycle times |
+| Throughput | Completed lots × 60 / observation minutes |
+| Average WIP | Sum of cycle times / observation minutes |
+| Average queue waiting time | Total station queue wait across all operations / lot count |
+| Average queue depth | Total station queue wait / observation minutes |
+| Peak queue depth | Maximum total queued lots across all stations in event order |
+| On-time delivery | Fraction completing at or before their due date |
+| Average tardiness | Mean positive lateness, including zero for on-time lots |
+| Machine utilization | Productive slot-minutes / (capacity × observation minutes) |
+| Machine availability | 1 − downtime / observation minutes |
 
-## Core Metrics
+Time paused on a failed machine contributes to cycle time and WIP, but not
+queue waiting or productive utilization. Downtime in KPIs is clipped to the
+observation window, including an unfinished repair when the last lot completes.
+See [reliability and KPI details](docs/day3-reliability-kpi.md) for edge cases.
 
-The completed MVP will report:
+## Architecture and Repository
 
-- Average and P95 cycle time
-- Throughput
-- Work in process
-- Queue depth and waiting time
-- Machine utilization
-- On-time delivery rate
-- Transport time and delivery-time accuracy
+Current execution is entirely local:
 
-Average cycle time and throughput are available on `SimulationResult`. The
-remaining manufacturing KPI calculations are planned for Day 3; transport
-metrics follow with the AMHS model in Day 4.
+```text
+Scenario inputs → SimPy engine + dispatching + reliability + AMHS
+                → Completed lots and event log
+                → KPI calculator → Markdown / JSON comparison
+```
 
-## Documentation
+```text
+fabflow/
+├── app/
+│   ├── cli.py                  # Informational entry point
+│   └── simulation/
+│       ├── demo.py             # 20-lot baseline
+│       ├── compare.py          # Policy comparison and exports
+│       └── amhs.py             # Vehicle-count comparison and exports
+├── simulator/
+│   ├── engine.py               # Scheduling, lifecycle, and results
+│   ├── entities/               # Lots, steps, machines, queues, scenarios, reliability
+│   ├── events/                 # Immutable event records
+│   ├── policies/               # FIFO, SPT, CR, and Hot lot/aging wrapper
+│   ├── metrics/                # KPI calculation
+│   └── scenarios/              # Baseline and comparison inputs
+├── tests/                      # Unit and integration tests
+├── docs/                       # Model definitions, walkthroughs, sample report
+├── .github/workflows/ci.yml    # Ruff and Pytest on Python 3.12
+└── pyproject.toml
+```
 
-- [Day 2 walkthrough](docs/day2-walkthrough.md)
-- [Domain Model](docs/domain-model.md)
-- [Hand-Calculated Baseline Scenario](docs/baseline-scenario.md)
+Other `app/` packages are placeholders for future services. The planned service
+architecture is Streamlit → FastAPI → simulation engine → in-memory results,
+with Docker Compose running the API and dashboard.
 
-## Assumptions and Limitations
+## Testing
 
-FabFlow does **not** use TSMC data or data from any real semiconductor
-fabrication facility. All routes, processing times, machine configurations,
-failures, transportation times, and events are simplified models based on
-public manufacturing concepts or synthetic data.
+```bash
+ruff check .
+ruff format --check .
+pytest -q
+```
 
-The MVP does not attempt to reproduce the complete behavior of a real fab. It
-excludes hundreds of detailed process steps, complete re-entrant routing,
-complex recipe qualification, and real facility path optimization.
+Latest local validation on Python 3.14.6:
 
-## Connection to Intelligent Manufacturing
+```text
+All checks passed!
+57 files already formatted
+90 passed
+```
 
-FabFlow demonstrates how discrete-event simulation, scheduling, visualization,
-API design, and container deployment can be combined to evaluate
-manufacturing decisions.
+Tests cover route order, timestamps, capacity, repeated station visits, stable
+policy ordering, Hot insertion, Normal service during continuing Hot arrivals,
+failure/repair, shared random failure calendars, hand-calculated KPIs, input
+isolation, AMHS capacity/FIFO, transport timestamps and KPIs, congestion, and report exports. The original no-failure baselines remain covered.
 
-The project also explores conceptual similarities between manufacturing
-dispatching and computing-resource scheduling, including queues, priorities,
-capacity constraints, fairness, and reservations. These are design analogies;
-Kubernetes and Apache YuniKorn are not presented as semiconductor AMHS
-dispatching systems.
+For coverage:
+
+```bash
+pytest --cov=app --cov=simulator --cov-report=term-missing
+```
+
+[GitHub Actions](.github/workflows/ci.yml) is configured to run lint, formatting,
+and tests on pushes to `main` and pull requests. The results above are local;
+remote CI status has not been verified for these changes.
 
 ## Roadmap
 
-1. **Implemented:** project foundation, domain models, and three-stage scenario creation
-2. **Implemented:** deterministic three-stage simulation engine
-3. FIFO, SPT, Critical Ratio, equipment reliability, and KPI comparison
-4. Simplified AMHS transportation
-5. FastAPI service with synchronous simulation execution
-6. Streamlit dashboard, Docker Compose, and end-to-end demo
-7. Tests, documentation, and portfolio packaging
+| Day | Status | Deliverable |
+| --- | --- | --- |
+| 1 | Complete locally | Project setup, domain models, scenario creation, test environment |
+| 2 | Complete locally | Three-stage engine, capacity control, events, reproducible demo |
+| 3 | Complete locally | FIFO/SPT/CR, Hot insertion and aging, reliability, KPIs, comparison exports |
+| 4 | Complete locally | Limited AMHS vehicles, transport queues, transport KPIs, congestion experiments |
+| 5 | Planned | FastAPI run creation, execution, result queries, validation, health checks |
+| 6 | Planned | Streamlit dashboard, Docker Compose, end-to-end demo |
+| 7 | Planned | Final tests, CI packaging, documentation, and portfolio materials |
 
-## Future Work
+## Assumptions and Limits
 
-The following are outside the seven-day MVP:
+All times, routes, due dates, priorities, and failure parameters are synthetic.
+Processing durations are fixed. The model supports repeated station visits but
+does not reproduce a full fab's routing, recipe qualification, setup rules, or
+facility layout. AMHS uses fixed travel times and interchangeable vehicles; empty
+repositioning, physical paths, loading/unloading, and stocker capacity are omitted.
 
-- PostgreSQL persistence and database migrations
-- Background workers and job queues such as Celery or RQ, with Redis
-- Prometheus and Grafana monitoring
-- Kubernetes and Kind deployment
-- Stocker capacity constraints
-- Advanced scheduling and large-scale performance testing
+Runs finish the supplied finite workload; there is no fixed-horizon or partial
+completion reporting. One comparison seed is an illustrative experiment.
+Production-scale statistical evaluation and advanced fairness scheduling remain
+future work.
 
-## License
+PostgreSQL, Redis/Celery, Prometheus/Grafana, Kubernetes, stocker capacity, and
+large-scale performance testing are outside the seven-day MVP scope.
 
-This project is intended for educational and portfolio purposes.
+## Documentation
+
+- [Day 4 AMHS model and KPI definitions](docs/day4-amhs.md)
+- [Generated AMHS congestion report](docs/day4-amhs-report.md)
+- [Day 2 engine walkthrough](docs/day2-walkthrough.md)
+- [Day 3 dispatching and Hot lot rules](docs/day3-dispatching.md)
+- [Day 3 reliability and KPI definitions](docs/day3-reliability-kpi.md)
+- [Generated policy comparison report](docs/day3-comparison-report.md)
+- [Hand-calculated baseline](docs/baseline-scenario.md)
+- [Original domain model and links to current definitions](docs/domain-model.md)

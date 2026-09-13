@@ -3,7 +3,9 @@
 > The sections below record the original single-machine design. For the current
 > Day 2 engine, scenario model, event fields, capacity semantics, and execution
 > contract, see [Day 2 walkthrough](day2-walkthrough.md). Multi-stage execution
-> and `SimulationScenario` are now implemented; advanced policies and KPIs remain planned.
+> and `SimulationScenario` are implemented. The historical definitions below are
+> superseded for dispatching, reliability, and KPIs by [Day 3 dispatching](day3-dispatching.md)
+> and [Day 3 reliability and KPIs](day3-reliability-kpi.md).
 
 ## Purpose
 
@@ -322,3 +324,8 @@ The deterministic simulation increment is accepted when it demonstrates:
 Machine failures, multiple stages, AMHS transportation, stockers, alternative
 dispatching policies, and aggregate KPI calculation remain outside the current
 implementation boundary.
+
+## Day 4 AMHS extension
+
+Scenarios optionally accept `TransportConfig`; results include completed `TransportJob`
+records and transport KPIs. See [AMHS model and semantics](day4-amhs.md).

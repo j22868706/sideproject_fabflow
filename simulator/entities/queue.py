@@ -5,7 +5,7 @@ from simulator.entities.lot import Lot
 
 @dataclass
 class Queue:
-    """A FIFO waiting queue for wafer lots."""
+    """A station waiting queue; the engine policy determines dispatch order."""
 
     queue_id: str
     waiting_lots: list[Lot] = field(default_factory=list)

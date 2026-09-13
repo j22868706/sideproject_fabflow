@@ -107,7 +107,7 @@ def test_engine_rejects_reuse_and_seed_mismatch() -> None:
         engine.run_scenario(scenario)
 
 
-def test_fifo_ties_use_input_order_even_for_hot_lots() -> None:
+def test_hot_lot_precedes_normal_at_same_arrival_time() -> None:
     from simulator.entities.lot import LotPriority
 
     step = ProcessStep("S", "Station", 4, "G")
@@ -119,7 +119,7 @@ def test_fifo_ties_use_input_order_even_for_hot_lots() -> None:
         (Lot("Z", 0, 20, [step]), Lot("A", 0, 20, [step], LotPriority.HOT)),
     )
     result = SimulationEngine(42).run_scenario(scenario)
-    assert [lot.lot_id for lot in result.completed_lots] == ["Z", "A"]
+    assert [lot.lot_id for lot in result.completed_lots] == ["A", "Z"]
     assert [lot.completed_at for lot in result.completed_lots] == [4, 8]
 
 

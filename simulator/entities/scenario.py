@@ -2,6 +2,8 @@ from dataclasses import dataclass
 
 from simulator.entities.lot import Lot
 from simulator.entities.process_step import ProcessStep
+from simulator.entities.reliability import ReliabilityConfig
+from simulator.entities.transport import TransportConfig
 
 
 @dataclass(frozen=True)
@@ -11,6 +13,7 @@ class MachineConfig:
     machine_id: str
     group: str
     capacity: int = 1
+    reliability: ReliabilityConfig | None = None
 
     def __post_init__(self) -> None:
         if not self.machine_id.strip():
@@ -30,6 +33,7 @@ class SimulationScenario:
     process_steps: tuple[ProcessStep, ...]
     machines: tuple[MachineConfig, ...]
     lots: tuple[Lot, ...]
+    transport: TransportConfig | None = None
 
     def __post_init__(self) -> None:
         if not self.scenario_id.strip():
