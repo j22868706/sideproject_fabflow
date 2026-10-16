@@ -5,10 +5,12 @@ in a simplified semiconductor fab. Synthetic wafer lots compete for machine
 capacity across Lithography, Etching, and Inspection. Reproducible experiments
 compare cycle time, throughput, on-time delivery, and equipment utilization.
 
-**Day 1–4 are implemented and locally validated:** domain models, multi-stage
+**Day 1–5 are implemented and locally validated:** domain models, multi-stage
 simulation, FIFO/SPT/Critical Ratio dispatching, Hot lot insertion with Normal
 lot aging protection, machine failure/repair, finite AMHS vehicles, and KPI comparison reports.
-API endpoints, a dashboard, and container deployment are scheduled for Day 5–7.
+The FastAPI service supports synchronous run creation, result queries, input
+validation, error handling, and health checks, with full API workflow acceptance.
+Dashboard and deployment follow on Day 6–7.
 
 > This project uses synthetic data and a simplified semiconductor manufacturing
 > model. It does not contain proprietary TSMC manufacturing data.
@@ -42,6 +44,52 @@ python -m simulator.scenarios.baseline
 
 The installed `fabflow` command only prints project information. Use the module
 commands above to execute simulations.
+
+## Run the HTTP API (Day 5)
+
+After installing the project, start the service from the repository root:
+
+```bash
+python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
+```
+
+Open [Swagger UI](http://localhost:8000/docs), select `POST /api/v1/runs`, click
+**Try it out**, and paste [the baseline request](docs/examples/baseline.json).
+Click **Execute** and copy the returned `run_id` into the query endpoints.
+The [complete walkthrough](docs/day5-api.md) also includes an AMHS example.
+
+| Method | Endpoint | Result |
+| --- | --- | --- |
+| POST | `/api/v1/runs` | Execute a simulation; return 201 with a completed run summary |
+| GET | `/api/v1/runs/{run_id}` | Run summary and execution settings |
+| GET | `/api/v1/runs/{run_id}/metrics` | Manufacturing, equipment, and transport KPIs |
+| GET | `/api/v1/runs/{run_id}/events` | Complete event list in simulation order |
+| GET | `/health/live` | Process liveness |
+| GET | `/health/ready` | Application readiness; 503 when unavailable |
+
+From another terminal, submit the same request:
+
+```bash
+curl --fail-with-body -i http://127.0.0.1:8000/api/v1/runs \
+  -H 'Content-Type: application/json' \
+  --data-binary @docs/examples/baseline.json
+# Replace RUN_ID with the run_id returned by POST.
+curl --fail-with-body http://127.0.0.1:8000/api/v1/runs/RUN_ID/metrics
+```
+
+The request contains a scenario, `policy` (`FIFO`, `SPT`, or `CR`), and
+`normal_wait_threshold` (default 60 minutes). Lot routes reference process step
+IDs. Optional machine reliability and AMHS settings use the same engine rules
+as Python simulations. Each POST creates a fresh engine and a unique run ID;
+it returns only after all lots finish. The `Location` header identifies the run.
+
+Invalid inputs return 422 with field locations and reasons; unknown run IDs
+return 404. Unexpected server failures return a generic 500 JSON response and
+are logged on the server. Failed runs do not publish partial results.
+
+Results live in application memory with no automatic expiry. Use one worker:
+processes do not share results, and restarting or reloading clears them. This
+MVP uses synchronous execution without a database or background job queue.
 
 ## Compare Dispatching Policies
 
@@ -260,17 +308,24 @@ See [reliability and KPI details](docs/day3-reliability-kpi.md) for edge cases.
 
 ## Architecture and Repository
 
-Current execution is entirely local:
+Current execution supports local Python commands and a FastAPI service:
 
 ```text
 Scenario inputs → SimPy engine + dispatching + reliability + AMHS
                 → Completed lots and event log
                 → KPI calculator → Markdown / JSON comparison
+
+HTTP request → FastAPI validation → Run service → Fresh simulation engine
+             → Completed summary + KPIs + events → In-memory store → HTTP queries
 ```
 
 ```text
 fabflow/
 ├── app/
+│   ├── main.py                 # FastAPI application and lifecycle
+│   ├── api/                    # Run queries, errors, and health checks
+│   ├── models/                 # API request/response contracts
+│   ├── services/               # Synchronous runs and in-memory results
 │   ├── cli.py                  # Informational entry point
 │   └── simulation/
 │       ├── demo.py             # 20-lot baseline
@@ -289,9 +344,10 @@ fabflow/
 └── pyproject.toml
 ```
 
-Other `app/` packages are placeholders for future services. The planned service
-architecture is Streamlit → FastAPI → simulation engine → in-memory results,
-with Docker Compose running the API and dashboard.
+The Day 5 API can be started with `python -m uvicorn app.main:app`; see the
+[API guide](docs/day5-api.md) for endpoints and in-memory storage limits.
+Day 6 will add Streamlit as an API client and Docker Compose for the API and
+dashboard. Those components are not implemented yet.
 
 ## Testing
 
@@ -305,14 +361,18 @@ Latest local validation on Python 3.14.6:
 
 ```text
 All checks passed!
-57 files already formatted
-90 passed
+68 files already formatted
+150 passed
 ```
 
 Tests cover route order, timestamps, capacity, repeated station visits, stable
 policy ordering, Hot insertion, Normal service during continuing Hot arrivals,
 failure/repair, shared random failure calendars, hand-calculated KPIs, input
 isolation, AMHS capacity/FIFO, transport timestamps and KPIs, congestion, and report exports. The original no-failure baselines remain covered.
+
+The 60 API tests cover request schemas, all three policy mappings, JSON results,
+validation and server errors, health checks, independent stores, concurrent runs,
+and both documented examples. The full suite contains 150 tests.
 
 For coverage:
 
@@ -324,6 +384,10 @@ pytest --cov=app --cov=simulator --cov-report=term-missing
 and tests on pushes to `main` and pull requests. The results above are local;
 remote CI status has not been verified for these changes.
 
+Day 5 validation also exercised a real local Uvicorn server with both JSON
+examples. Overall coverage is 91%; one upstream TestClient HTTPX deprecation
+warning remains. See the [Swagger walkthrough and acceptance record](docs/day5-api.md).
+
 ## Roadmap
 
 | Day | Status | Deliverable |
@@ -332,7 +396,7 @@ remote CI status has not been verified for these changes.
 | 2 | Complete locally | Three-stage engine, capacity control, events, reproducible demo |
 | 3 | Complete locally | FIFO/SPT/CR, Hot insertion and aging, reliability, KPIs, comparison exports |
 | 4 | Complete locally | Limited AMHS vehicles, transport queues, transport KPIs, congestion experiments |
-| 5 | Planned | FastAPI run creation, execution, result queries, validation, health checks |
+| 5 | Complete locally | FastAPI run creation, execution, result queries, validation, health checks |
 | 6 | Planned | Streamlit dashboard, Docker Compose, end-to-end demo |
 | 7 | Planned | Final tests, CI packaging, documentation, and portfolio materials |
 
@@ -354,6 +418,7 @@ large-scale performance testing are outside the seven-day MVP scope.
 
 ## Documentation
 
+- [Day 5 API guide, Swagger walkthrough, and acceptance](docs/day5-api.md)
 - [Day 4 AMHS model and KPI definitions](docs/day4-amhs.md)
 - [Generated AMHS congestion report](docs/day4-amhs-report.md)
 - [Day 2 engine walkthrough](docs/day2-walkthrough.md)

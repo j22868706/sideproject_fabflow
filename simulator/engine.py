@@ -18,6 +18,8 @@ from simulator.policies.hot_lot import HotLotPolicy
 
 @dataclass(frozen=True)
 class SimulationResult:
+    """Completed workload, ordered events, and inputs used to calculate run KPIs."""
+
     finished_at: float
     completed_lots: tuple[Lot, ...]
     events: tuple[SimulationEvent, ...]
@@ -235,6 +237,7 @@ class SimulationEngine:
         self.log_event(EventType.LOT_COMPLETED, lot, machine)
 
     def run_scenario(self, scenario: SimulationScenario) -> SimulationResult:
+        """Execute all lots with isolated runtime state and a matching engine seed."""
         if scenario.seed != self.seed:
             raise ValueError("scenario seed must match engine seed")
         machines = [

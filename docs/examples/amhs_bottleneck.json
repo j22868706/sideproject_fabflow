@@ -1,0 +1,274 @@
+{
+  "scenario": {
+    "scenario_id": "amhs-bottleneck",
+    "seed": 42,
+    "process_steps": [
+      {
+        "step_id": "L",
+        "name": "Lithography",
+        "processing_time": 2,
+        "eligible_machine_group": "LITHO"
+      },
+      {
+        "step_id": "E",
+        "name": "Etching",
+        "processing_time": 4,
+        "eligible_machine_group": "ETCH"
+      },
+      {
+        "step_id": "I",
+        "name": "Inspection",
+        "processing_time": 1,
+        "eligible_machine_group": "INSPECT"
+      }
+    ],
+    "machines": [
+      {
+        "machine_id": "LITHO-01",
+        "group": "LITHO",
+        "capacity": 1,
+        "reliability": null
+      },
+      {
+        "machine_id": "ETCH-01",
+        "group": "ETCH",
+        "capacity": 1,
+        "reliability": null
+      },
+      {
+        "machine_id": "INSPECT-01",
+        "group": "INSPECT",
+        "capacity": 1,
+        "reliability": null
+      }
+    ],
+    "lots": [
+      {
+        "lot_id": "LOT-001",
+        "arrival_time": 0,
+        "due_date": 150,
+        "priority": "NORMAL",
+        "route": [
+          "L",
+          "E",
+          "I"
+        ]
+      },
+      {
+        "lot_id": "LOT-002",
+        "arrival_time": 0,
+        "due_date": 150,
+        "priority": "NORMAL",
+        "route": [
+          "L",
+          "E",
+          "I"
+        ]
+      },
+      {
+        "lot_id": "LOT-003",
+        "arrival_time": 0,
+        "due_date": 150,
+        "priority": "NORMAL",
+        "route": [
+          "L",
+          "E",
+          "I"
+        ]
+      },
+      {
+        "lot_id": "LOT-004",
+        "arrival_time": 0,
+        "due_date": 150,
+        "priority": "NORMAL",
+        "route": [
+          "L",
+          "E",
+          "I"
+        ]
+      },
+      {
+        "lot_id": "LOT-005",
+        "arrival_time": 0,
+        "due_date": 150,
+        "priority": "NORMAL",
+        "route": [
+          "L",
+          "E",
+          "I"
+        ]
+      },
+      {
+        "lot_id": "LOT-006",
+        "arrival_time": 0,
+        "due_date": 150,
+        "priority": "NORMAL",
+        "route": [
+          "L",
+          "E",
+          "I"
+        ]
+      },
+      {
+        "lot_id": "LOT-007",
+        "arrival_time": 0,
+        "due_date": 150,
+        "priority": "NORMAL",
+        "route": [
+          "L",
+          "E",
+          "I"
+        ]
+      },
+      {
+        "lot_id": "LOT-008",
+        "arrival_time": 0,
+        "due_date": 150,
+        "priority": "NORMAL",
+        "route": [
+          "L",
+          "E",
+          "I"
+        ]
+      },
+      {
+        "lot_id": "LOT-009",
+        "arrival_time": 0,
+        "due_date": 150,
+        "priority": "NORMAL",
+        "route": [
+          "L",
+          "E",
+          "I"
+        ]
+      },
+      {
+        "lot_id": "LOT-010",
+        "arrival_time": 0,
+        "due_date": 150,
+        "priority": "NORMAL",
+        "route": [
+          "L",
+          "E",
+          "I"
+        ]
+      },
+      {
+        "lot_id": "LOT-011",
+        "arrival_time": 0,
+        "due_date": 150,
+        "priority": "NORMAL",
+        "route": [
+          "L",
+          "E",
+          "I"
+        ]
+      },
+      {
+        "lot_id": "LOT-012",
+        "arrival_time": 0,
+        "due_date": 150,
+        "priority": "NORMAL",
+        "route": [
+          "L",
+          "E",
+          "I"
+        ]
+      },
+      {
+        "lot_id": "LOT-013",
+        "arrival_time": 0,
+        "due_date": 150,
+        "priority": "NORMAL",
+        "route": [
+          "L",
+          "E",
+          "I"
+        ]
+      },
+      {
+        "lot_id": "LOT-014",
+        "arrival_time": 0,
+        "due_date": 150,
+        "priority": "NORMAL",
+        "route": [
+          "L",
+          "E",
+          "I"
+        ]
+      },
+      {
+        "lot_id": "LOT-015",
+        "arrival_time": 0,
+        "due_date": 150,
+        "priority": "NORMAL",
+        "route": [
+          "L",
+          "E",
+          "I"
+        ]
+      },
+      {
+        "lot_id": "LOT-016",
+        "arrival_time": 0,
+        "due_date": 150,
+        "priority": "NORMAL",
+        "route": [
+          "L",
+          "E",
+          "I"
+        ]
+      },
+      {
+        "lot_id": "LOT-017",
+        "arrival_time": 0,
+        "due_date": 150,
+        "priority": "NORMAL",
+        "route": [
+          "L",
+          "E",
+          "I"
+        ]
+      },
+      {
+        "lot_id": "LOT-018",
+        "arrival_time": 0,
+        "due_date": 150,
+        "priority": "NORMAL",
+        "route": [
+          "L",
+          "E",
+          "I"
+        ]
+      },
+      {
+        "lot_id": "LOT-019",
+        "arrival_time": 0,
+        "due_date": 150,
+        "priority": "NORMAL",
+        "route": [
+          "L",
+          "E",
+          "I"
+        ]
+      },
+      {
+        "lot_id": "LOT-020",
+        "arrival_time": 0,
+        "due_date": 150,
+        "priority": "NORMAL",
+        "route": [
+          "L",
+          "E",
+          "I"
+        ]
+      }
+    ],
+    "transport": {
+      "vehicle_count": 1,
+      "travel_time": 5
+    }
+  },
+  "policy": "FIFO",
+  "normal_wait_threshold": 60
+}
