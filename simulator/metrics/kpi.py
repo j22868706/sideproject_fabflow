@@ -1,5 +1,7 @@
 """Manufacturing KPIs over [0, last lot completion], in minutes."""
 
+from __future__ import annotations
+
 from dataclasses import dataclass
 from math import ceil
 from typing import TYPE_CHECKING

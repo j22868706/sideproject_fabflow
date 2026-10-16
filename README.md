@@ -18,7 +18,7 @@ Dashboard and deployment follow on Day 6–7.
 ## Quick Start
 
 Requires Python 3.12+ and Git. CI is configured for Python 3.12; the latest local
-validation used Python 3.14.6. Run these commands from the repository root:
+validation used Python 3.12.14. Run these commands from the repository root:
 
 ```bash
 python3 -m venv .venv
@@ -357,7 +357,7 @@ ruff format --check .
 pytest -q
 ```
 
-Latest local validation on Python 3.14.6:
+Latest local validation on Python 3.12.14:
 
 ```text
 All checks passed!
@@ -385,8 +385,33 @@ and tests on pushes to `main` and pull requests. The results above are local;
 remote CI status has not been verified for these changes.
 
 Day 5 validation also exercised a real local Uvicorn server with both JSON
-examples. Overall coverage is 91%; one upstream TestClient HTTPX deprecation
+examples. Overall coverage on Python 3.12.14 is 92%; one upstream TestClient HTTPX deprecation
 warning remains. See the [Swagger walkthrough and acceptance record](docs/day5-api.md).
+
+### Resolved CI Error: Python 3.12 Type Annotation Evaluation
+
+The [CI run for commit `e5314cf`](https://github.com/j22868706/sideproject_fabflow/actions/runs/38884540412)
+passed Ruff lint and formatting, but its `quality` job failed during test collection
+with exit code 2. Reproducing the failure locally on Python 3.12.14 produced 12
+collection errors with the same underlying exception:
+
+```text
+simulator/metrics/kpi.py:48: in <module>
+    def calculate_kpis(result: SimulationResult) -> KPIResult:
+NameError: name 'SimulationResult' is not defined
+```
+
+`SimulationResult` is imported only inside an `if TYPE_CHECKING:` block to avoid
+a circular import with `simulator.engine`. Python 3.12 evaluates function type
+annotations when the function is defined, but that import does not run at runtime.
+Earlier local checks on Python 3.14.6 passed because Python 3.14 defers annotation
+evaluation by default, masking this compatibility issue.
+
+The fix adds `from __future__ import annotations` to `simulator/metrics/kpi.py`,
+deferring annotation evaluation on Python 3.12 while preserving the type-only
+import. After the fix, Ruff lint, formatting, and all 150 tests passed locally on
+Python 3.12.14, including the CI coverage command. Validate changes with the CI
+Python version as well as newer supported versions to catch this kind of mismatch.
 
 ## Roadmap
 
