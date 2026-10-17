@@ -33,6 +33,14 @@ quality checks, container HTTP workflows, and real Chromium browser acceptance:
 Experiment results describe specific synthetic workloads, not improvements
 measured in a real fab. See the comparison sections below for inputs and limits.
 
+## AI-Assisted Development
+
+AI assistance was used for implementation, test authoring, debugging, and
+documentation, with user-defined scope and milestone approvals. Results were
+verified through deterministic scenarios, automated tests, container checks,
+and real browser acceptance. The reported metrics come from executed simulations
+and verification runs.
+
 ## Dashboard Preview
 
 ![FabFlow manufacturing KPIs and equipment charts](docs/images/three-stage-baseline-kpis.png)

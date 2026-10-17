@@ -89,6 +89,10 @@ The Day 7 handoff commit `9867659` also passed both jobs:
 
 ## Reuse in a project summary
 
+This project used AI assistance for implementation, tests, debugging, and
+documentation, with user-defined scope and milestone approvals. The results
+above are supported by executed simulations and automated verification.
+
 Built a reproducible semiconductor manufacturing simulator with Python, SimPy,
 FastAPI, and Streamlit. Implemented dispatch policies, priority aging, equipment
 failure/repair, AMHS capacity constraints, and event-based KPIs. Delivered a
