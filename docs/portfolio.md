@@ -84,7 +84,8 @@ statement/branch coverage across `app` and `simulator`. Ruff lint, formatting,
 dependency consistency, and Compose configuration also passed. Both remote CI
 jobs passed for `2d83879`, including real Chromium acceptance:
 [verified workflow run](https://github.com/j22868706/sideproject_fabflow/actions/runs/39043904601).
-Day 7 documentation changes have no separate remote CI result yet.
+The Day 7 handoff commit `9867659` also passed both jobs:
+[successful delivery CI](https://github.com/j22868706/sideproject_fabflow/actions/runs/39044791273).
 
 ## Reuse in a project summary
 

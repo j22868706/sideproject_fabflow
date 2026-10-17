@@ -1,13 +1,16 @@
 # Day 7: final verification and delivery
 
-Day 7 proceeds one step at a time, with confirmation before the next step.
+Day 7 is complete. Final handoff commit `9867659` was pushed to `origin/main`,
+and [its CI run](https://github.com/j22868706/sideproject_fabflow/actions/runs/39044791273)
+passed both `quality` and `containers`, including Chromium browser acceptance.
+The sections below retain the stepwise verification and delivery record.
 
 | Step | Deliverable | Status |
 | --- | --- | --- |
 | 1 | Verify CI, repeat Python 3.12 checks, reconcile progress documentation | Complete |
 | 2 | Delivery runbook and reproducible demo walkthrough | Complete |
 | 3 | Portfolio summary and screenshots | Complete |
-| 4 | Final change review and GitHub delivery | Review complete; push awaiting confirmation |
+| 4 | Final change review and GitHub delivery | Complete; pushed and CI passed |
 
 ## Step 1: final verification
 
@@ -22,7 +25,8 @@ for this commit completed successfully. Both jobs passed:
   Chromium acceptance, screenshot/trace upload, and service cleanup.
 
 These are verified remote results for the baseline commit. The Day 7 documentation
-changes have no separate remote CI result yet; delivery status is recorded in Step 4.
+changes were subsequently delivered in `9867659` with successful remote CI;
+delivery details are recorded in Step 4.
 
 ### Fresh local Python 3.12 verification
 
@@ -119,12 +123,16 @@ dependency, container, or workflow code changed in Day 7.
 The review checked local Markdown targets and heading anchors, screenshot
 dimensions and source hashes, consistency of the 30-minute screenshot and
 60-minute manual-demo settings, verified experiment values, and the distinction
-between baseline CI results and unpushed documentation. README now records the
-final review as complete and GitHub push as pending. Raw traces, failure images,
+between baseline CI results and the delivery documentation. Raw traces, failure images,
 virtual environments, and temporary reports are excluded from the delivery.
 
-The handoff is prepared as one documentation commit titled
-`docs: finalize Day 7 handoff and portfolio`. Per the stepwise confirmation
-process, push requires the next confirmation. No Day 7 remote CI result is claimed.
-After push, verify that the remote commit matches the local commit and inspect
-both CI jobs before recording remote delivery as complete.
+The handoff was committed as `9867659` (`docs: finalize Day 7 handoff and portfolio`)
+and pushed after confirmation. Local `main` and `origin/main` matched at
+`98676593381cd773df29d4aa52d9a702a819fcff`, with a clean working tree at handoff.
+Both jobs in the
+[delivery CI run](https://github.com/j22868706/sideproject_fabflow/actions/runs/39044791273)
+completed successfully: quality checks, container builds and HTTP checks,
+Chromium browser acceptance, artifact upload, and service cleanup.
+
+The subsequent README completion-status update records this existing delivery
+result; it does not claim a new CI result for that documentation update.

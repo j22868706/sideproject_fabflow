@@ -5,19 +5,33 @@ in a simplified semiconductor fab. Synthetic wafer lots compete for machine
 capacity across Lithography, Etching, and Inspection. Reproducible experiments
 compare cycle time, throughput, on-time delivery, and equipment utilization.
 
-**Day 1–5 are implemented and locally validated:** domain models, multi-stage
-simulation, FIFO/SPT/Critical Ratio dispatching, Hot lot insertion with Normal
-lot aging protection, machine failure/repair, finite AMHS vehicles, and KPI comparison reports.
-The FastAPI service supports synchronous run creation, result queries, input
-validation, error handling, and health checks, with full API workflow acceptance.
-Day 6 is complete locally: Streamlit supports connection checks, preset simulation
-submission, completion summaries, and KPI charts. Docker Compose integration is
-validated locally, including real desktop Chrome acceptance for both scenarios
-and all three policies. Day 7 verification, handoff documents, and portfolio are
-prepared; final GitHub delivery is pending.
+**The seven-day MVP is complete and delivered to GitHub.** It includes multi-stage
+simulation, FIFO/SPT/Critical Ratio dispatching, Hot lot priority with Normal lot
+aging protection, equipment failure/repair, and finite AMHS vehicle capacity.
+FastAPI exposes validated simulation requests, summaries, KPIs, events, and
+health checks. Streamlit provides scenario controls and manufacturing, equipment,
+and transport charts; Docker Compose starts both services together.
+
+Final delivery commit `9867659` passed both GitHub Actions jobs, including
+quality checks, container HTTP workflows, and real Chromium browser acceptance:
+[successful delivery CI](https://github.com/j22868706/sideproject_fabflow/actions/runs/39044791273).
 
 > This project uses synthetic data and a simplified semiconductor manufacturing
 > model. It does not contain proprietary TSMC manufacturing data.
+
+## Completed Results
+
+| Area | Verified outcome |
+| --- | --- |
+| Simulation baseline | 20 lots complete at minute 175; average cycle time 70.50 min |
+| Paired AMHS experiment | Increasing vehicles from 1 to 3 raises simulated throughput from 5.91 to 12.90 lots/hour on the same workload |
+| Policy comparison | Seed 42: SPT average cycle 36.37 min versus FIFO 39.77; CR has the lowest P95 at 66.74 min |
+| Automated tests | 179 passing tests; 93% combined statement/branch coverage on Python 3.12.14 |
+| End-to-end acceptance | Both dashboard presets × FIFO/SPT/CR verified in real browsers, with KPI refresh and error recovery |
+| Handoff | Operation runbook, reproducible demo, portfolio summary, and actual dashboard screenshots |
+
+Experiment results describe specific synthetic workloads, not improvements
+measured in a real fab. See the comparison sections below for inputs and limits.
 
 ## Dashboard Preview
 
@@ -105,7 +119,7 @@ Results live in application memory with no automatic expiry. Use one worker:
 processes do not share results, and restarting or reloading clears them. This
 MVP uses synchronous execution without a database or background job queue.
 
-## Day 6 Progress: Dashboard and Docker Compose
+## Dashboard and Docker Compose
 
 All five Day 6 steps are complete and locally validated:
 
@@ -123,7 +137,8 @@ first successful load. Screenshots and traces are generated locally under
 `artifacts/browser/` and uploaded by the CI workflow. Both `quality` and
 `containers` passed for commit `2d83879`, including Chromium browser acceptance:
 [verified CI run](https://github.com/j22868706/sideproject_fabflow/actions/runs/39043904601).
-Day 7 verification and handoff materials are prepared; final GitHub delivery is pending.
+Final handoff was delivered in `9867659` and passed
+[delivery CI](https://github.com/j22868706/sideproject_fabflow/actions/runs/39044791273).
 
 For handoff, use the [operation runbook](docs/runbook.md) and
 [reproducible demo walkthrough](docs/demo-walkthrough.md), including expected
@@ -488,18 +503,19 @@ pytest --cov=app --cov=simulator --cov-report=term-missing
 Day 7 repeated the full suite in a fresh Python 3.12.14 environment: 179 tests
 passed with 93% combined statement/branch coverage across `app` and `simulator`.
 `pip check` also passed. One upstream TestClient HTTPX deprecation warning remains.
-See the [Day 7 verification record and delivery status](docs/day7-delivery.md).
+See the [final verification and delivery record](docs/day7-delivery.md).
 
 [GitHub Actions](.github/workflows/ci.yml) is configured to run lint, formatting,
 and tests on Python 3.12, plus Docker Compose HTTP and Chromium browser acceptance,
 on pushes to `main` and pull requests. The
-[Day 6 CI run for `2d83879`](https://github.com/j22868706/sideproject_fabflow/actions/runs/39043904601)
-passed both jobs, including the real Chromium workflow. This result applies to
-that commit; subsequent documentation changes have not yet been pushed.
+[delivery CI run for `9867659`](https://github.com/j22868706/sideproject_fabflow/actions/runs/39044791273)
+passed both jobs, including the real Chromium workflow and browser artifact
+upload. These results apply to that delivered commit.
 
 Day 5 validation also exercised a real local Uvicorn server with both JSON
-examples. Overall coverage on Python 3.12.14 is 92%; one upstream TestClient HTTPX deprecation
-warning remains. See the [Swagger walkthrough and acceptance record](docs/day5-api.md).
+examples. That earlier Day 5 run reported 92% coverage; the completed MVP's
+Python 3.12.14 run reports 93% as recorded above. See the
+[Swagger walkthrough and acceptance record](docs/day5-api.md).
 
 ### Resolved CI Error: Python 3.12 Type Annotation Evaluation
 
@@ -526,17 +542,17 @@ import. After the fix, Ruff lint, formatting, and all 150 tests passed locally o
 Python 3.12.14, including the CI coverage command. Validate changes with the CI
 Python version as well as newer supported versions to catch this kind of mismatch.
 
-## Roadmap
+## Completed MVP Milestones
 
 | Day | Status | Deliverable |
 | --- | --- | --- |
-| 1 | Complete locally | Project setup, domain models, scenario creation, test environment |
-| 2 | Complete locally | Three-stage engine, capacity control, events, reproducible demo |
-| 3 | Complete locally | FIFO/SPT/CR, Hot insertion and aging, reliability, KPIs, comparison exports |
-| 4 | Complete locally | Limited AMHS vehicles, transport queues, transport KPIs, congestion experiments |
-| 5 | Complete locally | FastAPI run creation, execution, result queries, validation, health checks |
-| 6 | Complete locally | Streamlit controls, KPI charts, Docker Compose, and real browser acceptance |
-| 7 | Awaiting delivery | Verification, runbook, demo, portfolio, and final review complete; GitHub push pending |
+| 1 | Complete | Project setup, domain models, scenario creation, test environment |
+| 2 | Complete | Three-stage engine, capacity control, events, reproducible demo |
+| 3 | Complete | FIFO/SPT/CR, Hot insertion and aging, reliability, KPIs, comparison exports |
+| 4 | Complete | Limited AMHS vehicles, transport queues, transport KPIs, congestion experiments |
+| 5 | Complete | FastAPI run creation, execution, result queries, validation, health checks |
+| 6 | Complete | Streamlit controls, KPI charts, Docker Compose, and real browser acceptance |
+| 7 | Complete | Final verification, handoff documents, portfolio, GitHub delivery, and successful CI |
 
 ## Assumptions and Limits
 
@@ -556,7 +572,7 @@ large-scale performance testing are outside the seven-day MVP scope.
 
 ## Documentation
 
-- [Day 7 verification and delivery progress](docs/day7-delivery.md)
+- [Final verification and delivery record](docs/day7-delivery.md)
 - [Portfolio summary and dashboard screenshots](docs/portfolio.md)
 - [Operation and handoff runbook](docs/runbook.md)
 - [Reproducible demo walkthrough](docs/demo-walkthrough.md)
