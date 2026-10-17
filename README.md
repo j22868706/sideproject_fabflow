@@ -13,15 +13,25 @@ validation, error handling, and health checks, with full API workflow acceptance
 Day 6 is complete locally: Streamlit supports connection checks, preset simulation
 submission, completion summaries, and KPI charts. Docker Compose integration is
 validated locally, including real desktop Chrome acceptance for both scenarios
-and all three policies. Final delivery work remains Day 7.
+and all three policies. Day 7 verification, handoff documents, and portfolio are
+prepared; final GitHub delivery is pending.
 
 > This project uses synthetic data and a simplified semiconductor manufacturing
 > model. It does not contain proprietary TSMC manufacturing data.
+
+## Dashboard Preview
+
+![FabFlow manufacturing KPIs and equipment charts](docs/images/three-stage-baseline-kpis.png)
+
+Real browser capture using synthetic data, FIFO, seed 42, and a 30-minute aging
+threshold. See the [portfolio summary and AMHS screenshots](docs/portfolio.md)
+for experiment findings, engineering decisions, verification evidence, and limits.
 
 ## Quick Start
 
 Requires Python 3.12+ and Git. CI is configured for Python 3.12. Day 6 unit and
 integration checks ran on Python 3.14.6; container acceptance used Python 3.12.15.
+Day 7 repeated the full suite and coverage on Python 3.12.14.
 Run these commands from the repository root:
 
 ```bash
@@ -110,8 +120,14 @@ All five Day 6 steps are complete and locally validated:
 Browser acceptance also covers KPI refresh, API-address isolation, and recovery
 after invalid input. It found and fixed the KPI button label update after the
 first successful load. Screenshots and traces are generated locally under
-`artifacts/browser/` and uploaded by the configured CI workflow. Remote CI for
-these changes has not yet been verified. Day 7 final delivery work remains pending.
+`artifacts/browser/` and uploaded by the CI workflow. Both `quality` and
+`containers` passed for commit `2d83879`, including Chromium browser acceptance:
+[verified CI run](https://github.com/j22868706/sideproject_fabflow/actions/runs/39043904601).
+Day 7 verification and handoff materials are prepared; final GitHub delivery is pending.
+
+For handoff, use the [operation runbook](docs/runbook.md) and
+[reproducible demo walkthrough](docs/demo-walkthrough.md), including expected
+results, exports, troubleshooting, and shutdown.
 
 ### Run with Docker Compose
 
@@ -438,13 +454,13 @@ all three policies, including KPI refresh and invalid-address recovery.
 ## Testing
 
 ```bash
+python -m pip install -e ".[dev,dashboard]"
 ruff check .
 ruff format --check .
-python -m pip install -e ".[dev,dashboard]"
 pytest -q
 ```
 
-Latest local validation on Python 3.14.6, with dashboard dependencies installed:
+Latest local validation on Python 3.12.14, with dashboard dependencies installed:
 
 ```text
 All checks passed!
@@ -469,10 +485,17 @@ For coverage:
 pytest --cov=app --cov=simulator --cov-report=term-missing
 ```
 
+Day 7 repeated the full suite in a fresh Python 3.12.14 environment: 179 tests
+passed with 93% combined statement/branch coverage across `app` and `simulator`.
+`pip check` also passed. One upstream TestClient HTTPX deprecation warning remains.
+See the [Day 7 verification record and delivery status](docs/day7-delivery.md).
+
 [GitHub Actions](.github/workflows/ci.yml) is configured to run lint, formatting,
 and tests on Python 3.12, plus Docker Compose HTTP and Chromium browser acceptance,
-on pushes to `main` and pull requests. The results above are local;
-remote CI status has not been verified for these changes.
+on pushes to `main` and pull requests. The
+[Day 6 CI run for `2d83879`](https://github.com/j22868706/sideproject_fabflow/actions/runs/39043904601)
+passed both jobs, including the real Chromium workflow. This result applies to
+that commit; subsequent documentation changes have not yet been pushed.
 
 Day 5 validation also exercised a real local Uvicorn server with both JSON
 examples. Overall coverage on Python 3.12.14 is 92%; one upstream TestClient HTTPX deprecation
@@ -513,7 +536,7 @@ Python version as well as newer supported versions to catch this kind of mismatc
 | 4 | Complete locally | Limited AMHS vehicles, transport queues, transport KPIs, congestion experiments |
 | 5 | Complete locally | FastAPI run creation, execution, result queries, validation, health checks |
 | 6 | Complete locally | Streamlit controls, KPI charts, Docker Compose, and real browser acceptance |
-| 7 | Planned | Final tests, CI packaging, documentation, and portfolio materials |
+| 7 | Awaiting delivery | Verification, runbook, demo, portfolio, and final review complete; GitHub push pending |
 
 ## Assumptions and Limits
 
@@ -533,6 +556,10 @@ large-scale performance testing are outside the seven-day MVP scope.
 
 ## Documentation
 
+- [Day 7 verification and delivery progress](docs/day7-delivery.md)
+- [Portfolio summary and dashboard screenshots](docs/portfolio.md)
+- [Operation and handoff runbook](docs/runbook.md)
+- [Reproducible demo walkthrough](docs/demo-walkthrough.md)
 - [Day 6 dashboard, Docker Compose, and acceptance](docs/day6-dashboard.md)
 - [Day 5 API guide, Swagger walkthrough, and acceptance](docs/day5-api.md)
 - [Day 4 AMHS model and KPI definitions](docs/day4-amhs.md)
