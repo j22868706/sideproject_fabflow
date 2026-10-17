@@ -1,0 +1,10 @@
+*
+!Dockerfile
+!pyproject.toml
+!README.md
+!app/
+!app/**
+!simulator/
+!simulator/**
+**/__pycache__/
+**/*.py[cod]

@@ -43,3 +43,6 @@ dist/
 AGENTS.md
 
 Guideline.txt
+
+# Browser acceptance screenshots and traces
+artifacts/browser/

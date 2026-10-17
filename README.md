@@ -10,15 +10,19 @@ simulation, FIFO/SPT/Critical Ratio dispatching, Hot lot insertion with Normal
 lot aging protection, machine failure/repair, finite AMHS vehicles, and KPI comparison reports.
 The FastAPI service supports synchronous run creation, result queries, input
 validation, error handling, and health checks, with full API workflow acceptance.
-Dashboard and deployment follow on Day 6–7.
+Day 6 is complete locally: Streamlit supports connection checks, preset simulation
+submission, completion summaries, and KPI charts. Docker Compose integration is
+validated locally, including real desktop Chrome acceptance for both scenarios
+and all three policies. Final delivery work remains Day 7.
 
 > This project uses synthetic data and a simplified semiconductor manufacturing
 > model. It does not contain proprietary TSMC manufacturing data.
 
 ## Quick Start
 
-Requires Python 3.12+ and Git. CI is configured for Python 3.12; the latest local
-validation used Python 3.12.14. Run these commands from the repository root:
+Requires Python 3.12+ and Git. CI is configured for Python 3.12. Day 6 unit and
+integration checks ran on Python 3.14.6; container acceptance used Python 3.12.15.
+Run these commands from the repository root:
 
 ```bash
 python3 -m venv .venv
@@ -90,6 +94,77 @@ are logged on the server. Failed runs do not publish partial results.
 Results live in application memory with no automatic expiry. Use one worker:
 processes do not share results, and restarting or reloading clears them. This
 MVP uses synchronous execution without a database or background job queue.
+
+## Day 6 Progress: Dashboard and Docker Compose
+
+All five Day 6 steps are complete and locally validated:
+
+| Step | Deliverable | Status |
+| --- | --- | --- |
+| 1 | Streamlit entry point, configurable API address, readiness checks | Complete |
+| 2 | Baseline/AMHS presets, FIFO/SPT/CR, aging threshold, run creation and summary | Complete |
+| 3 | Manufacturing KPIs, equipment charts, AMHS charts, saved results and refresh | Complete |
+| 4 | Python 3.12 containers, single-worker API, Compose networking and health checks | Complete |
+| 5 | Real Chrome acceptance for both scenarios and all three dispatch policies | Complete |
+
+Browser acceptance also covers KPI refresh, API-address isolation, and recovery
+after invalid input. It found and fixed the KPI button label update after the
+first successful load. Screenshots and traces are generated locally under
+`artifacts/browser/` and uploaded by the configured CI workflow. Remote CI for
+these changes has not yet been verified. Day 7 final delivery work remains pending.
+
+### Run with Docker Compose
+
+With Docker running, start both services from the repository root:
+
+```bash
+docker compose up --build --wait --wait-timeout 120
+```
+
+Open the dashboard at http://localhost:8501 and Swagger at http://localhost:8000/docs.
+The dashboard connects to `http://api:8000` inside the Compose network. Select
+**Check connection**, run a preset simulation, then select **Load KPIs**.
+
+Run container HTTP acceptance and stop the stack:
+
+```bash
+docker compose exec -T dashboard python - < scripts/smoke_containers.py
+docker compose down
+```
+
+API results are held in memory and lost when the API restarts. See the
+[container setup and validation record](docs/day6-dashboard.md#step-4-docker-compose-integration-implemented-and-validated-locally).
+
+### Run the Dashboard Locally
+
+Install the optional dashboard dependencies, then start the API and dashboard
+in separate terminals:
+
+```bash
+python -m pip install -e ".[dev,dashboard]"
+python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
+```
+
+```bash
+python -m streamlit run app/dashboard/main.py
+```
+
+For local execution, the dashboard defaults to `http://127.0.0.1:8000`.
+`FABFLOW_API_URL` can override the default address.
+
+### Repeat Browser Acceptance
+
+With the API and dashboard running:
+
+```bash
+python -m pip install -e ".[browser]"
+python -m playwright install chromium
+python scripts/smoke_browser.py
+```
+
+Use `--channel chrome` to run against an existing Google Chrome installation.
+See the [browser acceptance record](docs/day6-dashboard.md#step-5-real-browser-acceptance-complete-locally)
+for the tested environment, results, and trace inspection commands.
 
 ## Compare Dispatching Policies
 
@@ -308,7 +383,7 @@ See [reliability and KPI details](docs/day3-reliability-kpi.md) for edge cases.
 
 ## Architecture and Repository
 
-Current execution supports local Python commands and a FastAPI service:
+Current execution supports local Python commands, FastAPI, and a Streamlit dashboard:
 
 ```text
 Scenario inputs → SimPy engine + dispatching + reliability + AMHS
@@ -317,6 +392,8 @@ Scenario inputs → SimPy engine + dispatching + reliability + AMHS
 
 HTTP request → FastAPI validation → Run service → Fresh simulation engine
              → Completed summary + KPIs + events → In-memory store → HTTP queries
+
+Browser → Streamlit dashboard → HTTP API → Run summary and KPI charts
 ```
 
 ```text
@@ -326,6 +403,7 @@ fabflow/
 │   ├── api/                    # Run queries, errors, and health checks
 │   ├── models/                 # API request/response contracts
 │   ├── services/               # Synchronous runs and in-memory results
+│   ├── dashboard/              # Streamlit controls, API calls, and KPI charts
 │   ├── cli.py                  # Informational entry point
 │   └── simulation/
 │       ├── demo.py             # 20-lot baseline
@@ -340,29 +418,38 @@ fabflow/
 │   └── scenarios/              # Baseline and comparison inputs
 ├── tests/                      # Unit and integration tests
 ├── docs/                       # Model definitions, walkthroughs, sample report
-├── .github/workflows/ci.yml    # Ruff and Pytest on Python 3.12
+├── scripts/                    # Container HTTP and real browser acceptance
+├── Dockerfile                  # Separate API and dashboard targets
+├── compose.yaml                # Services, networking, and health checks
+├── .github/workflows/ci.yml    # Ruff, Pytest, container and browser acceptance
 └── pyproject.toml
 ```
 
 The Day 5 API can be started with `python -m uvicorn app.main:app`; see the
 [API guide](docs/day5-api.md) for endpoints and in-memory storage limits.
-Day 6 will add Streamlit as an API client and Docker Compose for the API and
-dashboard. Those components are not implemented yet.
+Day 6 is complete locally: Streamlit supports API address configuration, readiness
+checks, preset scenario selection, FIFO/SPT/CR and aging settings, simulation
+submission, completion summaries, and manufacturing/equipment/AMHS KPI charts.
+See the [dashboard setup](docs/day6-dashboard.md).
+Docker Compose builds both services and passes container-network HTTP acceptance
+locally. Real desktop Chrome acceptance also passes across both scenarios and
+all three policies, including KPI refresh and invalid-address recovery.
 
 ## Testing
 
 ```bash
 ruff check .
 ruff format --check .
+python -m pip install -e ".[dev,dashboard]"
 pytest -q
 ```
 
-Latest local validation on Python 3.12.14:
+Latest local validation on Python 3.14.6, with dashboard dependencies installed:
 
 ```text
 All checks passed!
-68 files already formatted
-150 passed
+76 files already formatted
+179 passed
 ```
 
 Tests cover route order, timestamps, capacity, repeated station visits, stable
@@ -372,7 +459,9 @@ isolation, AMHS capacity/FIFO, transport timestamps and KPIs, congestion, and re
 
 The 60 API tests cover request schemas, all three policy mappings, JSON results,
 validation and server errors, health checks, independent stores, concurrent runs,
-and both documented examples. The full suite contains 150 tests.
+and both documented examples. Another 29 dashboard tests cover UI state,
+simulation submission, KPI rendering, refresh, and error handling. The full suite
+contains 179 tests. Without the dashboard extra, dashboard tests are skipped.
 
 For coverage:
 
@@ -381,7 +470,8 @@ pytest --cov=app --cov=simulator --cov-report=term-missing
 ```
 
 [GitHub Actions](.github/workflows/ci.yml) is configured to run lint, formatting,
-and tests on pushes to `main` and pull requests. The results above are local;
+and tests on Python 3.12, plus Docker Compose HTTP and Chromium browser acceptance,
+on pushes to `main` and pull requests. The results above are local;
 remote CI status has not been verified for these changes.
 
 Day 5 validation also exercised a real local Uvicorn server with both JSON
@@ -422,7 +512,7 @@ Python version as well as newer supported versions to catch this kind of mismatc
 | 3 | Complete locally | FIFO/SPT/CR, Hot insertion and aging, reliability, KPIs, comparison exports |
 | 4 | Complete locally | Limited AMHS vehicles, transport queues, transport KPIs, congestion experiments |
 | 5 | Complete locally | FastAPI run creation, execution, result queries, validation, health checks |
-| 6 | Planned | Streamlit dashboard, Docker Compose, end-to-end demo |
+| 6 | Complete locally | Streamlit controls, KPI charts, Docker Compose, and real browser acceptance |
 | 7 | Planned | Final tests, CI packaging, documentation, and portfolio materials |
 
 ## Assumptions and Limits
@@ -443,6 +533,7 @@ large-scale performance testing are outside the seven-day MVP scope.
 
 ## Documentation
 
+- [Day 6 dashboard, Docker Compose, and acceptance](docs/day6-dashboard.md)
 - [Day 5 API guide, Swagger walkthrough, and acceptance](docs/day5-api.md)
 - [Day 4 AMHS model and KPI definitions](docs/day4-amhs.md)
 - [Generated AMHS congestion report](docs/day4-amhs-report.md)
