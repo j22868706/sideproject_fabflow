@@ -1,5 +1,7 @@
 # Day 1: Understanding FabFlow Before Kubernetes
 
+狀態：已完成（依使用者確認）；接續 Day 2 Docker 基線教學。實際時數待填。
+
 ## Learning goal
 
 Trace a simulation request from the browser to the API, identify where results
