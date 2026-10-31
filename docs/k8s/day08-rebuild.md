@@ -1,7 +1,7 @@
 # Day 8：Namespace 重建與記憶體結果驗證
 
 狀態：核心操作驗收已完成（依使用者提供的終端輸出與 UI 確認）。
-實際時數待填。觀念補充已提供，尚未收到補充後的理解確認。
+實際時數待填。使用者已回答 Service 連線觀念，DNS 與 label selector 的分工已補充說明。
 
 ## 目標與範圍
 
@@ -82,3 +82,34 @@ EndpointSlice 找到可接收流量的 Pod。因此 Service 以相同名稱重�
 
 本次重建、HTTP 與 UI 驗收依使用者輸出與確認記錄；助理僅直接執行重建前的
 唯讀狀態查詢，未另行操作 namespace 刪除、重建或瀏覽器。
+
+## 後續現況與 Service 路徑查核（2026-10-31）
+
+助理重新直接查詢 kind-fabflow，節點 Ready；API 與 Dashboard Deployment
+皆 1/1，兩個 Pod 皆 Running、重啟 0，Pod 名稱與上述重建紀錄一致。
+本次未修改叢集設定。
+
+從 Dashboard Pod 執行 DNS 與 HTTP 查核，實際結果：
+
+```text
+FABFLOW_API_URL=http://api:8000
+api DNS=10.96.14.134
+readiness=200 {"status":"ready"}
+```
+
+同次 Service 與 EndpointSlice 查詢顯示：
+
+```text
+Service api: ClusterIP 10.96.14.134, selector app=fabflow-api
+EndpointSlice api-cz4l9: 10.244.0.13:8000
+API Pod api-9fcdd7f99-xl2j2: 10.244.0.13
+```
+
+這些結果驗證 Dashboard 使用的 api 名稱解析至 Service ClusterIP，
+且 Service 的後端端點對應目前 API Pod。HTTP readiness 回傳成功。
+本次未重新執行模擬或 UI 驗收。使用者後續回答固定 Service 名稱能避免追蹤
+Pod IP；助理補充 DNS 解析 Service、selector 選取 Pod 的分工。
+
+後續查到根目錄 `FabFlow_K8s_30天進度表.xlsx`：Day 9 為結果儲存介面與
+PostgreSQL schema 設計，接續見 day09-storage-design.md。先前僅查 Markdown
+而判斷未記載課程，已依原始進度表更正。
