@@ -129,8 +129,10 @@ Day 14 再由兩個 API Pod 各自查詢相同結果。既有 API 測試保護 r
 def __init__(self, store: RunStore) -> None:
     self._store = store
 
+
 # create() 完成模擬與 response 轉換後，取代原字典寫入：
 # self._store.save(stored)
+
 
 def get(self, run_id: str) -> StoredRun | None:
     return self._store.get(run_id)

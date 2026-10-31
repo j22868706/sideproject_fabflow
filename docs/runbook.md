@@ -15,12 +15,19 @@ the base image and Python packages. Obtain the project:
 ```bash
 git clone https://github.com/j22868706/sideproject_fabflow.git
 cd sideproject_fabflow
+cp .env.example .env
+# Edit .env: replace the password placeholder with a local development password.
 docker compose config --quiet
 docker compose up --build --wait --wait-timeout 120
 docker compose ps
 ```
 
-Both `api` and `dashboard` should be healthy. Open:
+Both `api` and `dashboard` should be healthy. The PostgreSQL `db` service should
+be running; check DB readiness separately with
+`docker compose exec db pg_isready -U fabflow -d fabflow`. The API currently
+stores simulation results in memory even though its container can connect to DB.
+See [Day 10](k8s/day10-postgres-dev.md) for schema setup and verification.
+Open:
 
 | Interface | Host address |
 | --- | --- |
@@ -134,3 +141,8 @@ docker compose down
 
 `down` removes this Compose project's containers and network. It also discards
 the API's in-memory results. To start again, repeat the Compose startup command.
+
+The PostgreSQL named volume survives ordinary `docker compose down`. Initialization
+SQL runs automatically only for an empty data directory. Changing the init file
+does not migrate an existing database. `docker compose down -v` deletes the DB
+volume and its contents; use ordinary `down` when preserving development data.

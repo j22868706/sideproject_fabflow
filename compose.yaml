@@ -15,6 +15,12 @@ services:
       timeout: 5s
       retries: 12
       start_period: 10s
+    environment:
+      PGHOST: db
+      PGPORT: "5432"
+      PGDATABASE: fabflow
+      PGUSER: fabflow
+      PGPASSWORD: ${POSTGRES_PASSWORD:?please set up your password at .env}
 
   dashboard:
     build:
@@ -37,3 +43,16 @@ services:
       timeout: 5s
       retries: 12
       start_period: 10s
+
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: fabflow
+      POSTGRES_USER: fabflow
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?please set up your password at .env}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./deployments/postgres/init:/docker-entrypoint-initdb.d:ro
+
+volumes:
+  postgres_data:

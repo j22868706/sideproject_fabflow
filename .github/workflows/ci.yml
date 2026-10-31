@@ -36,6 +36,9 @@ jobs:
 
   containers:
     runs-on: ubuntu-latest
+    env:
+      # Disposable CI database only; never use a deployment credential here.
+      POSTGRES_PASSWORD: fabflow-ci-only
     timeout-minutes: 15
     steps:
       - name: Check out repository

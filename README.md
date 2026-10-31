@@ -154,13 +154,20 @@ results, exports, troubleshooting, and shutdown.
 
 ### Run with Docker Compose
 
-With Docker running, start both services from the repository root:
+With Docker running, first copy `.env.example` to `.env` and replace the password
+placeholder with a local development password. Keep `.env` untracked. Then start
+the services from the repository root:
 
 ```bash
 docker compose up --build --wait --wait-timeout 120
 ```
 
 Open the dashboard at http://localhost:8501 and Swagger at http://localhost:8000/docs.
+The Kubernetes learning track now includes a PostgreSQL 17 development service
+with a named volume and initialization SQL. API-container database connectivity
+is verified; simulation results still use process-local memory. See the
+[Day 10 setup record](docs/k8s/day10-postgres-dev.md).
+
 The dashboard connects to `http://api:8000` inside the Compose network. Select
 **Check connection**, run a preset simulation, then select **Load KPIs**.
 
