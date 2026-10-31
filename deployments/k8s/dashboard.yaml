@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dashboard-config
+  namespace: fabflow
+data:
+  FABFLOW_API_URL: http://api:8000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dashboard
+  namespace: fabflow
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fabflow-dashboard
+  template:
+    metadata:
+      labels:
+        app: fabflow-dashboard
+    spec:
+      containers:
+        - name: dashboard
+          image: fabflow-dashboard:day5
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: FABFLOW_API_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: dashboard-config
+                  key: FABFLOW_API_URL
+          ports:
+            - name: http
+              containerPort: 8501
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dashboard
+  namespace: fabflow
+spec:
+  type: ClusterIP
+  selector:
+    app: fabflow-dashboard
+  ports:
+    - name: http
+      port: 8501
+      targetPort: http
