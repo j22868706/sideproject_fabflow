@@ -48,8 +48,10 @@ Day 18 達成 Excel 的成功建置紀錄與 commit SHA tag 標準。Excel 同�
 - main 建置日誌與完整映像 SHA 未提供，不將先前 PR SHA 當成 main 的映像標籤。
 - 遠端 CI 結果依使用者確認；助理未獨立取得 Actions 日誌或 run URL。
 
-## 下一次接續點
+## 當時接續點（已由 Day 19 紀錄更新）
 
 Day 19 尚未開始操作。已提出 `uname -m`、查詢 nodeInfo.architecture 與
 `git status --short`，使用者尚未提供結果，先要求同步文件。下次先確認工作目錄
 及 live cluster/context 狀態，再逐步核對架構與映像取得方式；不要預先完成整課。
+
+Day 19 後續已完成版本化部署與 HTTP 驗收，詳見 [Day 19](day19-versioned-deployment.md)。
