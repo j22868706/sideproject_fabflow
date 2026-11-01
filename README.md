@@ -163,10 +163,12 @@ docker compose up --build --wait --wait-timeout 120
 ```
 
 Open the dashboard at http://localhost:8501 and Swagger at http://localhost:8000/docs.
-The Kubernetes learning track now includes a PostgreSQL 17 development service
-with a named volume and initialization SQL. API-container database connectivity
-is verified; simulation results still use process-local memory. See the
-[Day 10 setup record](docs/k8s/day10-postgres-dev.md).
+The Kubernetes learning track now uses PostgreSQL 17 for completed Compose API
+results, with a named volume and initialization SQL. Compose explicitly sets
+`FABFLOW_RUN_STORE=postgres`; local Python defaults to `memory`. Completed results
+survive API restart; storage unavailability returns 503. Readiness currently checks
+application lifecycle rather than database availability. See the
+[Day 12 persistence record](docs/k8s/day12-postgres-read.md).
 
 The dashboard connects to `http://api:8000` inside the Compose network. Select
 **Check connection**, run a preset simulation, then select **Load KPIs**.
@@ -178,7 +180,9 @@ docker compose exec -T dashboard python - < scripts/smoke_containers.py
 docker compose down
 ```
 
-API results are held in memory and lost when the API restarts. See the
+Compose results are stored in PostgreSQL; ordinary `down` preserves its named
+volume. Unconfigured local API execution still uses memory and loses results on
+restart. See the
 [container setup and validation record](docs/day6-dashboard.md#step-4-docker-compose-integration-implemented-and-validated-locally).
 
 ### Run the Dashboard Locally
@@ -437,7 +441,7 @@ Scenario inputs → SimPy engine + dispatching + reliability + AMHS
                 → KPI calculator → Markdown / JSON comparison
 
 HTTP request → FastAPI validation → Run service → Fresh simulation engine
-             → Completed summary + KPIs + events → In-memory store → HTTP queries
+             → Completed summary + KPIs + events → Selected result store → HTTP queries
 
 Browser → Streamlit dashboard → HTTP API → Run summary and KPI charts
 ```
@@ -448,7 +452,7 @@ fabflow/
 │   ├── main.py                 # FastAPI application and lifecycle
 │   ├── api/                    # Run queries, errors, and health checks
 │   ├── models/                 # API request/response contracts
-│   ├── services/               # Synchronous runs and in-memory results
+│   ├── services/               # Synchronous runs and memory/PostgreSQL results
 │   ├── dashboard/              # Streamlit controls, API calls, and KPI charts
 │   ├── cli.py                  # Informational entry point
 │   └── simulation/

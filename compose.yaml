@@ -16,6 +16,7 @@ services:
       retries: 12
       start_period: 10s
     environment:
+      FABFLOW_RUN_STORE: postgres
       PGHOST: db
       PGPORT: "5432"
       PGDATABASE: fabflow

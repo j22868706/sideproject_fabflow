@@ -153,3 +153,20 @@ def test_storage_unavailable_returns_503(monkeypatch):
     assert response.status_code == 503
     assert response.json() == {"detail": "Result storage is unavailable"}
     assert "Location" not in response.headers
+
+
+@pytest.mark.parametrize("suffix", ["", "/metrics", "/events"])
+def test_storage_unavailable_during_lookup_returns_503(monkeypatch, suffix):
+    from app.services.run_store import RunStoreUnavailable
+
+    def fail_get(run_id):
+        raise RunStoreUnavailable("private connection diagnostic")
+
+    application = create_app()
+    monkeypatch.setattr(application.state.run_service._store, "get", fail_get)
+
+    with TestClient(application) as client:
+        response = client.get("/api/v1/runs/missing" + suffix)
+
+    assert response.status_code == 503
+    assert response.json() == {"detail": "Result storage is unavailable"}
