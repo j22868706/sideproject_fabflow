@@ -1,0 +1,21 @@
+flowchart TB
+    browser["Browser"]
+    dashboard["Dashboard · Streamlit · port 8501"]
+    browser -->|"Open UI / submit settings"| dashboard
+    dashboard -->|"Render interface and results"| browser
+    subgraph api["API process · FastAPI · port 8000"]
+        routes["HTTP routes / RunService"]
+        engine["SimulationEngine"]
+        store["In-memory dictionary: run_id → StoredRun"]
+        routes -->|"Create: run scenario synchronously"| engine
+        engine -->|"Return completed simulation"| routes
+        routes -->|"Create: store completed result"| store
+        routes -->|"Query: look up run_id"| store
+        store -->|"Stored result or missing"| routes
+    end
+    dashboard -->|"POST /api/v1/runs + JSON settings"| routes
+    routes -->|"201 + summary with run_id"| dashboard
+    dashboard -.->|"GET /api/v1/runs/{run_id}/metrics"| routes
+    routes -.->|"200 + KPIs; 404 if missing"| dashboard
+    note["Restart: dictionary is cleared. Replicas: dictionaries are independent. KPI queries do not rerun the engine."]
+    store --- note

@@ -2,7 +2,8 @@
 
 FabFlow runs a synthetic, finite semiconductor workload through Lithography,
 Etching, and Inspection. The dashboard calls the synchronous FastAPI service;
-the API owns simulation execution and process-local results. Use one API worker.
+the API owns simulation execution. Compose stores completed results in PostgreSQL;
+local Python defaults to process-local memory. Keep one API worker for this setup.
 The [demo walkthrough](demo-walkthrough.md) provides a presentation sequence and
 expected results. Commands below assume a Bash/Zsh-style shell at the repository root.
 
@@ -15,12 +16,21 @@ the base image and Python packages. Obtain the project:
 ```bash
 git clone https://github.com/j22868706/sideproject_fabflow.git
 cd sideproject_fabflow
+cp .env.example .env
+# Edit .env: replace the password placeholder with a local development password.
 docker compose config --quiet
 docker compose up --build --wait --wait-timeout 120
 docker compose ps
 ```
 
-Both `api` and `dashboard` should be healthy. Open:
+Both `api` and `dashboard` should be healthy. The PostgreSQL `db` service should
+be running; check DB readiness separately with
+`docker compose exec db pg_isready -U fabflow -d fabflow`. Compose explicitly sets
+`FABFLOW_RUN_STORE=postgres`; completed results are written before HTTP 201 and
+read from PostgreSQL. DB unavailability returns 503, while a successful lookup
+with no matching ID returns 404. API readiness currently does not check DB.
+See [Day 12](k8s/day12-postgres-read.md) for persistence acceptance and recovery.
+Open:
 
 | Interface | Host address |
 | --- | --- |
@@ -40,7 +50,49 @@ docker compose exec -T dashboard python - < scripts/smoke_containers.py
 ```
 
 The readiness response is `{"status":"ready"}`. The smoke script prints `PASS`
-for both presets and the dashboard/API checks. It creates two in-memory runs.
+for both presets and the dashboard/API checks. It creates two runs in the configured result store.
+
+## Kubernetes learning deployment
+
+The current kind manifests use PostgreSQL 17 with a 1Gi local PVC and two
+API replicas on the same kind node. Follow [Day 13](k8s/day13-postgres-pvc.md) to create the Secret and SQL
+ConfigMap, apply the DB manifests, and build/load `fabflow-api:day13`. Applying
+the manifest directory alone does not create those prerequisites.
+
+API Pod recreation has been verified against a snapshot saved outside the Pod.
+Direct queries to both API Pods have been verified against the same result;
+see [Day 14](k8s/day14-api-replicas.md). Recreate strategy is unchanged, and
+two API replicas do not provide DB HA or node fault tolerance.
+[Day 15](k8s/day15-persistence-acceptance.md) verifies PostgreSQL Pod recreation
+with the original PVC, 503 responses for GET/POST during DB outage on both APIs,
+unchanged results after recovery, and no saved rows for the two connection-failed POSTs. The DB is not highly available;
+local kind storage does not protect against cluster deletion. Deleting the namespace
+or PVC can reclaim database data under the current Delete policy.
+
+## Helm deployment
+
+The chart at deployments/helm/fabflow was installed and verified in the independent
+fabflow-helm namespace during [Day 17](k8s/day17-helm-install-upgrade.md). The original
+fabflow namespace remains managed by raw manifests; use Helm to update fabflow-helm.
+
+```bash
+helm lint deployments/helm/fabflow
+helm template fabflow deployments/helm/fabflow --namespace fabflow-helm
+helm list -n fabflow-helm
+helm history fabflow -n fabflow-helm
+```
+
+Rendering does not change the cluster. For fresh installation prerequisites,
+Secret creation, and upgrade commands, follow the
+[chart instructions](../deployments/helm/fabflow/README.md). Images must be available
+in kind; defaults are local API day13 and dashboard day5 tags. Day 17 accepted
+installation, both HTTP preset workflows, a 2-to-1 API replica upgrade and restoration
+to two, and full result preservation. It did not measure rolling-update availability.
+
+The Secret is external to the release, while the PVC is chart-managed without a
+keep policy. Uninstall or namespace deletion may remove database data. Preserve it
+before cleanup. Init SQL is not a migration; keep the chart SQL copy synchronized
+with deployments/postgres/init. DB HA, backups, and DB-aware API readiness are absent.
 
 ## Start with local Python instead
 
@@ -72,7 +124,8 @@ all lots complete. The dashboard's **Load KPIs** reads that run; **Refresh KPIs*
 queries it again. Settings shown next to the saved result belong to that run,
 even if the form has since changed. A failed submission keeps the previous
 successful result. Saved dashboard state is per browser session; reloading the
-tab resets that session. API results remain available until the API process stops.
+tab resets that session. Completed Compose API results remain in PostgreSQL across
+API restarts; memory-mode results remain only until the API process stops.
 
 To save API output, copy the displayed run ID and replace `RUN_ID` below:
 
@@ -81,10 +134,29 @@ curl --fail-with-body http://127.0.0.1:8000/api/v1/runs/RUN_ID/metrics --output 
 curl --fail-with-body http://127.0.0.1:8000/api/v1/runs/RUN_ID/events --output /tmp/fabflow-events.json
 ```
 
-There is no database, expiry policy, or background-job queue. Restarting or
-recreating the API clears every stored run; exports are not automatic. A cached
-dashboard result can still be visible after an API restart, but refreshing it
-returns 404. Submit a new simulation to obtain a new server-side result.
+There is no expiry policy or background-job queue; exports are not automatic.
+`FABFLOW_RUN_STORE` accepts `memory` (default) or `postgres`; invalid values fail
+startup. Compose uses PostgreSQL and the original named volume protects completed
+results across API and DB container recreation. Memory-mode results disappear
+on API restart, so a cached dashboard result can remain visible while refresh
+returns 404. A new POST creates a different run; it is not an idempotent retry.
+
+For a repeatable API restart check, run `prepare`, restart API, wait for healthy,
+then run `verify`:
+
+```bash
+docker compose exec -T api python - prepare < scripts/check_postgres_persistence.py
+docker compose restart api
+docker compose ps api db
+# After API is healthy:
+docker compose exec -T api python - verify < scripts/check_postgres_persistence.py
+```
+
+The snapshot is stored in the API container at `/tmp/fabflow-day12-check.json`.
+Use a new `--snapshot` path for repeated preparations. The snapshot survives
+restart but not container recreation; see [Day 12](k8s/day12-postgres-read.md)
+for its original scope. The `unavailable` mode and the newer `unavailable-create`
+mode were subsequently exercised on K8s in [Day 15](k8s/day15-persistence-acceptance.md).
 
 ## Verification and evidence
 
@@ -121,7 +193,9 @@ GitHub Actions runs quality, container HTTP, and Chromium checks and uploads the
 | Dashboard cannot reach API | Use `http://api:8000` for Compose, `http://127.0.0.1:8000` for local Python; select **Check connection**. |
 | API is reachable but not ready | Inspect API startup logs and retry readiness after startup completes. |
 | Simulation request times out | Execution may still finish server-side. No automatic retry occurs; a new submission creates a separate run. |
-| KPI refresh returns 404 | The run is absent, commonly after API restart. Run a new simulation. |
+| KPI refresh returns 404 | The ID is absent in the configured store; memory-mode results disappear on restart. Check the backend and run ID. |
+| Result queries return 503 | Check DB status and pg_isready; API readiness alone does not establish DB availability. |
+| External-SSD init bind mount fails | Confirm the host path is a directory and Docker Desktop sharing covers it; Day 12 recovered after Desktop restart while preserving the named volume. |
 | Swagger UI is blank | Swagger loads JavaScript/CSS from a CDN; check browser internet access or use curl. |
 | Browser tools cannot find Chromium | Run `python -m playwright install chromium`, or use `--channel chrome` with installed Chrome. |
 
@@ -133,4 +207,10 @@ docker compose down
 ```
 
 `down` removes this Compose project's containers and network. It also discards
-the API's in-memory results. To start again, repeat the Compose startup command.
+any memory-mode API results. Compose PostgreSQL results remain in the named
+volume. To start again, repeat the Compose startup command.
+
+The PostgreSQL named volume survives ordinary `docker compose down`. Initialization
+SQL runs automatically only for an empty data directory. Changing the init file
+does not migrate an existing database. `docker compose down -v` deletes the DB
+volume and its contents; use ordinary `down` when preserving development data.

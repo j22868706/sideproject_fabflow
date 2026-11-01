@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1070" viewBox="0 0 1200 1070" role="img" aria-labelledby="title desc">
+<title id="title">FabFlow: Current Architecture</title><desc id="desc">Browser connects to dashboard on port 8501. Dashboard calls API on port 8000. Simulation engine and memory dictionary are inside the API process. Creation executes the engine and stores results; KPI queries read memory without running the engine again.</desc>
+<defs><marker id="a" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="context-stroke"/></marker></defs>
+<rect width="1200" height="1070" fill="#f5f7fb"/>
+<style>text{font-family:Arial,sans-serif;fill:#172b4d}.title{font-size:28px;font-weight:bold}.label{font-size:18px;font-weight:bold}.small{font-size:16px}.muted{fill:#52657e}</style>
+<text x="50" y="48" class="title" text-anchor="start">FabFlow | Current Architecture</text>
+<text x="50" y="77" class="small muted" text-anchor="start">Day 1: two deployed services; engine and storage remain inside the API process.</text>
+<rect x="60" y="105" width="1080" height="90" rx="14" fill="#fff" stroke="#ced8e6" stroke-width="2"/>
+<text x="600" y="140" class="label" text-anchor="middle">Browser</text>
+<text x="600" y="170" class="small" text-anchor="middle">Open http://localhost:8501 to use the dashboard</text>
+<path d="M300 195 V255" fill="none" stroke="#2167bf" stroke-width="3" marker-end="url(#a)"/>
+<text x="315" y="230" class="small" text-anchor="start">User actions / UI</text>
+<path d="M900 255 V195" fill="none" stroke="#52657e" stroke-width="3" marker-end="url(#a)"/>
+<text x="915" y="230" class="small" text-anchor="start">Render results</text>
+<rect x="60" y="255" width="1080" height="100" rx="14" fill="#eaf2ff" stroke="#89addb" stroke-width="2"/>
+<text x="600" y="292" class="label" text-anchor="middle">Dashboard | Streamlit | port 8501</text>
+<text x="600" y="322" class="small" text-anchor="middle">Server-side Python sends HTTP requests to http://api:8000 in Compose</text>
+<rect x="45" y="475" width="1110" height="425" rx="14" fill="#edf1f7" stroke="#7489a6" stroke-width="2"/>
+<path d="M200 355 V515" fill="none" stroke="#2167bf" stroke-width="3" marker-end="url(#a)"/>
+<text x="215" y="391" class="label" text-anchor="start">CREATE</text>
+<text x="215" y="416" class="small" text-anchor="start">POST /api/v1/runs</text>
+<text x="215" y="441" class="small" text-anchor="start">JSON: scenario, policy, threshold</text>
+<path d="M610 355 V515" fill="none" stroke="#008675" stroke-width="3" marker-end="url(#a)" stroke-dasharray="8 6"/>
+<text x="625" y="391" class="label" text-anchor="start">READ KPIs</text>
+<text x="625" y="416" class="small" text-anchor="start">GET /api/v1/runs/{run_id}/metrics</text>
+<text x="625" y="441" class="small" text-anchor="start">Uses the existing run ID</text>
+<path d="M1090 515 V355" fill="none" stroke="#52657e" stroke-width="3" marker-end="url(#a)"/>
+<text x="1070" y="467" class="small" text-anchor="end">HTTP response</text>
+<text x="1070" y="490" class="small" text-anchor="end">201 summary / 200 KPIs / 404</text>
+<text x="70" y="503" class="label" text-anchor="start">API PROCESS | FastAPI | port 8000</text>
+<rect x="80" y="525" width="1040" height="85" rx="14" fill="#fff" stroke="#ced8e6" stroke-width="2"/>
+<text x="600" y="558" class="label" text-anchor="middle">HTTP routes + RunService</text>
+<text x="600" y="587" class="small" text-anchor="middle">Create: wait for completion, then store and return summary. Query: read saved metrics.</text>
+<path d="M235 610 V720" fill="none" stroke="#2167bf" stroke-width="3" marker-end="url(#a)"/>
+<text x="250" y="645" class="small" text-anchor="start">1. Run simulation</text>
+<path d="M470 720 V610" fill="none" stroke="#2167bf" stroke-width="3" marker-end="url(#a)"/>
+<text x="485" y="689" class="small" text-anchor="start">2. Return result</text>
+<path d="M800 610 V720" fill="none" stroke="#008675" stroke-width="3" marker-end="url(#a)"/>
+<text x="815" y="642" class="small" text-anchor="start">3. Store completed run</text>
+<text x="815" y="666" class="small" text-anchor="start">OR look up run_id</text>
+<path d="M1065 720 V610" fill="none" stroke="#008675" stroke-width="3" marker-end="url(#a)"/>
+<text x="1050" y="705" class="small" text-anchor="end">Read result</text>
+<rect x="80" y="725" width="490" height="125" rx="14" fill="#eaf2ff" stroke="#89addb" stroke-width="2"/>
+<text x="325" y="770" class="label" text-anchor="middle">SimulationEngine</text>
+<text x="325" y="800" class="small" text-anchor="middle">Executes synchronously during creation</text>
+<text x="325" y="826" class="small" text-anchor="middle">Not called again for KPI queries</text>
+<rect x="610" y="725" width="510" height="125" rx="14" fill="#e7f5ef" stroke="#6dab93" stroke-width="2"/>
+<text x="865" y="762" class="label" text-anchor="middle">In-memory dictionary</text>
+<text x="865" y="791" class="small" text-anchor="middle">run_id → StoredRun</text>
+<text x="865" y="819" class="small" text-anchor="middle">summary + metrics + events</text>
+<text x="70" y="880" class="small muted" text-anchor="start">Engine and dictionary are internal components, not separate services.</text>
+<rect x="60" y="925" width="1080" height="110" rx="14" fill="#fff4df" stroke="#dfbd74" stroke-width="2"/>
+<text x="85" y="957" class="label" text-anchor="start">Current limitations</text>
+<text x="85" y="985" class="small" text-anchor="start">Restart → empty dictionary → old run IDs return 404.</text>
+<text x="85" y="1012" class="small" text-anchor="start">Multiple API processes → separate dictionaries → cross-replica queries can return 404.</text>
+</svg>

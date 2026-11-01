@@ -94,14 +94,19 @@ def test_unexpected_failure_is_logged_and_returns_generic_json(monkeypatch, capl
     def fail(self, scenario):
         raise RuntimeError("internal diagnostic")
 
+    def unexpected_save(run):
+        pytest.fail("Failed simulations must not save results")
+
     monkeypatch.setattr(SimulationEngine, "run_scenario", fail)
     application = create_app()
+    monkeypatch.setattr(application.state.run_service._store, "save", unexpected_save)
+
     with TestClient(application, raise_server_exceptions=False) as client:
         response = client.post("/api/v1/runs", json=request_payload())
         assert response.status_code == 500
         assert response.json() == {"detail": "Internal server error"}
-        assert application.state.run_service._runs == {}
         assert client.get("/health/ready").status_code == 200
+
     assert "internal diagnostic" in caplog.text
 
 
@@ -114,3 +119,54 @@ def test_openapi_describes_error_responses_and_health():
     assert responses["422"]["content"]["application/json"]["schema"]["$ref"].endswith(
         "/ValidationErrorResponse"
     )
+
+
+def test_storage_failure_returns_generic_error(monkeypatch):
+    from app.services.run_store import RunStoreError
+
+    def fail_save(run):
+        raise RunStoreError("internal storage diagnostic")
+
+    application = create_app()
+    monkeypatch.setattr(application.state.run_service._store, "save", fail_save)
+
+    with TestClient(application, raise_server_exceptions=False) as client:
+        response = client.post("/api/v1/runs", json=request_payload())
+
+    assert response.status_code == 500
+    assert response.json() == {"detail": "Internal server error"}
+    assert "Location" not in response.headers
+
+
+def test_storage_unavailable_returns_503(monkeypatch):
+    from app.services.run_store import RunStoreUnavailable
+
+    def fail_save(run):
+        raise RunStoreUnavailable("private connection diagnostic")
+
+    application = create_app()
+    monkeypatch.setattr(application.state.run_service._store, "save", fail_save)
+
+    with TestClient(application) as client:
+        response = client.post("/api/v1/runs", json=request_payload())
+
+    assert response.status_code == 503
+    assert response.json() == {"detail": "Result storage is unavailable"}
+    assert "Location" not in response.headers
+
+
+@pytest.mark.parametrize("suffix", ["", "/metrics", "/events"])
+def test_storage_unavailable_during_lookup_returns_503(monkeypatch, suffix):
+    from app.services.run_store import RunStoreUnavailable
+
+    def fail_get(run_id):
+        raise RunStoreUnavailable("private connection diagnostic")
+
+    application = create_app()
+    monkeypatch.setattr(application.state.run_service._store, "get", fail_get)
+
+    with TestClient(application) as client:
+        response = client.get("/api/v1/runs/missing" + suffix)
+
+    assert response.status_code == 503
+    assert response.json() == {"detail": "Result storage is unavailable"}

@@ -154,13 +154,38 @@ results, exports, troubleshooting, and shutdown.
 
 ### Run with Docker Compose
 
-With Docker running, start both services from the repository root:
+With Docker running, first copy `.env.example` to `.env` and replace the password
+placeholder with a local development password. Keep `.env` untracked. Then start
+the services from the repository root:
 
 ```bash
 docker compose up --build --wait --wait-timeout 120
 ```
 
 Open the dashboard at http://localhost:8501 and Swagger at http://localhost:8000/docs.
+The Kubernetes learning track now uses PostgreSQL 17 for completed Compose API
+results, with a named volume and initialization SQL. Compose explicitly sets
+`FABFLOW_RUN_STORE=postgres`; local Python defaults to `memory`. Completed results
+survive API restart; storage unavailability returns 503. Readiness currently checks
+application lifecycle rather than database availability. See the
+[Day 12 persistence record](docs/k8s/day12-postgres-read.md).
+
+The kind learning deployment also uses PostgreSQL with a 1Gi local PVC and Secret
+references. API Pod recreation preserves completed results; this is a single-instance
+DB without HA or protection against deleting the entire cluster. The Secret and SQL
+ConfigMap must be created before applying the workload manifests. See the
+[Day 13 setup and acceptance](docs/k8s/day13-postgres-pvc.md).
+[Day 14](docs/k8s/day14-api-replicas.md) verifies that two API Pods read the same
+completed summary, metrics, and events from the shared DB. Both API Pods are on
+one kind node; PostgreSQL remains a single instance.
+[Day 15](docs/k8s/day15-persistence-acceptance.md) verifies K8s DB outage responses,
+recovery with the original PVC, preserved results, and successful writes after recovery.
+The [Day 16 Helm skeleton](docs/k8s/day16-helm-skeleton.md) was completed with
+connections, ConfigMaps, Secret references, a PVC, probes, and resources in
+[Day 17](docs/k8s/day17-helm-install-upgrade.md). A clean namespace installation,
+both HTTP scenario workflows, and replica-change upgrades passed. See the
+[chart instructions](deployments/helm/fabflow/README.md) for prerequisites and scope.
+
 The dashboard connects to `http://api:8000` inside the Compose network. Select
 **Check connection**, run a preset simulation, then select **Load KPIs**.
 
@@ -171,7 +196,9 @@ docker compose exec -T dashboard python - < scripts/smoke_containers.py
 docker compose down
 ```
 
-API results are held in memory and lost when the API restarts. See the
+Compose results are stored in PostgreSQL; ordinary `down` preserves its named
+volume. Unconfigured local API execution still uses memory and loses results on
+restart. See the
 [container setup and validation record](docs/day6-dashboard.md#step-4-docker-compose-integration-implemented-and-validated-locally).
 
 ### Run the Dashboard Locally
@@ -430,7 +457,7 @@ Scenario inputs → SimPy engine + dispatching + reliability + AMHS
                 → KPI calculator → Markdown / JSON comparison
 
 HTTP request → FastAPI validation → Run service → Fresh simulation engine
-             → Completed summary + KPIs + events → In-memory store → HTTP queries
+             → Completed summary + KPIs + events → Selected result store → HTTP queries
 
 Browser → Streamlit dashboard → HTTP API → Run summary and KPI charts
 ```
@@ -441,7 +468,7 @@ fabflow/
 │   ├── main.py                 # FastAPI application and lifecycle
 │   ├── api/                    # Run queries, errors, and health checks
 │   ├── models/                 # API request/response contracts
-│   ├── services/               # Synchronous runs and in-memory results
+│   ├── services/               # Synchronous runs and memory/PostgreSQL results
 │   ├── dashboard/              # Streamlit controls, API calls, and KPI charts
 │   ├── cli.py                  # Informational entry point
 │   └── simulation/
