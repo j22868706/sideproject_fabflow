@@ -54,13 +54,18 @@ for both presets and the dashboard/API checks. It creates two runs in the config
 
 ## Kubernetes learning deployment
 
-The current kind manifests use PostgreSQL 17 with a 1Gi local PVC and a single
-API replica. Follow [Day 13](k8s/day13-postgres-pvc.md) to create the Secret and SQL
+The current kind manifests use PostgreSQL 17 with a 1Gi local PVC and two
+API replicas on the same kind node. Follow [Day 13](k8s/day13-postgres-pvc.md) to create the Secret and SQL
 ConfigMap, apply the DB manifests, and build/load `fabflow-api:day13`. Applying
 the manifest directory alone does not create those prerequisites.
 
 API Pod recreation has been verified against a snapshot saved outside the Pod.
-PostgreSQL Pod recreation has not yet been tested. The DB is not highly available;
+Direct queries to both API Pods have been verified against the same result;
+see [Day 14](k8s/day14-api-replicas.md). Recreate strategy is unchanged, and
+two API replicas do not provide DB HA or node fault tolerance.
+[Day 15](k8s/day15-persistence-acceptance.md) verifies PostgreSQL Pod recreation
+with the original PVC, 503 responses for GET/POST during DB outage on both APIs,
+unchanged results after recovery, and no saved rows for the two connection-failed POSTs. The DB is not highly available;
 local kind storage does not protect against cluster deletion. Deleting the namespace
 or PVC can reclaim database data under the current Delete policy.
 
@@ -125,7 +130,8 @@ docker compose exec -T api python - verify < scripts/check_postgres_persistence.
 The snapshot is stored in the API container at `/tmp/fabflow-day12-check.json`.
 Use a new `--snapshot` path for repeated preparations. The snapshot survives
 restart but not container recreation; see [Day 12](k8s/day12-postgres-read.md)
-for the scope, manual DB outage acceptance, and the unexecuted `unavailable` mode.
+for its original scope. The `unavailable` mode and the newer `unavailable-create`
+mode were subsequently exercised on K8s in [Day 15](k8s/day15-persistence-acceptance.md).
 
 ## Verification and evidence
 

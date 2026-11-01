@@ -29,9 +29,8 @@ def request_json(url: str, payload: dict | None = None) -> tuple[int, dict | lis
             return exc.code, json.load(exc), headers
 
 
-def prepare(base: str, path: Path) -> None:
-    if path.exists():
-        raise FileExistsError(f"Snapshot already exists; use a new --snapshot path: {path}")
+def comparison_payload() -> dict:
+    """Build an API request without domain-only lot state fields."""
     scenario = asdict(create_comparison_scenario())
     scenario["lots"] = [
         {
@@ -43,9 +42,13 @@ def prepare(base: str, path: Path) -> None:
         }
         for lot in scenario["lots"]
     ]
-    status, summary, headers = request_json(
-        base, {"scenario": scenario, "policy": "FIFO", "normal_wait_threshold": 15}
-    )
+    return {"scenario": scenario, "policy": "FIFO", "normal_wait_threshold": 15}
+
+
+def prepare(base: str, path: Path) -> None:
+    if path.exists():
+        raise FileExistsError(f"Snapshot already exists; use a new --snapshot path: {path}")
+    status, summary, headers = request_json(base, comparison_payload())
     assert status == 201, f"Expected 201, got {status}: {summary}"
     assert isinstance(summary, dict)
     run_id = summary["run_id"]
@@ -90,15 +93,35 @@ def unavailable(base: str, snapshot: dict) -> None:
             print(f"PASS: storage outage returns HTTP 503 for {key}; ID={run_id}")
 
 
+def unavailable_create(base: str, path: Path) -> None:
+    """Record a unique scenario and verify POST cannot report storage success."""
+    payload = comparison_payload()
+    scenario_id = f"outage-{uuid4()}"
+    payload["scenario"]["scenario_id"] = scenario_id
+    with path.open("x", encoding="utf-8") as output:
+        json.dump({"scenario_id": scenario_id}, output)
+    print(f"scenario_id: {scenario_id}", flush=True)
+    print(f"attempt record: {path}", flush=True)
+    status, body, headers = request_json(base, payload)
+    assert status == 503, f"Expected POST 503, got {status}: {body}"
+    assert body == {"detail": "Result storage is unavailable"}
+    assert "location" not in headers, "Failed POST must not return a result Location"
+    print("PASS: database outage returns POST 503 without Location")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("action", choices=("prepare", "verify", "unavailable"))
+    parser.add_argument(
+        "action", choices=("prepare", "verify", "unavailable", "unavailable-create")
+    )
     parser.add_argument("--api-url", default="http://127.0.0.1:8000")
     parser.add_argument("--snapshot", type=Path, default=Path("/tmp/fabflow-day12-check.json"))
     args = parser.parse_args()
     base = args.api_url.rstrip("/") + "/api/v1/runs"
     if args.action == "prepare":
         prepare(base, args.snapshot)
+    elif args.action == "unavailable-create":
+        unavailable_create(base, args.snapshot)
     else:
         snapshot = json.loads(args.snapshot.read_text(encoding="utf-8"))
         if args.action == "verify":

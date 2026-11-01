@@ -175,6 +175,11 @@ references. API Pod recreation preserves completed results; this is a single-ins
 DB without HA or protection against deleting the entire cluster. The Secret and SQL
 ConfigMap must be created before applying the workload manifests. See the
 [Day 13 setup and acceptance](docs/k8s/day13-postgres-pvc.md).
+[Day 14](docs/k8s/day14-api-replicas.md) verifies that two API Pods read the same
+completed summary, metrics, and events from the shared DB. Both API Pods are on
+one kind node; PostgreSQL remains a single instance.
+[Day 15](docs/k8s/day15-persistence-acceptance.md) verifies K8s DB outage responses,
+recovery with the original PVC, preserved results, and successful writes after recovery.
 
 The dashboard connects to `http://api:8000` inside the Compose network. Select
 **Check connection**, run a preset simulation, then select **Load KPIs**.
