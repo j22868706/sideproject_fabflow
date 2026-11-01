@@ -170,6 +170,12 @@ survive API restart; storage unavailability returns 503. Readiness currently che
 application lifecycle rather than database availability. See the
 [Day 12 persistence record](docs/k8s/day12-postgres-read.md).
 
+The kind learning deployment also uses PostgreSQL with a 1Gi local PVC and Secret
+references. API Pod recreation preserves completed results; this is a single-instance
+DB without HA or protection against deleting the entire cluster. The Secret and SQL
+ConfigMap must be created before applying the workload manifests. See the
+[Day 13 setup and acceptance](docs/k8s/day13-postgres-pvc.md).
+
 The dashboard connects to `http://api:8000` inside the Compose network. Select
 **Check connection**, run a preset simulation, then select **Load KPIs**.
 

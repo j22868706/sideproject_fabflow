@@ -52,6 +52,18 @@ docker compose exec -T dashboard python - < scripts/smoke_containers.py
 The readiness response is `{"status":"ready"}`. The smoke script prints `PASS`
 for both presets and the dashboard/API checks. It creates two runs in the configured result store.
 
+## Kubernetes learning deployment
+
+The current kind manifests use PostgreSQL 17 with a 1Gi local PVC and a single
+API replica. Follow [Day 13](k8s/day13-postgres-pvc.md) to create the Secret and SQL
+ConfigMap, apply the DB manifests, and build/load `fabflow-api:day13`. Applying
+the manifest directory alone does not create those prerequisites.
+
+API Pod recreation has been verified against a snapshot saved outside the Pod.
+PostgreSQL Pod recreation has not yet been tested. The DB is not highly available;
+local kind storage does not protect against cluster deletion. Deleting the namespace
+or PVC can reclaim database data under the current Delete policy.
+
 ## Start with local Python instead
 
 Requires Python 3.12+. In a fresh checkout, create and activate a virtual environment:

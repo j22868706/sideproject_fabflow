@@ -17,11 +17,27 @@ spec:
     spec:
       containers:
         - name: api
-          image: fabflow-api:day4
+          image: fabflow-api:day13
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
               containerPort: 8000
+          env:
+            - name: FABFLOW_RUN_STORE
+              value: postgres
+            - name: PGHOST
+              value: postgres
+            - name: PGPORT
+              value: "5432"
+            - name: PGDATABASE
+              value: fabflow
+            - name: PGUSER
+              value: fabflow
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: POSTGRES_PASSWORD
           startupProbe:
             httpGet:
               path: /health/live
