@@ -31,10 +31,27 @@ fabflow-helm 為 revision 3 deployed、chart 0.1.0。API 2/2、Dashboard 與 DB 
 
 映像僅在 GitHub Actions runner 建置，未 push registry、未匯出 artifact。
 Docker 日誌 naming to docker.io/library 不代表已上傳 Docker Hub。
-未確認 PR 已合併、main push CI 或手動觸發驗收；本次為 PR CI 驗收。
+PR 與 main push CI 均依使用者確認通過；手動觸發驗收仍未執行。
 workflow_dispatch 手動入口需要 workflow 存在於預設分支。
 
 Day 18 達成 Excel 的成功建置紀錄與 commit SHA tag 標準。Excel 同步 18/30
 （60%），實際時數仍空白；不把規劃日期當成實際完成日期。
 下一課 Day 19：版本化部署，先決定映像保存／取得方式，並處理 CI runner 與
 本機 kind 的架構相容性，再讓 Helm 使用指定版本。一次一步，等待使用者操作。
+
+## PR 合併與 main 驗收收尾
+
+- Day 18 紀錄提交 `8421b3d` 已推送，使用者確認更新後四項 CI 全部成功。
+- 使用者確認 PR #1 checks 通過、無衝突，並完成合併。
+- 使用者終端輸出：`0e16ef4 (HEAD -> main, origin/main, origin/HEAD) Merge pull request #1 from j22868706/feat/k8s-deployment`。
+- 使用者確認此 main push 的 quality、containers、images (api)、images (dashboard) 全部成功。
+- main 建置日誌與完整映像 SHA 未提供，不將先前 PR SHA 當成 main 的映像標籤。
+- 遠端 CI 結果依使用者確認；助理未獨立取得 Actions 日誌或 run URL。
+
+## 當時接續點（已由 Day 19 紀錄更新）
+
+Day 19 尚未開始操作。已提出 `uname -m`、查詢 nodeInfo.architecture 與
+`git status --short`，使用者尚未提供結果，先要求同步文件。下次先確認工作目錄
+及 live cluster/context 狀態，再逐步核對架構與映像取得方式；不要預先完成整課。
+
+Day 19 後續已完成版本化部署與 HTTP 驗收，詳見 [Day 19](day19-versioned-deployment.md)。

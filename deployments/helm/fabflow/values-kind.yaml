@@ -1,0 +1,11 @@
+api:
+  image:
+    repository: fabflow-api
+    tag: "395df1ec02a010163ea46e68374feb607c0c39bd"
+    pullPolicy: IfNotPresent
+
+dashboard:
+  image:
+    repository: fabflow-dashboard
+    tag: "395df1ec02a010163ea46e68374feb607c0c39bd"
+    pullPolicy: IfNotPresent
