@@ -41,3 +41,12 @@ async def unexpected_error_handler(request: Request, exc: Exception) -> JSONResp
     """Log the diagnostic exception and return a generic JSON 500 response."""
     logger.error("Unhandled API error on %s", request.url.path, exc_info=exc)
     return JSONResponse(status_code=500, content={"detail": "Internal server error"})
+
+
+async def storage_unavailable_handler(request: Request, exc: Exception) -> JSONResponse:
+    """Return a generic 503 response when result storage is unavailable."""
+    logger.error("Result storage unavailable on %s", request.url.path)
+    return JSONResponse(
+        status_code=503,
+        content={"detail": "Result storage is unavailable"},
+    )
