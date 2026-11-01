@@ -1,0 +1,1533 @@
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "action": "Binding",
+            "apiVersion": "v1",
+            "eventTime": "2026-11-01T22:22:56.240516Z",
+            "firstTimestamp": null,
+            "involvedObject": {
+                "apiVersion": "v1",
+                "kind": "Pod",
+                "name": "fabflow-api-77bbcb6b4d-2j8nz",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221692",
+                "uid": "1e4e9420-3575-4f9d-b87b-2fb8013d10d8"
+            },
+            "kind": "Event",
+            "lastTimestamp": null,
+            "message": "Successfully assigned fabflow-helm/fabflow-api-77bbcb6b4d-2j8nz to fabflow-control-plane",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:22:56Z",
+                "name": "fabflow-api-77bbcb6b4d-2j8nz.18e40c0719fba455",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221707",
+                "uid": "4f552432-4f1b-41cc-a195-28f1e7cc2df2"
+            },
+            "reason": "Scheduled",
+            "reportingComponent": "default-scheduler",
+            "reportingInstance": "default-scheduler-fabflow-control-plane",
+            "source": {},
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:22:56Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{api}",
+                "kind": "Pod",
+                "name": "fabflow-api-77bbcb6b4d-2j8nz",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221705",
+                "uid": "1e4e9420-3575-4f9d-b87b-2fb8013d10d8"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:22:56Z",
+            "message": "Container image \"fabflow-api:395df1ec02a010163ea46e68374feb607c0c39bd\" already present on machine and can be accessed by the pod",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:22:56Z",
+                "name": "fabflow-api-77bbcb6b4d-2j8nz.18e40c0740417414",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221715",
+                "uid": "f29a81f1-4bf5-4f63-b8c6-23d36ad9aac4"
+            },
+            "reason": "Pulled",
+            "reportingComponent": "kubelet",
+            "reportingInstance": "fabflow-control-plane",
+            "source": {
+                "component": "kubelet",
+                "host": "fabflow-control-plane"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:22:56Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{api}",
+                "kind": "Pod",
+                "name": "fabflow-api-77bbcb6b4d-2j8nz",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221705",
+                "uid": "1e4e9420-3575-4f9d-b87b-2fb8013d10d8"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:22:56Z",
+            "message": "Container created",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:22:56Z",
+                "name": "fabflow-api-77bbcb6b4d-2j8nz.18e40c074622eb54",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221718",
+                "uid": "c819606f-623b-458a-9af9-7e62bc2fd30a"
+            },
+            "reason": "Created",
+            "reportingComponent": "kubelet",
+            "reportingInstance": "fabflow-control-plane",
+            "source": {
+                "component": "kubelet",
+                "host": "fabflow-control-plane"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:22:57Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{api}",
+                "kind": "Pod",
+                "name": "fabflow-api-77bbcb6b4d-2j8nz",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221705",
+                "uid": "1e4e9420-3575-4f9d-b87b-2fb8013d10d8"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:22:57Z",
+            "message": "Container started",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:22:57Z",
+                "name": "fabflow-api-77bbcb6b4d-2j8nz.18e40c074cb3843d",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221721",
+                "uid": "43d4bef0-5d0f-44a7-a44d-ed66f6930757"
+            },
+            "reason": "Started",
+            "reportingComponent": "kubelet",
+            "reportingInstance": "fabflow-control-plane",
+            "source": {
+                "component": "kubelet",
+                "host": "fabflow-control-plane"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:33:11Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{api}",
+                "kind": "Pod",
+                "name": "fabflow-api-77bbcb6b4d-2j8nz",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221705",
+                "uid": "1e4e9420-3575-4f9d-b87b-2fb8013d10d8"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:33:11Z",
+            "message": "Readiness probe failed: Get \"http://10.244.0.20:8000/health/ready\": context deadline exceeded (Client.Timeout exceeded while awaiting headers)",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:33:11Z",
+                "name": "fabflow-api-77bbcb6b4d-2j8nz.18e40c9658046b62",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "222672",
+                "uid": "c0dc68a9-cb7d-44a0-83cd-3acef8c897a4"
+            },
+            "reason": "Unhealthy",
+            "reportingComponent": "kubelet",
+            "reportingInstance": "fabflow-control-plane",
+            "source": {
+                "component": "kubelet",
+                "host": "fabflow-control-plane"
+            },
+            "type": "Warning"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:53:09Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{api}",
+                "kind": "Pod",
+                "name": "fabflow-api-77bbcb6b4d-2j8nz",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221705",
+                "uid": "1e4e9420-3575-4f9d-b87b-2fb8013d10d8"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:53:09Z",
+            "message": "Stopping container api",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:53:09Z",
+                "name": "fabflow-api-77bbcb6b4d-2j8nz.18e40dad592b22ce",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "224373",
+                "uid": "a456ad61-a975-49fc-8535-33d9804ff46c"
+            },
+            "reason": "Killing",
+            "reportingComponent": "kubelet",
+            "reportingInstance": "fabflow-control-plane",
+            "source": {
+                "component": "kubelet",
+                "host": "fabflow-control-plane"
+            },
+            "type": "Normal"
+        },
+        {
+            "action": "Binding",
+            "apiVersion": "v1",
+            "eventTime": "2026-11-01T22:22:58.823280Z",
+            "firstTimestamp": null,
+            "involvedObject": {
+                "apiVersion": "v1",
+                "kind": "Pod",
+                "name": "fabflow-api-77bbcb6b4d-cwpxr",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221749",
+                "uid": "8738c6b3-1678-4ba6-9b83-536d5fb6d3ce"
+            },
+            "kind": "Event",
+            "lastTimestamp": null,
+            "message": "Successfully assigned fabflow-helm/fabflow-api-77bbcb6b4d-cwpxr to fabflow-control-plane",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:22:58Z",
+                "name": "fabflow-api-77bbcb6b4d-cwpxr.18e40c07b3f403f8",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221756",
+                "uid": "2b113783-6871-494b-afa0-7022723ea207"
+            },
+            "reason": "Scheduled",
+            "reportingComponent": "default-scheduler",
+            "reportingInstance": "default-scheduler-fabflow-control-plane",
+            "source": {},
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:22:59Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{api}",
+                "kind": "Pod",
+                "name": "fabflow-api-77bbcb6b4d-cwpxr",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221754",
+                "uid": "8738c6b3-1678-4ba6-9b83-536d5fb6d3ce"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:22:59Z",
+            "message": "Container image \"fabflow-api:395df1ec02a010163ea46e68374feb607c0c39bd\" already present on machine and can be accessed by the pod",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:22:59Z",
+                "name": "fabflow-api-77bbcb6b4d-cwpxr.18e40c07d6bf621a",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221775",
+                "uid": "772ba1be-434a-4178-88e0-3f210459da3b"
+            },
+            "reason": "Pulled",
+            "reportingComponent": "kubelet",
+            "reportingInstance": "fabflow-control-plane",
+            "source": {
+                "component": "kubelet",
+                "host": "fabflow-control-plane"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:22:59Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{api}",
+                "kind": "Pod",
+                "name": "fabflow-api-77bbcb6b4d-cwpxr",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221754",
+                "uid": "8738c6b3-1678-4ba6-9b83-536d5fb6d3ce"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:22:59Z",
+            "message": "Container created",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:22:59Z",
+                "name": "fabflow-api-77bbcb6b4d-cwpxr.18e40c07d98d3067",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221777",
+                "uid": "d1d0c5d2-8102-4cbb-a646-e322851dae59"
+            },
+            "reason": "Created",
+            "reportingComponent": "kubelet",
+            "reportingInstance": "fabflow-control-plane",
+            "source": {
+                "component": "kubelet",
+                "host": "fabflow-control-plane"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:22:59Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{api}",
+                "kind": "Pod",
+                "name": "fabflow-api-77bbcb6b4d-cwpxr",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221754",
+                "uid": "8738c6b3-1678-4ba6-9b83-536d5fb6d3ce"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:22:59Z",
+            "message": "Container started",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:22:59Z",
+                "name": "fabflow-api-77bbcb6b4d-cwpxr.18e40c07e065dfe7",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221778",
+                "uid": "de3f625b-b0bc-46ea-9ec2-b3390c8054e7"
+            },
+            "reason": "Started",
+            "reportingComponent": "kubelet",
+            "reportingInstance": "fabflow-control-plane",
+            "source": {
+                "component": "kubelet",
+                "host": "fabflow-control-plane"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:53:12Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{api}",
+                "kind": "Pod",
+                "name": "fabflow-api-77bbcb6b4d-cwpxr",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221754",
+                "uid": "8738c6b3-1678-4ba6-9b83-536d5fb6d3ce"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:53:12Z",
+            "message": "Stopping container api",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:53:12Z",
+                "name": "fabflow-api-77bbcb6b4d-cwpxr.18e40dae0d7bf8f7",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "224418",
+                "uid": "8ecd1231-17b2-4dbc-9ef5-d4708e328f77"
+            },
+            "reason": "Killing",
+            "reportingComponent": "kubelet",
+            "reportingInstance": "fabflow-control-plane",
+            "source": {
+                "component": "kubelet",
+                "host": "fabflow-control-plane"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:22:56Z",
+            "involvedObject": {
+                "apiVersion": "apps/v1",
+                "kind": "ReplicaSet",
+                "name": "fabflow-api-77bbcb6b4d",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221686",
+                "uid": "b22bab61-1657-4404-82d9-02e2a0d8f181"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:22:56Z",
+            "message": "Created pod: fabflow-api-77bbcb6b4d-2j8nz",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:22:56Z",
+                "name": "fabflow-api-77bbcb6b4d.18e40c071532b35e",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221699",
+                "uid": "a5defba6-0824-43e6-919c-3d68d31c5cce"
+            },
+            "reason": "SuccessfulCreate",
+            "reportingComponent": "replicaset-controller",
+            "reportingInstance": "",
+            "source": {
+                "component": "replicaset-controller"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:22:58Z",
+            "involvedObject": {
+                "apiVersion": "apps/v1",
+                "kind": "ReplicaSet",
+                "name": "fabflow-api-77bbcb6b4d",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221744",
+                "uid": "b22bab61-1657-4404-82d9-02e2a0d8f181"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:22:58Z",
+            "message": "Created pod: fabflow-api-77bbcb6b4d-cwpxr",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:22:58Z",
+                "name": "fabflow-api-77bbcb6b4d.18e40c07b252a5f1",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221751",
+                "uid": "5816ebb9-46f0-48f8-ad72-41e3985165d3"
+            },
+            "reason": "SuccessfulCreate",
+            "reportingComponent": "replicaset-controller",
+            "reportingInstance": "",
+            "source": {
+                "component": "replicaset-controller"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:53:09Z",
+            "involvedObject": {
+                "apiVersion": "apps/v1",
+                "kind": "ReplicaSet",
+                "name": "fabflow-api-77bbcb6b4d",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "224367",
+                "uid": "b22bab61-1657-4404-82d9-02e2a0d8f181"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:53:09Z",
+            "message": "Deleted pod: fabflow-api-77bbcb6b4d-2j8nz",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:53:09Z",
+                "name": "fabflow-api-77bbcb6b4d.18e40dad59090c14",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "224372",
+                "uid": "6df032fa-a583-41db-8f34-1d1a57ff37df"
+            },
+            "reason": "SuccessfulDelete",
+            "reportingComponent": "replicaset-controller",
+            "reportingInstance": "",
+            "source": {
+                "component": "replicaset-controller"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:53:12Z",
+            "involvedObject": {
+                "apiVersion": "apps/v1",
+                "kind": "ReplicaSet",
+                "name": "fabflow-api-77bbcb6b4d",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "224411",
+                "uid": "b22bab61-1657-4404-82d9-02e2a0d8f181"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:53:12Z",
+            "message": "Deleted pod: fabflow-api-77bbcb6b4d-cwpxr",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:53:12Z",
+                "name": "fabflow-api-77bbcb6b4d.18e40dae0d65f686",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "224419",
+                "uid": "66d90a74-c068-4ffb-80cc-1414c5a2a2ef"
+            },
+            "reason": "SuccessfulDelete",
+            "reportingComponent": "replicaset-controller",
+            "reportingInstance": "",
+            "source": {
+                "component": "replicaset-controller"
+            },
+            "type": "Normal"
+        },
+        {
+            "action": "Binding",
+            "apiVersion": "v1",
+            "eventTime": "2026-11-01T22:53:06.823049Z",
+            "firstTimestamp": null,
+            "involvedObject": {
+                "apiVersion": "v1",
+                "kind": "Pod",
+                "name": "fabflow-api-7bfd9c659d-h8qbh",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "224338",
+                "uid": "342b5d8d-a7ad-49f4-af2f-103eb2239461"
+            },
+            "kind": "Event",
+            "lastTimestamp": null,
+            "message": "Successfully assigned fabflow-helm/fabflow-api-7bfd9c659d-h8qbh to fabflow-control-plane",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:53:06Z",
+                "name": "fabflow-api-7bfd9c659d-h8qbh.18e40daca91cd925",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "224348",
+                "uid": "f63c7dd0-4147-4672-9663-e5258f3fc605"
+            },
+            "reason": "Scheduled",
+            "reportingComponent": "default-scheduler",
+            "reportingInstance": "default-scheduler-fabflow-control-plane",
+            "source": {},
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:53:07Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{api}",
+                "kind": "Pod",
+                "name": "fabflow-api-7bfd9c659d-h8qbh",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "224346",
+                "uid": "342b5d8d-a7ad-49f4-af2f-103eb2239461"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:53:07Z",
+            "message": "Container image \"fabflow-api:794dbaafc1697a8812358b30b0808c6100242ebe\" already present on machine and can be accessed by the pod",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:53:07Z",
+                "name": "fabflow-api-7bfd9c659d-h8qbh.18e40daccd0d83ea",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "224352",
+                "uid": "cbd6c2d1-c2a3-4f72-8125-6d13864c9273"
+            },
+            "reason": "Pulled",
+            "reportingComponent": "kubelet",
+            "reportingInstance": "fabflow-control-plane",
+            "source": {
+                "component": "kubelet",
+                "host": "fabflow-control-plane"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:53:07Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{api}",
+                "kind": "Pod",
+                "name": "fabflow-api-7bfd9c659d-h8qbh",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "224346",
+                "uid": "342b5d8d-a7ad-49f4-af2f-103eb2239461"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:53:07Z",
+            "message": "Container created",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:53:07Z",
+                "name": "fabflow-api-7bfd9c659d-h8qbh.18e40daccee01f16",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "224354",
+                "uid": "5fea509b-42ce-492f-a52c-cfe449fba816"
+            },
+            "reason": "Created",
+            "reportingComponent": "kubelet",
+            "reportingInstance": "fabflow-control-plane",
+            "source": {
+                "component": "kubelet",
+                "host": "fabflow-control-plane"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:53:07Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{api}",
+                "kind": "Pod",
+                "name": "fabflow-api-7bfd9c659d-h8qbh",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "224346",
+                "uid": "342b5d8d-a7ad-49f4-af2f-103eb2239461"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:53:07Z",
+            "message": "Container started",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:53:07Z",
+                "name": "fabflow-api-7bfd9c659d-h8qbh.18e40dacd2b7882e",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "224355",
+                "uid": "aa21013f-5558-44e1-a105-578e257dacbc"
+            },
+            "reason": "Started",
+            "reportingComponent": "kubelet",
+            "reportingInstance": "fabflow-control-plane",
+            "source": {
+                "component": "kubelet",
+                "host": "fabflow-control-plane"
+            },
+            "type": "Normal"
+        },
+        {
+            "action": "Binding",
+            "apiVersion": "v1",
+            "eventTime": "2026-11-01T22:53:09.823593Z",
+            "firstTimestamp": null,
+            "involvedObject": {
+                "apiVersion": "v1",
+                "kind": "Pod",
+                "name": "fabflow-api-7bfd9c659d-zxp8q",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "224378",
+                "uid": "d81e71e4-d197-4063-9ff7-78b04f6e0ee2"
+            },
+            "kind": "Event",
+            "lastTimestamp": null,
+            "message": "Successfully assigned fabflow-helm/fabflow-api-7bfd9c659d-zxp8q to fabflow-control-plane",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:53:09Z",
+                "name": "fabflow-api-7bfd9c659d-zxp8q.18e40dad5bf5e910",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "224386",
+                "uid": "0a523246-cc6e-4d51-9e3e-d312192ecc93"
+            },
+            "reason": "Scheduled",
+            "reportingComponent": "default-scheduler",
+            "reportingInstance": "default-scheduler-fabflow-control-plane",
+            "source": {},
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:53:10Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{api}",
+                "kind": "Pod",
+                "name": "fabflow-api-7bfd9c659d-zxp8q",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "224383",
+                "uid": "d81e71e4-d197-4063-9ff7-78b04f6e0ee2"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:53:10Z",
+            "message": "Container image \"fabflow-api:794dbaafc1697a8812358b30b0808c6100242ebe\" already present on machine and can be accessed by the pod",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:53:10Z",
+                "name": "fabflow-api-7bfd9c659d-zxp8q.18e40dad79a596a4",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "224390",
+                "uid": "a9162047-0dca-4f45-bd68-63498d10006d"
+            },
+            "reason": "Pulled",
+            "reportingComponent": "kubelet",
+            "reportingInstance": "fabflow-control-plane",
+            "source": {
+                "component": "kubelet",
+                "host": "fabflow-control-plane"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:53:10Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{api}",
+                "kind": "Pod",
+                "name": "fabflow-api-7bfd9c659d-zxp8q",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "224383",
+                "uid": "d81e71e4-d197-4063-9ff7-78b04f6e0ee2"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:53:10Z",
+            "message": "Container created",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:53:10Z",
+                "name": "fabflow-api-7bfd9c659d-zxp8q.18e40dad7af468ac",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "224392",
+                "uid": "ed1896fe-645a-466a-b308-23df3e7572ea"
+            },
+            "reason": "Created",
+            "reportingComponent": "kubelet",
+            "reportingInstance": "fabflow-control-plane",
+            "source": {
+                "component": "kubelet",
+                "host": "fabflow-control-plane"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:53:10Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{api}",
+                "kind": "Pod",
+                "name": "fabflow-api-7bfd9c659d-zxp8q",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "224383",
+                "uid": "d81e71e4-d197-4063-9ff7-78b04f6e0ee2"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:53:10Z",
+            "message": "Container started",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:53:10Z",
+                "name": "fabflow-api-7bfd9c659d-zxp8q.18e40dad7e60385b",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "224396",
+                "uid": "cf943569-3779-4d82-ac4f-97cf7eca2696"
+            },
+            "reason": "Started",
+            "reportingComponent": "kubelet",
+            "reportingInstance": "fabflow-control-plane",
+            "source": {
+                "component": "kubelet",
+                "host": "fabflow-control-plane"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:53:06Z",
+            "involvedObject": {
+                "apiVersion": "apps/v1",
+                "kind": "ReplicaSet",
+                "name": "fabflow-api-7bfd9c659d",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "224335",
+                "uid": "c9f2d108-0726-4f59-b9ce-8b04468fd9f5"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:53:06Z",
+            "message": "Created pod: fabflow-api-7bfd9c659d-h8qbh",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:53:06Z",
+                "name": "fabflow-api-7bfd9c659d.18e40daca6d3f560",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "224340",
+                "uid": "bd272b75-f17b-4a5f-a487-f4c2cb895470"
+            },
+            "reason": "SuccessfulCreate",
+            "reportingComponent": "replicaset-controller",
+            "reportingInstance": "",
+            "source": {
+                "component": "replicaset-controller"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:53:09Z",
+            "involvedObject": {
+                "apiVersion": "apps/v1",
+                "kind": "ReplicaSet",
+                "name": "fabflow-api-7bfd9c659d",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "224371",
+                "uid": "c9f2d108-0726-4f59-b9ce-8b04468fd9f5"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:53:09Z",
+            "message": "Created pod: fabflow-api-7bfd9c659d-zxp8q",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:53:09Z",
+                "name": "fabflow-api-7bfd9c659d.18e40dad5a8cb092",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "224381",
+                "uid": "5c5eb669-2e2a-4004-88e5-a34b04fb544a"
+            },
+            "reason": "SuccessfulCreate",
+            "reportingComponent": "replicaset-controller",
+            "reportingInstance": "",
+            "source": {
+                "component": "replicaset-controller"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:23:01Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{api}",
+                "kind": "Pod",
+                "name": "fabflow-api-b6c874b7-9bt6g",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "216811",
+                "uid": "f9f2d7cb-be12-417e-b68a-fc2b6189252b"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:23:01Z",
+            "message": "Stopping container api",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:23:01Z",
+                "name": "fabflow-api-b6c874b7-9bt6g.18e40c08654176b5",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221812",
+                "uid": "f7acc31a-5453-4feb-9940-2885dc5949ed"
+            },
+            "reason": "Killing",
+            "reportingComponent": "kubelet",
+            "reportingInstance": "fabflow-control-plane",
+            "source": {
+                "component": "kubelet",
+                "host": "fabflow-control-plane"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:22:58Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{api}",
+                "kind": "Pod",
+                "name": "fabflow-api-b6c874b7-xsvxg",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "217269",
+                "uid": "6cf41e6f-c64a-4a3d-b41e-c8dfda073900"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:22:58Z",
+            "message": "Stopping container api",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:22:58Z",
+                "name": "fabflow-api-b6c874b7-xsvxg.18e40c07b09d21b5",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221742",
+                "uid": "0cf663a6-50c1-431c-ac00-6cac8864cc8c"
+            },
+            "reason": "Killing",
+            "reportingComponent": "kubelet",
+            "reportingInstance": "fabflow-control-plane",
+            "source": {
+                "component": "kubelet",
+                "host": "fabflow-control-plane"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:22:59Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{api}",
+                "kind": "Pod",
+                "name": "fabflow-api-b6c874b7-xsvxg",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "217269",
+                "uid": "6cf41e6f-c64a-4a3d-b41e-c8dfda073900"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:22:59Z",
+            "message": "Readiness probe failed: Get \"http://10.244.0.18:8000/health/ready\": dial tcp 10.244.0.18:8000: connect: connection refused",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:22:59Z",
+                "name": "fabflow-api-b6c874b7-xsvxg.18e40c07c2748b86",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221774",
+                "uid": "71b586e6-a92f-42d5-9d61-893ddb4fdc54"
+            },
+            "reason": "Unhealthy",
+            "reportingComponent": "kubelet",
+            "reportingInstance": "fabflow-control-plane",
+            "source": {
+                "component": "kubelet",
+                "host": "fabflow-control-plane"
+            },
+            "type": "Warning"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:22:58Z",
+            "involvedObject": {
+                "apiVersion": "apps/v1",
+                "kind": "ReplicaSet",
+                "name": "fabflow-api-b6c874b7",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221737",
+                "uid": "d6e32d51-f340-44f2-8cc9-ebe243b33062"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:22:58Z",
+            "message": "Deleted pod: fabflow-api-b6c874b7-xsvxg",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:22:58Z",
+                "name": "fabflow-api-b6c874b7.18e40c07b0da3d6d",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221743",
+                "uid": "8a61dc6c-66b4-4eeb-89fd-52424c28f8d8"
+            },
+            "reason": "SuccessfulDelete",
+            "reportingComponent": "replicaset-controller",
+            "reportingInstance": "",
+            "source": {
+                "component": "replicaset-controller"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:23:01Z",
+            "involvedObject": {
+                "apiVersion": "apps/v1",
+                "kind": "ReplicaSet",
+                "name": "fabflow-api-b6c874b7",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221804",
+                "uid": "d6e32d51-f340-44f2-8cc9-ebe243b33062"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:23:01Z",
+            "message": "Deleted pod: fabflow-api-b6c874b7-9bt6g",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:23:01Z",
+                "name": "fabflow-api-b6c874b7.18e40c08650f3f13",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221811",
+                "uid": "7d071f2d-5f61-4536-a63a-ba2c3087d8f9"
+            },
+            "reason": "SuccessfulDelete",
+            "reportingComponent": "replicaset-controller",
+            "reportingInstance": "",
+            "source": {
+                "component": "replicaset-controller"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:22:56Z",
+            "involvedObject": {
+                "apiVersion": "apps/v1",
+                "kind": "Deployment",
+                "name": "fabflow-api",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221684",
+                "uid": "0eb5b81e-e572-44a4-87b1-610f50b40e94"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:22:56Z",
+            "message": "Scaled up replica set fabflow-api-77bbcb6b4d from 0 to 1",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:22:56Z",
+                "name": "fabflow-api.18e40c0712e2e1d6",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221689",
+                "uid": "138610ff-e67b-42d8-a34e-9fcfd986d65f"
+            },
+            "reason": "ScalingReplicaSet",
+            "reportingComponent": "deployment-controller",
+            "reportingInstance": "",
+            "source": {
+                "component": "deployment-controller"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:22:58Z",
+            "involvedObject": {
+                "apiVersion": "apps/v1",
+                "kind": "Deployment",
+                "name": "fabflow-api",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221703",
+                "uid": "0eb5b81e-e572-44a4-87b1-610f50b40e94"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:22:58Z",
+            "message": "Scaled down replica set fabflow-api-b6c874b7 from 2 to 1",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:22:58Z",
+                "name": "fabflow-api.18e40c07afbff326",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221738",
+                "uid": "0acfa3d2-b8ca-4c26-a0c0-5f6cd0eb2a80"
+            },
+            "reason": "ScalingReplicaSet",
+            "reportingComponent": "deployment-controller",
+            "reportingInstance": "",
+            "source": {
+                "component": "deployment-controller"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:22:58Z",
+            "involvedObject": {
+                "apiVersion": "apps/v1",
+                "kind": "Deployment",
+                "name": "fabflow-api",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221703",
+                "uid": "0eb5b81e-e572-44a4-87b1-610f50b40e94"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:22:58Z",
+            "message": "Scaled up replica set fabflow-api-77bbcb6b4d from 1 to 2",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:22:58Z",
+                "name": "fabflow-api.18e40c07b1a5ed78",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221748",
+                "uid": "faea67e6-f575-4b8d-a6f6-87dcea78a6b2"
+            },
+            "reason": "ScalingReplicaSet",
+            "reportingComponent": "deployment-controller",
+            "reportingInstance": "",
+            "source": {
+                "component": "deployment-controller"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:23:01Z",
+            "involvedObject": {
+                "apiVersion": "apps/v1",
+                "kind": "Deployment",
+                "name": "fabflow-api",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221787",
+                "uid": "0eb5b81e-e572-44a4-87b1-610f50b40e94"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:23:01Z",
+            "message": "Scaled down replica set fabflow-api-b6c874b7 from 1 to 0",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:23:01Z",
+                "name": "fabflow-api.18e40c0864bef3e6",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221805",
+                "uid": "41a59f7f-7dba-49a7-b1a9-cd67ec005a53"
+            },
+            "reason": "ScalingReplicaSet",
+            "reportingComponent": "deployment-controller",
+            "reportingInstance": "",
+            "source": {
+                "component": "deployment-controller"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:53:06Z",
+            "involvedObject": {
+                "apiVersion": "apps/v1",
+                "kind": "Deployment",
+                "name": "fabflow-api",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "224334",
+                "uid": "0eb5b81e-e572-44a4-87b1-610f50b40e94"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:53:06Z",
+            "message": "Scaled up replica set fabflow-api-7bfd9c659d from 0 to 1",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:53:06Z",
+                "name": "fabflow-api.18e40daca5e80937",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "224339",
+                "uid": "35e3efe1-ed3a-4bf9-9168-d0dfecc08a24"
+            },
+            "reason": "ScalingReplicaSet",
+            "reportingComponent": "deployment-controller",
+            "reportingInstance": "",
+            "source": {
+                "component": "deployment-controller"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:53:09Z",
+            "involvedObject": {
+                "apiVersion": "apps/v1",
+                "kind": "Deployment",
+                "name": "fabflow-api",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "224347",
+                "uid": "0eb5b81e-e572-44a4-87b1-610f50b40e94"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:53:09Z",
+            "message": "Scaled down replica set fabflow-api-77bbcb6b4d from 2 to 1",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:53:09Z",
+                "name": "fabflow-api.18e40dad588c5e6f",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "224368",
+                "uid": "f6c1a205-737a-407b-ae60-a28aecc77821"
+            },
+            "reason": "ScalingReplicaSet",
+            "reportingComponent": "deployment-controller",
+            "reportingInstance": "",
+            "source": {
+                "component": "deployment-controller"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:53:09Z",
+            "involvedObject": {
+                "apiVersion": "apps/v1",
+                "kind": "Deployment",
+                "name": "fabflow-api",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "224347",
+                "uid": "0eb5b81e-e572-44a4-87b1-610f50b40e94"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:53:09Z",
+            "message": "Scaled up replica set fabflow-api-7bfd9c659d from 1 to 2",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:53:09Z",
+                "name": "fabflow-api.18e40dad59845a29",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "224377",
+                "uid": "4dc87d3a-fb71-4579-8539-81a75601d2b9"
+            },
+            "reason": "ScalingReplicaSet",
+            "reportingComponent": "deployment-controller",
+            "reportingInstance": "",
+            "source": {
+                "component": "deployment-controller"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:53:12Z",
+            "involvedObject": {
+                "apiVersion": "apps/v1",
+                "kind": "Deployment",
+                "name": "fabflow-api",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "224397",
+                "uid": "0eb5b81e-e572-44a4-87b1-610f50b40e94"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:53:12Z",
+            "message": "Scaled down replica set fabflow-api-77bbcb6b4d from 1 to 0",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:53:12Z",
+                "name": "fabflow-api.18e40dae0d0f14fd",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "224412",
+                "uid": "29b43a34-bb8e-462f-adc2-3e21c4f09172"
+            },
+            "reason": "ScalingReplicaSet",
+            "reportingComponent": "deployment-controller",
+            "reportingInstance": "",
+            "source": {
+                "component": "deployment-controller"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:22:59Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{dashboard}",
+                "kind": "Pod",
+                "name": "fabflow-dashboard-55f6897657-csdft",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "216808",
+                "uid": "5f3cf338-cfef-4f14-90c1-0c4f22ccf818"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:22:59Z",
+            "message": "Stopping container dashboard",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:22:59Z",
+                "name": "fabflow-dashboard-55f6897657-csdft.18e40c07e9133369",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221784",
+                "uid": "e332b02d-816d-4e75-aaa4-89b8cc9709fd"
+            },
+            "reason": "Killing",
+            "reportingComponent": "kubelet",
+            "reportingInstance": "fabflow-control-plane",
+            "source": {
+                "component": "kubelet",
+                "host": "fabflow-control-plane"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:22:59Z",
+            "involvedObject": {
+                "apiVersion": "apps/v1",
+                "kind": "ReplicaSet",
+                "name": "fabflow-dashboard-55f6897657",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221764",
+                "uid": "57c8544c-5e15-4232-901e-1fd97156217b"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:22:59Z",
+            "message": "Deleted pod: fabflow-dashboard-55f6897657-csdft",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:22:59Z",
+                "name": "fabflow-dashboard-55f6897657.18e40c07c13aa59d",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221770",
+                "uid": "36b47448-1c3b-4122-b2de-06ec41d7572e"
+            },
+            "reason": "SuccessfulDelete",
+            "reportingComponent": "replicaset-controller",
+            "reportingInstance": "",
+            "source": {
+                "component": "replicaset-controller"
+            },
+            "type": "Normal"
+        },
+        {
+            "action": "Binding",
+            "apiVersion": "v1",
+            "eventTime": "2026-11-01T22:22:56.228747Z",
+            "firstTimestamp": null,
+            "involvedObject": {
+                "apiVersion": "v1",
+                "kind": "Pod",
+                "name": "fabflow-dashboard-899996b87-fvxgt",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221693",
+                "uid": "4e839fe8-0e05-4fa5-9253-eab5e4629c2d"
+            },
+            "kind": "Event",
+            "lastTimestamp": null,
+            "message": "Successfully assigned fabflow-helm/fabflow-dashboard-899996b87-fvxgt to fabflow-control-plane",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:22:56Z",
+                "name": "fabflow-dashboard-899996b87-fvxgt.18e40c0719488942",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221706",
+                "uid": "c6eccc27-a768-4e14-8991-e46d05d24ec2"
+            },
+            "reason": "Scheduled",
+            "reportingComponent": "default-scheduler",
+            "reportingInstance": "default-scheduler-fabflow-control-plane",
+            "source": {},
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:22:56Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{dashboard}",
+                "kind": "Pod",
+                "name": "fabflow-dashboard-899996b87-fvxgt",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221704",
+                "uid": "4e839fe8-0e05-4fa5-9253-eab5e4629c2d"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:22:56Z",
+            "message": "Container image \"fabflow-dashboard:395df1ec02a010163ea46e68374feb607c0c39bd\" already present on machine and can be accessed by the pod",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:22:56Z",
+                "name": "fabflow-dashboard-899996b87-fvxgt.18e40c0740206460",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221714",
+                "uid": "a38972c9-e993-4c90-b43c-380fe1a970df"
+            },
+            "reason": "Pulled",
+            "reportingComponent": "kubelet",
+            "reportingInstance": "fabflow-control-plane",
+            "source": {
+                "component": "kubelet",
+                "host": "fabflow-control-plane"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:22:56Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{dashboard}",
+                "kind": "Pod",
+                "name": "fabflow-dashboard-899996b87-fvxgt",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221704",
+                "uid": "4e839fe8-0e05-4fa5-9253-eab5e4629c2d"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:22:56Z",
+            "message": "Container created",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:22:56Z",
+                "name": "fabflow-dashboard-899996b87-fvxgt.18e40c074623b7c2",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221719",
+                "uid": "c4c29cdd-9e1e-4342-9710-7742623798ca"
+            },
+            "reason": "Created",
+            "reportingComponent": "kubelet",
+            "reportingInstance": "fabflow-control-plane",
+            "source": {
+                "component": "kubelet",
+                "host": "fabflow-control-plane"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:22:57Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{dashboard}",
+                "kind": "Pod",
+                "name": "fabflow-dashboard-899996b87-fvxgt",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221704",
+                "uid": "4e839fe8-0e05-4fa5-9253-eab5e4629c2d"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:22:57Z",
+            "message": "Container started",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:22:57Z",
+                "name": "fabflow-dashboard-899996b87-fvxgt.18e40c074cb28a67",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221720",
+                "uid": "7c9151ba-2890-40fc-a580-cbd79ef4c79e"
+            },
+            "reason": "Started",
+            "reportingComponent": "kubelet",
+            "reportingInstance": "fabflow-control-plane",
+            "source": {
+                "component": "kubelet",
+                "host": "fabflow-control-plane"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:22:56Z",
+            "involvedObject": {
+                "apiVersion": "apps/v1",
+                "kind": "ReplicaSet",
+                "name": "fabflow-dashboard-899996b87",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221687",
+                "uid": "aa2d1f91-5ed0-44cf-994d-5265ebed3935"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:22:56Z",
+            "message": "Created pod: fabflow-dashboard-899996b87-fvxgt",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:22:56Z",
+                "name": "fabflow-dashboard-899996b87.18e40c0715302db3",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221695",
+                "uid": "a4a525cd-3357-4944-9f2a-161adc797064"
+            },
+            "reason": "SuccessfulCreate",
+            "reportingComponent": "replicaset-controller",
+            "reportingInstance": "",
+            "source": {
+                "component": "replicaset-controller"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:22:56Z",
+            "involvedObject": {
+                "apiVersion": "apps/v1",
+                "kind": "Deployment",
+                "name": "fabflow-dashboard",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221685",
+                "uid": "edd92196-d701-4365-b41d-d259bd4e4fc0"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:22:56Z",
+            "message": "Scaled up replica set fabflow-dashboard-899996b87 from 0 to 1",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:22:56Z",
+                "name": "fabflow-dashboard.18e40c071316a382",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221691",
+                "uid": "e8ddf2aa-54f3-45dc-9eeb-f00f299cfdb8"
+            },
+            "reason": "ScalingReplicaSet",
+            "reportingComponent": "deployment-controller",
+            "reportingInstance": "",
+            "source": {
+                "component": "deployment-controller"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 1,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T22:22:59Z",
+            "involvedObject": {
+                "apiVersion": "apps/v1",
+                "kind": "Deployment",
+                "name": "fabflow-dashboard",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221701",
+                "uid": "edd92196-d701-4365-b41d-d259bd4e4fc0"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:22:59Z",
+            "message": "Scaled down replica set fabflow-dashboard-55f6897657 from 1 to 0",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T22:22:59Z",
+                "name": "fabflow-dashboard.18e40c07c027f69a",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "221765",
+                "uid": "d63e16a9-8bbc-422d-8dc3-8120fbe9626f"
+            },
+            "reason": "ScalingReplicaSet",
+            "reportingComponent": "deployment-controller",
+            "reportingInstance": "",
+            "source": {
+                "component": "deployment-controller"
+            },
+            "type": "Normal"
+        },
+        {
+            "apiVersion": "v1",
+            "count": 2,
+            "eventTime": null,
+            "firstTimestamp": "2026-11-01T21:48:52Z",
+            "involvedObject": {
+                "apiVersion": "v1",
+                "fieldPath": "spec.containers{postgres}",
+                "kind": "Pod",
+                "name": "fabflow-postgres-7b879c7d67-tsf4s",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "216889",
+                "uid": "2e1b52ec-0e03-4765-bc26-4f5c1684026f"
+            },
+            "kind": "Event",
+            "lastTimestamp": "2026-11-01T22:33:09Z",
+            "message": "Readiness probe failed: command timed out: \"pg_isready -h 127.0.0.1 -U fabflow -d fabflow\" timed out after 2s",
+            "metadata": {
+                "creationTimestamp": "2026-11-01T21:48:58Z",
+                "name": "fabflow-postgres-7b879c7d67-tsf4s.18e40a2b2d9388ee",
+                "namespace": "fabflow-helm",
+                "resourceVersion": "222669",
+                "uid": "d50e65ba-a139-41b6-98cc-48f87ae7bbbb"
+            },
+            "reason": "Unhealthy",
+            "reportingComponent": "kubelet",
+            "reportingInstance": "fabflow-control-plane",
+            "source": {
+                "component": "kubelet",
+                "host": "fabflow-control-plane"
+            },
+            "type": "Warning"
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": ""
+    }
+}

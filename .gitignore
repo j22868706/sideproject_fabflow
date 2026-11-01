@@ -46,3 +46,6 @@ Guideline.txt
 
 # Browser acceptance screenshots and traces
 artifacts/browser/
+
+# Preserve Day 20 deployment measurement evidence
+!artifacts/day20/*.log

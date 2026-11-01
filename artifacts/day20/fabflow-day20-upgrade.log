@@ -1,0 +1,17 @@
+START_UTC=2026-11-01T22:53:06Z
+Release "fabflow" has been upgraded. Happy Helming!
+NAME: fabflow
+LAST DEPLOYED: Sun Nov  1 16:53:06 2026
+NAMESPACE: fabflow-helm
+STATUS: deployed
+REVISION: 5
+DESCRIPTION: Upgrade complete
+TEST SUITE: None
+helm upgrade fabflow deployments/helm/fabflow --namespace fabflow-helm -f      0.40s user 0.18s system 8% cpu 6.818 total
+EXIT_CODE=0
+END_UTC=2026-11-01T22:53:12Z
+
+Saving session...
+...copying shared history...
+...saving history...truncating history files...
+...completed.
