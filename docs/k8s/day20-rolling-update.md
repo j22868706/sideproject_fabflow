@@ -1,7 +1,7 @@
 # Day 20：Rolling update 量測
 
 狀態：指定 API 映像更新、持續 HTTP 量測與資料驗收完成；觀察到 5 次連線失敗，
-不宣稱零停機。實際時數未填。PR/main CI 尚待本課提交後驗收。
+不宣稱零停機。實際時數未填。PR 與 main CI 已依使用者確認全部成功，收尾完成。
 
 ## 環境與設定
 
@@ -70,8 +70,20 @@ artifacts/day20/ 保存 JSONL、升級日誌、快照、更新後 Deployment YAM
 升級日誌含 shell session 結束輸出；命令成功證據為 EXIT_CODE=0 與 Helm 結果。
 助理讀取本機原始 JSONL，核對計數、錯誤類型、時間與上述統計。
 probe 腳本 Ruff/format、模擬 HTTP 回應一致／不一致分支檢查通過；使用者 Helm lint
-通過（只有 icon INFO）。尚未執行本課 PR CI，不沿用前課 CI 當成本課結果。
+通過（只有 icon INFO）。本課 PR 與 main CI 結果見下方收尾紀錄。
 
 Excel 更新 20/30（約 66.7%），實際時數空白。
-下一課依計畫為 Day 21 壞版本與回復演練，開始前先完成本課提交、CI 與文件收尾，
-重新確認 live cluster；一次一步，不預先操作故障或回復。
+下一課依計畫為 Day 21 壞版本與回復演練，尚未開始。開始前重新確認 live cluster；
+一次一步，不預先操作故障或回復。
+
+## PR 與 main 收尾
+
+- 量測設定與 probe 提交：794dbaa；驗收紀錄與原始證據提交：a084f55。
+- PR #3：https://github.com/j22868706/sideproject_fabflow/pull/3
+- 使用者確認 PR 全部 Checks 成功、無衝突，並完成合併。
+- 使用者終端確認：`c750798 (HEAD -> main, origin/main, origin/HEAD) Merge pull request #3 from j22868706/feat/day20-rolling-update`。
+- 使用者確認 c750798 的 main CI：quality、containers、images (api)、images (dashboard) 全部成功。
+- 遠端 Checks 依使用者確認，助理未獨立取得遠端 Actions 日誌；不推定有額外量測。
+- main 合併不會自動更新本機 Helm release；最後已驗證的部署仍為 revision 5、API SHA 794dbaa。
+
+Day 20 的原始資料、統計、限制、資料完整性驗收及合併／CI 收尾紀錄齊全。
