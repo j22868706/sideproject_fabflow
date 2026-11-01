@@ -180,6 +180,11 @@ completed summary, metrics, and events from the shared DB. Both API Pods are on
 one kind node; PostgreSQL remains a single instance.
 [Day 15](docs/k8s/day15-persistence-acceptance.md) verifies K8s DB outage responses,
 recovery with the original PVC, preserved results, and successful writes after recovery.
+The [Day 16 Helm skeleton](docs/k8s/day16-helm-skeleton.md) was completed with
+connections, ConfigMaps, Secret references, a PVC, probes, and resources in
+[Day 17](docs/k8s/day17-helm-install-upgrade.md). A clean namespace installation,
+both HTTP scenario workflows, and replica-change upgrades passed. See the
+[chart instructions](deployments/helm/fabflow/README.md) for prerequisites and scope.
 
 The dashboard connects to `http://api:8000` inside the Compose network. Select
 **Check connection**, run a preset simulation, then select **Load KPIs**.

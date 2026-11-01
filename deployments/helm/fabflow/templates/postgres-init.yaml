@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-postgres-init
+  namespace: {{ .Release.Namespace }}
+data:
+  001_completed_runs.sql: |
+{{ required "Initialization SQL is missing" (.Files.Get "files/001_completed_runs.sql") | nindent 4 }}

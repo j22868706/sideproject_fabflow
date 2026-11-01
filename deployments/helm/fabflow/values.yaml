@@ -1,0 +1,32 @@
+api:
+  replicaCount: 2
+  image:
+    repository: fabflow-api
+    tag: "day13"
+    pullPolicy: IfNotPresent
+  service:
+    port: 8000
+
+dashboard:
+  replicaCount: 1
+  image:
+    repository: fabflow-dashboard
+    tag: "day5"
+    pullPolicy: IfNotPresent
+  service:
+    port: 8501
+
+postgres:
+  image:
+    repository: postgres
+    tag: "17"
+    pullPolicy: IfNotPresent
+  service:
+    port: 5432
+  database: fabflow
+  username: fabflow
+  existingSecret: postgres-credentials
+  passwordKey: POSTGRES_PASSWORD
+  persistence:
+    storageClass: standard
+    size: 1Gi

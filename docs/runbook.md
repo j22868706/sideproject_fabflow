@@ -69,6 +69,31 @@ unchanged results after recovery, and no saved rows for the two connection-faile
 local kind storage does not protect against cluster deletion. Deleting the namespace
 or PVC can reclaim database data under the current Delete policy.
 
+## Helm deployment
+
+The chart at deployments/helm/fabflow was installed and verified in the independent
+fabflow-helm namespace during [Day 17](k8s/day17-helm-install-upgrade.md). The original
+fabflow namespace remains managed by raw manifests; use Helm to update fabflow-helm.
+
+```bash
+helm lint deployments/helm/fabflow
+helm template fabflow deployments/helm/fabflow --namespace fabflow-helm
+helm list -n fabflow-helm
+helm history fabflow -n fabflow-helm
+```
+
+Rendering does not change the cluster. For fresh installation prerequisites,
+Secret creation, and upgrade commands, follow the
+[chart instructions](../deployments/helm/fabflow/README.md). Images must be available
+in kind; defaults are local API day13 and dashboard day5 tags. Day 17 accepted
+installation, both HTTP preset workflows, a 2-to-1 API replica upgrade and restoration
+to two, and full result preservation. It did not measure rolling-update availability.
+
+The Secret is external to the release, while the PVC is chart-managed without a
+keep policy. Uninstall or namespace deletion may remove database data. Preserve it
+before cleanup. Init SQL is not a migration; keep the chart SQL copy synchronized
+with deployments/postgres/init. DB HA, backups, and DB-aware API readiness are absent.
+
 ## Start with local Python instead
 
 Requires Python 3.12+. In a fresh checkout, create and activate a virtual environment:
