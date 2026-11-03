@@ -1,0 +1,7 @@
+START_UTC=2026-11-03T03:27:08Z
+level=WARN msg="upgrade failed" name=fabflow error="resource Deployment/fabflow-helm/fabflow-api not ready. status: InProgress, message: Updated: 1/2\ncontext deadline exceeded"
+Error: UPGRADE FAILED: resource Deployment/fabflow-helm/fabflow-api not ready. status: InProgress, message: Updated: 1/2
+context deadline exceeded
+EXIT_CODE=1
+ELAPSED_SECONDS=90
+END_UTC=2026-11-03T03:28:38Z

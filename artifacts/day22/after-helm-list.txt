@@ -1,0 +1,2 @@
+NAME   	NAMESPACE   	REVISION	UPDATED                             	STATUS  	CHART        	APP VERSION
+fabflow	fabflow-helm	7       	2026-11-02 21:32:59.043041 -0600 CST	deployed	fabflow-0.1.0	           

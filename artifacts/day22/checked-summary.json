@@ -1,0 +1,58 @@
+[
+  {
+    "attempt": 1,
+    "first_request": "2026-11-03T03:46:33.014763+00:00",
+    "last_request": "2026-11-03T03:48:32.752257+00:00",
+    "requests": 960,
+    "failures": [
+      {
+        "type": "request",
+        "endpoint": "metrics",
+        "utc": "2026-11-03T03:47:58.716155+00:00",
+        "elapsed_s": 85.703694,
+        "status": null,
+        "ok": false,
+        "error": "URLError: <urlopen error [Errno 111] Connection refused>",
+        "latency_ms": 5.357
+      },
+      {
+        "type": "request",
+        "endpoint": "events",
+        "utc": "2026-11-03T03:47:58.721748+00:00",
+        "elapsed_s": 85.709288,
+        "status": null,
+        "ok": false,
+        "error": "URLError: <urlopen error [Errno 111] Connection refused>",
+        "latency_ms": 1.543
+      }
+    ],
+    "recovery_log": "DELETE_START_UTC: 2026-11-03T03:47:58.562784+00:00\nTARGET: fabflow-api-7bfd9c659d-h8qbh\npod \"fabflow-api-7bfd9c659d-h8qbh\" deleted from fabflow-helm namespace\nRECOVERED_UTC: 2026-11-03T03:48:01.611242+00:00\nOBSERVED_RECOVERY_SECONDS: 3.049\nREADY_PODS: ['fabflow-api-7bfd9c659d-lb4bv', 'fabflow-api-7bfd9c659d-zxp8q']\n"
+  },
+  {
+    "attempt": 2,
+    "first_request": "2026-11-03T03:49:30.920382+00:00",
+    "last_request": "2026-11-03T03:51:30.833787+00:00",
+    "requests": 908,
+    "failures": [
+      {
+        "type": "request",
+        "endpoint": "metrics",
+        "utc": "2026-11-03T03:51:18.798661+00:00",
+        "elapsed_s": 107.871978,
+        "status": null,
+        "ok": false,
+        "error": "TimeoutError: timed out",
+        "latency_ms": 4146.716
+      }
+    ],
+    "recovery_log": "DELETE_START_UTC: 2026-11-03T03:49:58.051739+00:00\nTARGET: fabflow-api-7bfd9c659d-zxp8q\npod \"fabflow-api-7bfd9c659d-zxp8q\" deleted from fabflow-helm namespace\nRECOVERED_UTC: 2026-11-03T03:50:01.746065+00:00\nOBSERVED_RECOVERY_SECONDS: 3.694\nREADY_PODS: ['fabflow-api-7bfd9c659d-9dltm', 'fabflow-api-7bfd9c659d-lb4bv']\n"
+  },
+  {
+    "attempt": 3,
+    "first_request": "2026-11-03T03:52:21.399302+00:00",
+    "last_request": "2026-11-03T03:54:21.223841+00:00",
+    "requests": 960,
+    "failures": [],
+    "recovery_log": "DELETE_START_UTC: 2026-11-03T03:52:50.448771+00:00\nTARGET: fabflow-api-7bfd9c659d-lb4bv\npod \"fabflow-api-7bfd9c659d-lb4bv\" deleted from fabflow-helm namespace\nRECOVERED_UTC: 2026-11-03T03:52:54.031848+00:00\nOBSERVED_RECOVERY_SECONDS: 3.583\nREADY_PODS: ['fabflow-api-7bfd9c659d-9dltm', 'fabflow-api-7bfd9c659d-xbk64']\n"
+  }
+]

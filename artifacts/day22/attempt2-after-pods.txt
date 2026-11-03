@@ -1,0 +1,5 @@
+NAME                                READY   STATUS    RESTARTS   AGE     IP            NODE                    NOMINATED NODE   READINESS GATES
+fabflow-api-7bfd9c659d-9dltm        1/1     Running   0          115s    10.244.0.26   fabflow-control-plane   <none>           <none>
+fabflow-api-7bfd9c659d-lb4bv        1/1     Running   0          3m55s   10.244.0.25   fabflow-control-plane   <none>           <none>
+fabflow-dashboard-899996b87-fvxgt   1/1     Running   0          29h     10.244.0.19   fabflow-control-plane   <none>           <none>
+fabflow-postgres-7b879c7d67-tsf4s   1/1     Running   0          30h     10.244.0.17   fabflow-control-plane   <none>           <none>

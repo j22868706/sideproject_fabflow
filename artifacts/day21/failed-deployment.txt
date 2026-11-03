@@ -1,0 +1,2 @@
+NAME          READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES                                    SELECTOR
+fabflow-api   2/2     1            2           30h   api          fabflow-api:day21-intentionally-missing   app.kubernetes.io/component=api,app.kubernetes.io/instance=fabflow

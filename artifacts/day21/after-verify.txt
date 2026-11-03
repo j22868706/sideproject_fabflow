@@ -1,0 +1,7 @@
+PASS: summary matches pre-restart snapshot
+PASS: metrics matches pre-restart snapshot
+PASS: events matches pre-restart snapshot
+PASS: unknown ID returns HTTP 404 for summary
+PASS: unknown ID returns HTTP 404 for metrics
+PASS: unknown ID returns HTTP 404 for events
+run_id: 5edf7556-d9e5-404b-adb1-3bc512cac086

@@ -49,3 +49,6 @@ artifacts/browser/
 
 # Preserve Day 20 deployment measurement evidence
 !artifacts/day20/*.log
+
+# Preserve Day 21 failure and rollback evidence
+!artifacts/day21/*.log

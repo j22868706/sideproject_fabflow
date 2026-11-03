@@ -1,0 +1,13 @@
+NAME                                READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES                                                       SELECTOR
+deployment.apps/fabflow-api         2/2     2            2           29h   api          fabflow-api:794dbaafc1697a8812358b30b0808c6100242ebe         app.kubernetes.io/component=api,app.kubernetes.io/instance=fabflow
+deployment.apps/fabflow-dashboard   1/1     1            1           29h   dashboard    fabflow-dashboard:395df1ec02a010163ea46e68374feb607c0c39bd   app.kubernetes.io/component=dashboard,app.kubernetes.io/instance=fabflow
+deployment.apps/fabflow-postgres    1/1     1            1           29h   postgres     postgres:17                                                  app.kubernetes.io/component=postgres,app.kubernetes.io/instance=fabflow
+
+NAME                                    READY   STATUS    RESTARTS   AGE   IP            NODE                    NOMINATED NODE   READINESS GATES
+pod/fabflow-api-7bfd9c659d-h8qbh        1/1     Running   0          28h   10.244.0.22   fabflow-control-plane   <none>           <none>
+pod/fabflow-api-7bfd9c659d-zxp8q        1/1     Running   0          28h   10.244.0.23   fabflow-control-plane   <none>           <none>
+pod/fabflow-dashboard-899996b87-fvxgt   1/1     Running   0          29h   10.244.0.19   fabflow-control-plane   <none>           <none>
+pod/fabflow-postgres-7b879c7d67-tsf4s   1/1     Running   0          29h   10.244.0.17   fabflow-control-plane   <none>           <none>
+
+NAME                                          STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE   VOLUMEMODE
+persistentvolumeclaim/fabflow-postgres-data   Bound    pvc-5b243a9e-ec4c-4f0a-a87e-2650a639b1dd   1Gi        RWO            standard       <unset>                 29h   Filesystem

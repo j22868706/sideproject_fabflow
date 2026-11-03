@@ -1,0 +1,6 @@
+DELETE_START_UTC: 2026-11-03T03:47:58.562784+00:00
+TARGET: fabflow-api-7bfd9c659d-h8qbh
+pod "fabflow-api-7bfd9c659d-h8qbh" deleted from fabflow-helm namespace
+RECOVERED_UTC: 2026-11-03T03:48:01.611242+00:00
+OBSERVED_RECOVERY_SECONDS: 3.049
+READY_PODS: ['fabflow-api-7bfd9c659d-lb4bv', 'fabflow-api-7bfd9c659d-zxp8q']

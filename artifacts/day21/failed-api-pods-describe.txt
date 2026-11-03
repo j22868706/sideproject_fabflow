@@ -1,0 +1,190 @@
+Name:             fabflow-api-67756b6786-86fb6
+Namespace:        fabflow-helm
+Priority:         0
+Service Account:  default
+Node:             fabflow-control-plane/172.18.0.2
+Start Time:       Mon, 02 Nov 2026 21:27:08 -0600
+Labels:           app.kubernetes.io/component=api
+                  app.kubernetes.io/instance=fabflow
+                  pod-template-hash=67756b6786
+Annotations:      <none>
+Status:           Pending
+IP:               10.244.0.24
+IPs:
+  IP:           10.244.0.24
+Controlled By:  ReplicaSet/fabflow-api-67756b6786
+Containers:
+  api:
+    Container ID:   
+    Image:          fabflow-api:day21-intentionally-missing
+    Image ID:       
+    Port:           8000/TCP (http)
+    Host Port:      0/TCP (http)
+    State:          Waiting
+      Reason:       ImagePullBackOff
+    Ready:          False
+    Restart Count:  0
+    Limits:
+      cpu:     1
+      memory:  512Mi
+    Requests:
+      cpu:      100m
+      memory:   128Mi
+    Liveness:   http-get http://:http/health/live delay=0s timeout=3s period=10s #success=1 #failure=6
+    Readiness:  http-get http://:http/health/ready delay=0s timeout=2s period=5s #success=1 #failure=3
+    Startup:    http-get http://:http/health/live delay=0s timeout=2s period=2s #success=1 #failure=60
+    Environment:
+      FABFLOW_RUN_STORE:  postgres
+      PGHOST:             fabflow-postgres
+      PGPORT:             5432
+      PGDATABASE:         fabflow
+      PGUSER:             fabflow
+      PGPASSWORD:         <set to the key 'POSTGRES_PASSWORD' in secret 'postgres-credentials'>  Optional: false
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-ld9h7 (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       False 
+  ContainersReady             False 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-ld9h7:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+
+
+Name:             fabflow-api-7bfd9c659d-h8qbh
+Namespace:        fabflow-helm
+Priority:         0
+Service Account:  default
+Node:             fabflow-control-plane/172.18.0.2
+Start Time:       Sun, 01 Nov 2026 16:53:06 -0600
+Labels:           app.kubernetes.io/component=api
+                  app.kubernetes.io/instance=fabflow
+                  pod-template-hash=7bfd9c659d
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.22
+IPs:
+  IP:           10.244.0.22
+Controlled By:  ReplicaSet/fabflow-api-7bfd9c659d
+Containers:
+  api:
+    Container ID:   containerd://1a3f5275908653f07b4be85e895e46df6c434b57dac55bdc04d4ea7c24292b51
+    Image:          fabflow-api:794dbaafc1697a8812358b30b0808c6100242ebe
+    Image ID:       docker.io/library/import-2026-11-01@sha256:32d76cf96d83f1426bd9ed352e743b0472c4a5afaf16e3ea07e1afa5274dea1a
+    Port:           8000/TCP (http)
+    Host Port:      0/TCP (http)
+    State:          Running
+      Started:      Sun, 01 Nov 2026 16:53:07 -0600
+    Ready:          True
+    Restart Count:  0
+    Limits:
+      cpu:     1
+      memory:  512Mi
+    Requests:
+      cpu:      100m
+      memory:   128Mi
+    Liveness:   http-get http://:http/health/live delay=0s timeout=3s period=10s #success=1 #failure=6
+    Readiness:  http-get http://:http/health/ready delay=0s timeout=2s period=5s #success=1 #failure=3
+    Startup:    http-get http://:http/health/live delay=0s timeout=2s period=2s #success=1 #failure=60
+    Environment:
+      FABFLOW_RUN_STORE:  postgres
+      PGHOST:             fabflow-postgres
+      PGPORT:             5432
+      PGDATABASE:         fabflow
+      PGUSER:             fabflow
+      PGPASSWORD:         <set to the key 'POSTGRES_PASSWORD' in secret 'postgres-credentials'>  Optional: false
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-md65b (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-md65b:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s
+
+
+Name:             fabflow-api-7bfd9c659d-zxp8q
+Namespace:        fabflow-helm
+Priority:         0
+Service Account:  default
+Node:             fabflow-control-plane/172.18.0.2
+Start Time:       Sun, 01 Nov 2026 16:53:09 -0600
+Labels:           app.kubernetes.io/component=api
+                  app.kubernetes.io/instance=fabflow
+                  pod-template-hash=7bfd9c659d
+Annotations:      <none>
+Status:           Running
+IP:               10.244.0.23
+IPs:
+  IP:           10.244.0.23
+Controlled By:  ReplicaSet/fabflow-api-7bfd9c659d
+Containers:
+  api:
+    Container ID:   containerd://53b3ed748f30a17b92f2592785df20f61d1e96cf28221c75afd1e4d8f7be2186
+    Image:          fabflow-api:794dbaafc1697a8812358b30b0808c6100242ebe
+    Image ID:       docker.io/library/import-2026-11-01@sha256:32d76cf96d83f1426bd9ed352e743b0472c4a5afaf16e3ea07e1afa5274dea1a
+    Port:           8000/TCP (http)
+    Host Port:      0/TCP (http)
+    State:          Running
+      Started:      Sun, 01 Nov 2026 16:53:10 -0600
+    Ready:          True
+    Restart Count:  0
+    Limits:
+      cpu:     1
+      memory:  512Mi
+    Requests:
+      cpu:      100m
+      memory:   128Mi
+    Liveness:   http-get http://:http/health/live delay=0s timeout=3s period=10s #success=1 #failure=6
+    Readiness:  http-get http://:http/health/ready delay=0s timeout=2s period=5s #success=1 #failure=3
+    Startup:    http-get http://:http/health/live delay=0s timeout=2s period=2s #success=1 #failure=60
+    Environment:
+      FABFLOW_RUN_STORE:  postgres
+      PGHOST:             fabflow-postgres
+      PGPORT:             5432
+      PGDATABASE:         fabflow
+      PGUSER:             fabflow
+      PGPASSWORD:         <set to the key 'POSTGRES_PASSWORD' in secret 'postgres-credentials'>  Optional: false
+    Mounts:
+      /var/run/secrets/kubernetes.io/serviceaccount from kube-api-access-ndthh (ro)
+Conditions:
+  Type                        Status
+  PodReadyToStartContainers   True 
+  Initialized                 True 
+  Ready                       True 
+  ContainersReady             True 
+  PodScheduled                True 
+Volumes:
+  kube-api-access-ndthh:
+    Type:                    Projected (a volume that contains injected data from multiple sources)
+    TokenExpirationSeconds:  3607
+    ConfigMapName:           kube-root-ca.crt
+    Optional:                false
+    DownwardAPI:             true
+QoS Class:                   Burstable
+Node-Selectors:              <none>
+Tolerations:                 node.kubernetes.io/not-ready:NoExecute op=Exists for 300s
+                             node.kubernetes.io/unreachable:NoExecute op=Exists for 300s

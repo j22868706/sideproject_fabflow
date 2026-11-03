@@ -1,0 +1,4 @@
+NAME                           READY   STATUS             RESTARTS   AGE     IP            NODE                    NOMINATED NODE   READINESS GATES
+fabflow-api-67756b6786-86fb6   0/1     ImagePullBackOff   0          2m19s   10.244.0.24   fabflow-control-plane   <none>           <none>
+fabflow-api-7bfd9c659d-h8qbh   1/1     Running            0          28h     10.244.0.22   fabflow-control-plane   <none>           <none>
+fabflow-api-7bfd9c659d-zxp8q   1/1     Running            0          28h     10.244.0.23   fabflow-control-plane   <none>           <none>

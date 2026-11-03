@@ -1,0 +1,42 @@
+{"type": "start", "run_id": "5edf7556-d9e5-404b-adb1-3bc512cac086", "api_url": "http://fabflow-api:8000", "snapshot": "/tmp/day22-snapshot.json", "duration": 5.0, "interval": 0.5, "timeout": 2.0}
+{"type": "request", "endpoint": "ready", "utc": "2026-11-03T03:42:16.873967+00:00", "elapsed_s": 0.000279, "status": 200, "ok": true, "error": null, "latency_ms": 67.338}
+{"type": "request", "endpoint": "summary", "utc": "2026-11-03T03:42:16.941339+00:00", "elapsed_s": 0.067652, "status": 404, "ok": false, "error": "HTTP Error 404: Not Found", "latency_ms": 127.551}
+{"type": "request", "endpoint": "metrics", "utc": "2026-11-03T03:42:17.068957+00:00", "elapsed_s": 0.195265, "status": 404, "ok": false, "error": "HTTP Error 404: Not Found", "latency_ms": 68.368}
+{"type": "request", "endpoint": "events", "utc": "2026-11-03T03:42:17.137355+00:00", "elapsed_s": 0.263668, "status": 404, "ok": false, "error": "HTTP Error 404: Not Found", "latency_ms": 7.717}
+{"type": "request", "endpoint": "ready", "utc": "2026-11-03T03:42:17.374407+00:00", "elapsed_s": 0.500716, "status": 200, "ok": true, "error": null, "latency_ms": 4.009}
+{"type": "request", "endpoint": "summary", "utc": "2026-11-03T03:42:17.378450+00:00", "elapsed_s": 0.504763, "status": 404, "ok": false, "error": "HTTP Error 404: Not Found", "latency_ms": 8.797}
+{"type": "request", "endpoint": "metrics", "utc": "2026-11-03T03:42:17.387299+00:00", "elapsed_s": 0.513612, "status": 404, "ok": false, "error": "HTTP Error 404: Not Found", "latency_ms": 10.821}
+{"type": "request", "endpoint": "events", "utc": "2026-11-03T03:42:17.398157+00:00", "elapsed_s": 0.52447, "status": 404, "ok": false, "error": "HTTP Error 404: Not Found", "latency_ms": 11.132}
+{"type": "request", "endpoint": "ready", "utc": "2026-11-03T03:42:17.874949+00:00", "elapsed_s": 1.001196, "status": 200, "ok": true, "error": null, "latency_ms": 11.537}
+{"type": "request", "endpoint": "summary", "utc": "2026-11-03T03:42:17.886742+00:00", "elapsed_s": 1.013055, "status": 404, "ok": false, "error": "HTTP Error 404: Not Found", "latency_ms": 52.223}
+{"type": "request", "endpoint": "metrics", "utc": "2026-11-03T03:42:17.939029+00:00", "elapsed_s": 1.065341, "status": 404, "ok": false, "error": "HTTP Error 404: Not Found", "latency_ms": 13.444}
+{"type": "request", "endpoint": "events", "utc": "2026-11-03T03:42:17.952536+00:00", "elapsed_s": 1.078848, "status": 404, "ok": false, "error": "HTTP Error 404: Not Found", "latency_ms": 17.914}
+{"type": "request", "endpoint": "ready", "utc": "2026-11-03T03:42:18.375256+00:00", "elapsed_s": 1.501566, "status": 200, "ok": true, "error": null, "latency_ms": 4.43}
+{"type": "request", "endpoint": "summary", "utc": "2026-11-03T03:42:18.379731+00:00", "elapsed_s": 1.506044, "status": 404, "ok": false, "error": "HTTP Error 404: Not Found", "latency_ms": 28.12}
+{"type": "request", "endpoint": "metrics", "utc": "2026-11-03T03:42:18.407907+00:00", "elapsed_s": 1.53422, "status": 404, "ok": false, "error": "HTTP Error 404: Not Found", "latency_ms": 13.453}
+{"type": "request", "endpoint": "events", "utc": "2026-11-03T03:42:18.421399+00:00", "elapsed_s": 1.547711, "status": 404, "ok": false, "error": "HTTP Error 404: Not Found", "latency_ms": 7.364}
+{"type": "request", "endpoint": "ready", "utc": "2026-11-03T03:42:18.874941+00:00", "elapsed_s": 2.002055, "status": 200, "ok": true, "error": null, "latency_ms": 12.499}
+{"type": "request", "endpoint": "summary", "utc": "2026-11-03T03:42:18.887497+00:00", "elapsed_s": 2.014611, "status": 404, "ok": false, "error": "HTTP Error 404: Not Found", "latency_ms": 10.752}
+{"type": "request", "endpoint": "metrics", "utc": "2026-11-03T03:42:18.898287+00:00", "elapsed_s": 2.025399, "status": 404, "ok": false, "error": "HTTP Error 404: Not Found", "latency_ms": 8.48}
+{"type": "request", "endpoint": "events", "utc": "2026-11-03T03:42:18.906812+00:00", "elapsed_s": 2.033928, "status": 404, "ok": false, "error": "HTTP Error 404: Not Found", "latency_ms": 10.047}
+{"type": "request", "endpoint": "ready", "utc": "2026-11-03T03:42:19.375835+00:00", "elapsed_s": 2.502946, "status": 200, "ok": true, "error": null, "latency_ms": 3.296}
+{"type": "request", "endpoint": "summary", "utc": "2026-11-03T03:42:19.379174+00:00", "elapsed_s": 2.50629, "status": 404, "ok": false, "error": "HTTP Error 404: Not Found", "latency_ms": 14.751}
+{"type": "request", "endpoint": "metrics", "utc": "2026-11-03T03:42:19.393974+00:00", "elapsed_s": 2.521088, "status": 404, "ok": false, "error": "HTTP Error 404: Not Found", "latency_ms": 10.248}
+{"type": "request", "endpoint": "events", "utc": "2026-11-03T03:42:19.404255+00:00", "elapsed_s": 2.53137, "status": 404, "ok": false, "error": "HTTP Error 404: Not Found", "latency_ms": 10.293}
+{"type": "request", "endpoint": "ready", "utc": "2026-11-03T03:42:19.876078+00:00", "elapsed_s": 3.003158, "status": 200, "ok": true, "error": null, "latency_ms": 3.051}
+{"type": "request", "endpoint": "summary", "utc": "2026-11-03T03:42:19.879166+00:00", "elapsed_s": 3.006282, "status": 404, "ok": false, "error": "HTTP Error 404: Not Found", "latency_ms": 11.897}
+{"type": "request", "endpoint": "metrics", "utc": "2026-11-03T03:42:19.891116+00:00", "elapsed_s": 3.01823, "status": 404, "ok": false, "error": "HTTP Error 404: Not Found", "latency_ms": 9.499}
+{"type": "request", "endpoint": "events", "utc": "2026-11-03T03:42:19.900719+00:00", "elapsed_s": 3.027832, "status": 404, "ok": false, "error": "HTTP Error 404: Not Found", "latency_ms": 16.954}
+{"type": "request", "endpoint": "ready", "utc": "2026-11-03T03:42:20.376673+00:00", "elapsed_s": 3.503786, "status": 200, "ok": true, "error": null, "latency_ms": 3.594}
+{"type": "request", "endpoint": "summary", "utc": "2026-11-03T03:42:20.380327+00:00", "elapsed_s": 3.507443, "status": 404, "ok": false, "error": "HTTP Error 404: Not Found", "latency_ms": 13.537}
+{"type": "request", "endpoint": "metrics", "utc": "2026-11-03T03:42:20.393901+00:00", "elapsed_s": 3.521016, "status": 404, "ok": false, "error": "HTTP Error 404: Not Found", "latency_ms": 13.677}
+{"type": "request", "endpoint": "events", "utc": "2026-11-03T03:42:20.407614+00:00", "elapsed_s": 3.53473, "status": 404, "ok": false, "error": "HTTP Error 404: Not Found", "latency_ms": 8.006}
+{"type": "request", "endpoint": "ready", "utc": "2026-11-03T03:42:20.876929+00:00", "elapsed_s": 4.004044, "status": 200, "ok": true, "error": null, "latency_ms": 2.54}
+{"type": "request", "endpoint": "summary", "utc": "2026-11-03T03:42:20.879503+00:00", "elapsed_s": 4.006619, "status": 404, "ok": false, "error": "HTTP Error 404: Not Found", "latency_ms": 8.993}
+{"type": "request", "endpoint": "metrics", "utc": "2026-11-03T03:42:20.888534+00:00", "elapsed_s": 4.015649, "status": 404, "ok": false, "error": "HTTP Error 404: Not Found", "latency_ms": 9.239}
+{"type": "request", "endpoint": "events", "utc": "2026-11-03T03:42:20.897847+00:00", "elapsed_s": 4.024961, "status": 404, "ok": false, "error": "HTTP Error 404: Not Found", "latency_ms": 10.529}
+{"type": "request", "endpoint": "ready", "utc": "2026-11-03T03:42:21.377083+00:00", "elapsed_s": 4.504194, "status": 200, "ok": true, "error": null, "latency_ms": 7.069}
+{"type": "request", "endpoint": "summary", "utc": "2026-11-03T03:42:21.384202+00:00", "elapsed_s": 4.511318, "status": 404, "ok": false, "error": "HTTP Error 404: Not Found", "latency_ms": 14.119}
+{"type": "request", "endpoint": "metrics", "utc": "2026-11-03T03:42:21.398365+00:00", "elapsed_s": 4.52548, "status": 404, "ok": false, "error": "HTTP Error 404: Not Found", "latency_ms": 12.283}
+{"type": "request", "endpoint": "events", "utc": "2026-11-03T03:42:21.410686+00:00", "elapsed_s": 4.537801, "status": 404, "ok": false, "error": "HTTP Error 404: Not Found", "latency_ms": 9.344}
+{"type": "summary", "elapsed_s": 5.000129834996187, "counts": {"ready": {"requests": 10, "failures": 0}, "summary": {"requests": 10, "failures": 10}, "metrics": {"requests": 10, "failures": 10}, "events": {"requests": 10, "failures": 10}}}
