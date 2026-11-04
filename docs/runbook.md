@@ -5,6 +5,8 @@ For the local kind/Helm deployment, see the
 including image prerequisites, external Secret setup, and acceptance status.
 The [local Argo CD demo](k8s/day24-argocd-local.md) documents the separate
 GitOps environment, UI access, manual synchronization, and observed recovery.
+See [GitOps synchronization and recovery](k8s/day25-gitops-sync.md) for Git image
+changes, live drift correction, and reverting desired state.
 
 FabFlow runs a synthetic, finite semiconductor workload through Lithography,
 Etching, and Inspection. The dashboard calls the synchronous FastAPI service;
