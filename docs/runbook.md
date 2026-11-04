@@ -1,5 +1,9 @@
 # FabFlow operation and handoff
 
+For the local kind/Helm deployment, see the
+[versioned deployment and rollback handoff](k8s/day23-deployment-handoff.md),
+including image prerequisites, external Secret setup, and acceptance status.
+
 FabFlow runs a synthetic, finite semiconductor workload through Lithography,
 Etching, and Inspection. The dashboard calls the synchronous FastAPI service;
 the API owns simulation execution. Compose stores completed results in PostgreSQL;
