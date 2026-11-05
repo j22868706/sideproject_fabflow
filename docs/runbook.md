@@ -1,5 +1,12 @@
 # FabFlow operation and handoff
 
+For an existing kind/Helm environment, the
+[Day 27 demo and troubleshooting guide](k8s/day27-readme-demo.md) provides a
+presentation sequence, direct Pod checks, and fixes for working-directory,
+port-forward, and shell quoting errors. The
+[architecture and measurements report](k8s/day26-measurements-architecture.md)
+separates command timing, replica recovery, and observed HTTP failures.
+
 For the local kind/Helm deployment, see the
 [versioned deployment and rollback handoff](k8s/day23-deployment-handoff.md),
 including image prerequisites, external Secret setup, and acceptance status.

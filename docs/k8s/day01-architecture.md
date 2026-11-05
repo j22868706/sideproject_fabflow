@@ -1,12 +1,14 @@
 # Day 1: Understanding FabFlow Before Kubernetes
 
-狀態：已完成（依使用者確認）；接續 Day 2 Docker 基線教學。實際時數待填。
+Status: Complete, as confirmed by the learner. Day 2 establishes the Docker baseline.
+Actual hours are unrecorded.
 
 ## Learning goal
 
 Trace a simulation request from the browser to the API, identify where results
 are stored, and explain why restarts and multiple API replicas affect queries.
-These notes describe the current implementation, before any Kubernetes changes.
+These historical notes describe the implementation at Day 1, before Kubernetes
+or PostgreSQL changes. See [Day 26](day26-measurements-architecture.md) for the later architecture.
 Today's work covered code reading and architecture reasoning; it did not include
 a new deployment or runtime verification.
 

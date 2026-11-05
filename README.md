@@ -10,7 +10,15 @@ simulation, FIFO/SPT/Critical Ratio dispatching, Hot lot priority with Normal lo
 aging protection, equipment failure/repair, and finite AMHS vehicle capacity.
 FastAPI exposes validated simulation requests, summaries, KPIs, events, and
 health checks. Streamlit provides scenario controls and manufacturing, equipment,
-and transport charts; Docker Compose starts both services together.
+and transport charts. The subsequent Kubernetes track adds PostgreSQL persistence,
+two API replicas, Helm deployments, SHA-tagged image builds in CI, and a separate
+Argo CD environment with manual synchronization.
+
+For a review of the engineering work, start with the
+[portfolio](docs/portfolio.md), [architecture and measured recovery results](docs/k8s/day26-measurements-architecture.md),
+and [Kubernetes demonstration](docs/k8s/day27-readme-demo.md). The 30-day plan is
+[FabFlow_K8s_30_Day_Progress.xlsx](FabFlow_K8s_30_Day_Progress.xlsx): 26 lessons
+complete; Day 27's timed demonstration rehearsal remains pending.
 
 Final delivery commit `9867659` passed both GitHub Actions jobs, including
 quality checks, container HTTP workflows, and real Chromium browser acceptance:
@@ -26,7 +34,10 @@ quality checks, container HTTP workflows, and real Chromium browser acceptance:
 | Simulation baseline | 20 lots complete at minute 175; average cycle time 70.50 min |
 | Paired AMHS experiment | Increasing vehicles from 1 to 3 raises simulated throughput from 5.91 to 12.90 lots/hour on the same workload |
 | Policy comparison | Seed 42: SPT average cycle 36.37 min versus FIFO 39.77; CR has the lowest P95 at 66.74 min |
-| Automated tests | 179 passing tests; 93% combined statement/branch coverage on Python 3.12.14 |
+| MVP verification | 179 passing tests; 93% combined statement/branch coverage on Python 3.12.14 at MVP delivery |
+| Persistent results | Complete results survive API replacement; direct queries to both API replicas return the same summary, metrics, and ordered events |
+| Deployment measurement | Rolling-update observation: 2,376 requests, 5 failures over 300 seconds; causes unconfirmed, no zero-downtime claim |
+| Pod replacement | Three observed replica recoveries: 3.049 / 3.694 / 3.583 seconds, including command and polling overhead; not HTTP downtime |
 | End-to-end acceptance | Both dashboard presets × FIFO/SPT/CR verified in real browsers, with KPI refresh and error recovery |
 | Handoff | Operation runbook, reproducible demo, portfolio summary, and actual dashboard screenshots |
 
@@ -81,6 +92,54 @@ python -m simulator.scenarios.baseline
 The installed `fabflow` command only prints project information. Use the module
 commands above to execute simulations.
 
+## Kubernetes Quick Start (local kind / Helm)
+
+The Kubernetes follow-up adds PostgreSQL persistence, two API replicas, versioned
+Helm deployments, and a separate manual Argo CD demo. The
+[architecture and measurements report](docs/k8s/day26-measurements-architecture.md)
+links the measured results and their limits. All components share one local kind
+node; PostgreSQL is a single instance, and the PVC is not a backup.
+
+Requires Docker, kind, kubectl, Helm, and the configured images loaded into kind.
+For a new environment, follow the
+[deployment handoff](docs/k8s/day23-deployment-handoff.md): build from
+the intended source commits, load the API/dashboard images, create the namespace
+and external Secret, then install the chart with `values-kind.yaml` explicitly.
+The handoff contains the detailed preparation and acceptance steps.
+Default chart tags are older local images, and CI does not publish images or
+automatically deploy them. Keep real credentials in the ignored `.env`.
+
+For the existing `kind-fabflow` cluster and `fabflow-helm` release, from the
+repository root:
+
+```bash
+kubectl config current-context
+helm list -n fabflow-helm
+kubectl get deployments,pods,pvc -n fabflow-helm
+kubectl port-forward -n fabflow-helm --address 127.0.0.1 service/fabflow-api 18027:8000
+```
+
+Confirm context `kind-fabflow`, a deployed release, two Ready API replicas, and a
+Bound PVC before proceeding. Leave port-forward running. In another terminal,
+from the repository root with the project installed in the Python environment:
+
+```bash
+curl --fail-with-body http://127.0.0.1:18027/health/ready
+python scripts/check_postgres_persistence.py prepare \
+  --api-url http://127.0.0.1:18027 \
+  --snapshot /tmp/fabflow-k8s-quickstart.json
+python scripts/check_postgres_persistence.py verify \
+  --api-url http://127.0.0.1:18027 \
+  --snapshot /tmp/fabflow-k8s-quickstart.json
+```
+
+Use a new snapshot filename for another run. API Pod replacement can disconnect
+port-forward; restart it before subsequent requests. Explicit IPv4 and port 18027
+avoid confusing this endpoint with Compose on port 8000. Readiness does not check
+DB connectivity. See the [Kubernetes demo and troubleshooting guide](docs/k8s/day27-readme-demo.md)
+for direct queries to both Pods, Pod replacement, and Helm rollback. Manage
+`fabflow-gitops` through Argo CD separately; do not use these Helm commands there.
+
 ## Run the HTTP API (Day 5)
 
 After installing the project, start the service from the repository root:
@@ -123,9 +182,11 @@ Invalid inputs return 422 with field locations and reasons; unknown run IDs
 return 404. Unexpected server failures return a generic 500 JSON response and
 are logged on the server. Failed runs do not publish partial results.
 
-Results live in application memory with no automatic expiry. Use one worker:
-processes do not share results, and restarting or reloading clears them. This
-MVP uses synchronous execution without a database or background job queue.
+Unconfigured local API execution uses process memory with no automatic expiry.
+Use one worker in memory mode: processes do not share results, and restart/reload
+clears them. Compose and the Kubernetes deployments explicitly select PostgreSQL
+for completed results. All modes execute simulations synchronously; there is no
+background job queue or automatic resumption of interrupted simulations.
 
 ## Dashboard and Docker Compose
 
@@ -510,7 +571,18 @@ ruff format --check .
 pytest -q
 ```
 
-Latest local validation on Python 3.12.14, with dashboard dependencies installed:
+Current local validation on Python 3.14.6, with dashboard dependencies installed:
+
+```text
+All checks passed!
+113 files already formatted
+184 passed, 1 warning
+```
+
+The warning is an upstream Starlette TestClient/HTTPX deprecation notice. CI targets
+Python 3.12; this local run does not establish a new remote CI result or new
+container/browser acceptance. The earlier MVP-delivery validation on Python
+3.12.14 was:
 
 ```text
 All checks passed!
@@ -523,11 +595,12 @@ policy ordering, Hot insertion, Normal service during continuing Hot arrivals,
 failure/repair, shared random failure calendars, hand-calculated KPIs, input
 isolation, AMHS capacity/FIFO, transport timestamps and KPIs, congestion, and report exports. The original no-failure baselines remain covered.
 
-The 60 API tests cover request schemas, all three policy mappings, JSON results,
+At MVP delivery, 60 API tests covered request schemas, all three policy mappings, JSON results,
 validation and server errors, health checks, independent stores, concurrent runs,
 and both documented examples. Another 29 dashboard tests cover UI state,
 simulation submission, KPI rendering, refresh, and error handling. The full suite
-contains 179 tests. Without the dashboard extra, dashboard tests are skipped.
+contained 179 tests. Persistence/backend-selection checks brought the current
+suite to 184 tests. Without the dashboard extra, dashboard tests are skipped.
 
 For coverage:
 
@@ -606,6 +679,10 @@ PostgreSQL, Redis/Celery, Prometheus/Grafana, Kubernetes, stocker capacity, and
 large-scale performance testing are outside the seven-day MVP scope.
 
 ## Documentation
+
+- [English documentation and portfolio review](docs/english-project-review.md)
+- [Kubernetes demo, troubleshooting, and Day 27 acceptance](docs/k8s/day27-readme-demo.md)
+- [Kubernetes architecture, measurements, and limits](docs/k8s/day26-measurements-architecture.md)
 
 - [Final verification and delivery record](docs/day7-delivery.md)
 - [Portfolio summary and dashboard screenshots](docs/portfolio.md)

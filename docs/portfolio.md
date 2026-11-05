@@ -4,7 +4,9 @@ FabFlow is a Python discrete-event simulator for exploring how dispatch decision
 machine outages, and limited material-handling capacity affect a synthetic fab.
 It connects a SimPy engine to a synchronous FastAPI service and Streamlit
 dashboard, with Docker Compose and automated browser acceptance for a repeatable
-local demonstration.
+local demonstration. The subsequent deployment track adds PostgreSQL persistence,
+two API replicas on local Kubernetes, versioned Helm deployments, image-build CI,
+and a separate Argo CD environment with manual synchronization.
 
 ## Problem and implemented scope
 
@@ -75,7 +77,7 @@ expected outputs; the [policy report](day3-comparison-report.md) and
 | Engine-owned random streams and fresh per-run entities | Keeps experiments repeatable and failure calendars comparable across policies | [Simulation engine](../simulator/engine.py) |
 | Immutable event records and explicit KPI definitions | Makes lifecycle order and metric calculations inspectable | [Events](../simulator/events/event.py), [KPIs](../simulator/metrics/kpi.py) |
 | Priority wrapper with Normal lot aging | Allows Hot insertion while protecting long-waiting Normal lots from starvation | [Dispatch wrapper](../simulator/policies/hot_lot.py) |
-| Synchronous API with an isolated in-memory store | Keeps the MVP execution model simple and prevents partial-result publication | [Run service](../app/services/runs.py) |
+| Synchronous API with interchangeable memory/PostgreSQL stores | Commits complete results before success while retaining a simple local mode | [Run service](../app/services/runs.py), [PostgreSQL store](../app/services/postgres_run_store.py) |
 | Dashboard as an HTTP client | Exercises the same API used by external clients and keeps simulation logic in the backend | [Dashboard](../app/dashboard/main.py) |
 | Health-gated Compose startup and real browser checks | Verifies service connectivity and actual widget/chart behavior | [Compose](../compose.yaml), [browser acceptance](../scripts/smoke_browser.py) |
 
@@ -86,6 +88,23 @@ jobs passed for `2d83879`, including real Chromium acceptance:
 [verified workflow run](https://github.com/j22868706/sideproject_fabflow/actions/runs/39043904601).
 The Day 7 handoff commit `9867659` also passed both jobs:
 [successful delivery CI](https://github.com/j22868706/sideproject_fabflow/actions/runs/39044791273).
+
+## Kubernetes and persistence evidence
+
+| Capability | Accepted outcome | Evidence and limits |
+| --- | --- | --- |
+| Shared result storage | Two named API Pods independently return identical summary, metrics, and ordered events | [Cross-replica acceptance](k8s/day14-api-replicas.md); single DB and single node |
+| DB outage handling | Both APIs return 503 during outage; retained results recover with original PVC | [Persistence acceptance](k8s/day15-persistence-acceptance.md); no database HA |
+| Versioned deployment | Locally built ARM64 images loaded into kind; Helm uses explicit source SHA tags | [Deployment record](k8s/day19-versioned-deployment.md); CI builds but does not publish images |
+| Rolling-update observation | 2,376 requests, 5 failures over 300 seconds; command duration 6.818 seconds | [Raw evidence and method](k8s/day20-rolling-update.md); full-window sample, unconfirmed cause, not zero downtime |
+| API replacement | Three observed replica recoveries: 3.049 / 3.694 / 3.583 seconds; full-window failures 2 / 1 / 0 | [Recovery measurements](k8s/day22-pod-recovery.md); includes command/polling overhead, not HTTP downtime |
+| GitOps | Manual tag synchronization, drift correction, and Git revert accepted | [GitOps record](k8s/day25-gitops-sync.md); no auto-sync/self-heal acceptance |
+
+The [architecture report](k8s/day26-measurements-architecture.md) links original
+measurement files and explains the Day 21 correction: its localhost integrity
+checks reached Compose, so they are excluded from Helm rollback data evidence.
+The [Day 27 demonstration](k8s/day27-readme-demo.md) records successful tag-switch
+and rollback checks on both API Pods; its timed five-minute rehearsal is pending.
 
 ## Reuse in a project summary
 
@@ -99,17 +118,27 @@ failure/repair, AMHS capacity constraints, and event-based KPIs. Delivered a
 Docker Compose demo validated by 179 tests and real browser workflows; used
 paired synthetic experiments to show dispatch and transport bottleneck trade-offs.
 
+Extended the service with PostgreSQL result persistence, two API replicas,
+versioned Helm deployments on kind, and manual Argo CD synchronization. Verified
+cross-Pod result consistency and database-outage recovery, and preserved raw HTTP
+measurements for rolling updates and three API Pod replacement exercises.
+
 ## Demonstration and limits
 
-Start with `docker compose up --build --wait --wait-timeout 120`, then open
+Copy `.env.example` to ignored `.env` and set a local development password, then
+run `docker compose up --build --wait --wait-timeout 120` and open
 http://localhost:8501. Follow the [runbook](runbook.md) for dependencies, API
 addresses, evidence generation, result exports, and shutdown.
 
 The model uses synthetic inputs, fixed processing/travel times, and simplified
 routing. It omits recipe qualification, setups, physical vehicle paths, and
-stocker capacity. Results are process-local and disappear on API restart; use
-one API worker. There is no production performance claim, persistent storage,
-or public hosted deployment. Desktop Chrome and CI Chromium are verified;
+stocker capacity. Unconfigured local Python execution stores results in process
+memory; Compose/Kubernetes store completed results in PostgreSQL. In-flight
+simulations have no checkpoint or automatic retry. All Kubernetes components
+share one local node, PostgreSQL is a single instance, and its PVC is not a
+backup or protection against cluster loss. There is no production performance,
+zero-downtime, database-HA, or public-hosted-deployment claim.
+Desktop Chrome and CI Chromium are verified;
 mobile layouts and other browser engines have not been tested.
 
 The three selected PNGs are tracked in `docs/images/` for GitHub viewing. Raw

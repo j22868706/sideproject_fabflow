@@ -1,29 +1,68 @@
-# Day 10：PostgreSQL 開發環境
+# Day 10: PostgreSQL Development Environment
 
-狀態：設定與逐步操作驗收完成，依使用者提供的終端輸出與問答記錄。
-依據 `FabFlow_K8s_30天進度表.xlsx` Day 10；實際時數待填。
-本課只建立開發環境與驗證連線，尚未將 RunService 接到資料庫。
+Status: Configuration, connectivity acceptance, and guided review complete from
+learner output. Actual hours unrecorded. RunService still used memory at this milestone.
 
-## 本次變更
+## Configuration
 
-- `compose.yaml`：新增 PostgreSQL 17 的 db 服務，使用者與資料庫皆為 fabflow。
-- `postgres_data` 具名 volume 掛載 `/var/lib/postgresql/data`。
-- 初始化目錄唯讀掛載 `/docker-entrypoint-initdb.d`。
-- `.env` 保存本機密碼且被 Git 忽略；`.env.example` 只保存佔位值。
-- API 加入 PGHOST=db、PGPORT=5432、PGDATABASE/PGUSER=fabflow 與 PGPASSWORD。
-- `pyproject.toml` 加入 `psycopg[binary]>=3.2,<4.0`，重建 API 映像安裝驅動程式。
+Compose gained PostgreSQL 17 service db with database/user fabflow, named volume
+postgres_data at /var/lib/postgresql/data, and a read-only init directory at
+/docker-entrypoint-initdb.d. The ignored .env holds the local password; .env.example
+contains only a placeholder. Compose rejects an empty POSTGRES_PASSWORD.
+API uses PGHOST=db, PGPORT=5432, PGDATABASE/PGUSER=fabflow and PGPASSWORD.
+psycopg[binary]>=3.2,<4.0 was added and the API image rebuilt. DB has no published
+host port; use the Compose service name, not localhost. Environment configuration
+alone does not switch application storage.
 
-db 沒有對主機發布連接埠。API 在 Compose 網路以 db 服務名稱連線，
-不使用 localhost。Compose 要求 POSTGRES_PASSWORD 非空，否則停止並提示。
-設定了環境變數不代表應用程式已改用 PostgreSQL；模擬結果仍在 API 記憶體。
+## Observed setup and schema
 
-## 操作與實際結果
+Compose v5.4.0 initially had no running containers. The learner corrected db nesting,
+volumes mistakenly under environment, and the missing nonempty-password check.
+After local .env creation, config validation passed, the image downloaded,
+fabflow_postgres_data was created, and fabflow-db-1 started. pg_isready accepted
+connections; SQL returned database/user fabflow. Container Up alone is insufficient.
 
-開始時 `docker compose version` 為 v5.4.0，`docker compose ps` 沒有容器。
-使用者逐步加入 db、環境變數、volume 與初始化 SQL，修正 db 層級、
-volumes 誤放 environment 內的縮排，以及密碼變數缺少非空檢查。
+The Day 9 schema was added after DB first start, so it did not automatically run
+on the existing volume. A one-time psql invocation with ON_ERROR_STOP created
+completed_runs. Inspection showed five NOT NULL fields, the primary key, three
+JSON-shape constraints, and summary/key consistency. Initialization is for empty
+data directories, not migration; do not rerun CREATE TABLE against an existing table.
+After adding the mount and recreating the DB container, the SQL file was visible
+and to_regclass returned completed_runs. No simulation rows were inserted, so
+this verifies schema survival, not completed-result persistence. Empty-volume
+automatic initialization was not separately tested here.
 
-建立本機 `.env` 後：
+## API connectivity and secrets
+
+The learner rebuilt API, initially health: starting (no final healthy output
+supplied), and executed real psycopg queries inside it. Results were
+('fabflow', 'fabflow') and ('completed_runs',), proving driver, network,
+authentication, and table visibility, not RunStore save/get.
+
+.env was confirmed ignored and absent from git status. A trailing whitespace issue
+on postgres_data was reported fixed; the assistant also restored final newlines.
+The learner understood init scripts do not rerun on populated data, container
+replacement retains a separately retained volume, ordinary down preserves it,
+and down -v deletes it. Volume deletion was not performed.
+CI's disposable test DB received a test-only password so nonempty validation would
+not break existing container checks; no real local credential was committed or
+reported. README/runbook gained .env setup steps. Remote CI was not verified here.
+
+## Verification and handoff
+
+Assistant checks passed Ruff lint/format, pytest (179 passed, one upstream
+TestClient/HTTPX deprecation warning), git diff --check, and Compose config --quiet
+on the Python 3.14 host environment. Python 3.12 full tests, container HTTP smoke,
+and browser acceptance were not rerun. A Day 9 example formatting gap was fixed.
+Workbook Days 8–10 were pending at this point. A local DB/volume is not HA or
+backup. Day 11 implemented complete-result writes and commit-before-201 behavior.
+
+## Recorded commands and examples
+
+These blocks preserve the milestone procedures and recorded output in their original
+order. They describe the historical configuration; review current manifests and
+prerequisites before repeating them. Resource names and IP addresses are observations,
+not fixed values.
 
 ```bash
 docker compose config --quiet
@@ -34,51 +73,21 @@ docker compose exec db psql -U fabflow -d fabflow \
   -c "SELECT current_database(), current_user;"
 ```
 
-使用者輸出確認映像下載成功、fabflow_postgres_data 建立、fabflow-db-1 啟動。
-pg_isready 回 accepting connections，SQL 回傳 fabflow / fabflow。
-容器 Up 本身不等於資料庫已可用，因此另做 readiness 與查詢驗證。
-
-## Schema 初始化
-
-使用者建立 `deployments/postgres/init/001_completed_runs.sql`，內容沿用
-Day 9：run_id 主鍵、三個 JSONB、created_at、JSON 形狀與 ID 一致性約束。
-
-本次先啟動 DB，之後才加入初始化 SQL，所以既有 volume 不會自動執行腳本。
-使用者手動套用一次：
-
 ```bash
 docker compose exec -T db psql -U fabflow -d fabflow \
   -v ON_ERROR_STOP=1 < deployments/postgres/init/001_completed_runs.sql
 docker compose exec db psql -U fabflow -d fabflow -c '\d completed_runs'
 ```
 
-實際回傳 CREATE TABLE；表結構列出五個 NOT NULL 欄位、run_id 主鍵、
-三個 JSON 形狀 CHECK 及 summary.run_id 非 NULL 且等於主鍵的 CHECK。
-此腳本供空資料目錄首次初始化使用，不是 migration，也不應在已有表時重跑。
-
-加入掛載後重新執行 `docker compose up -d db`，容器中可見
-`/docker-entrypoint-initdb.d/001_completed_runs.sql`。再次查詢：
-
 ```bash
 docker compose exec db psql -U fabflow -d fabflow \
   -c "SELECT to_regclass('public.completed_runs');"
 ```
 
-回傳 completed_runs，確認本次容器重建後表結構仍保留。
-本次未插入模擬結果，因此不能宣稱已驗證結果資料重建後持久化。
-也尚未實測空白 volume 的自動初始化路徑。
-
-## API 容器連線
-
-使用者重建 API：
-
 ```bash
 docker compose up -d --build api
 docker compose ps api db
 ```
-
-提供的狀態為 API Up、health: starting，DB Up；未另提供 API healthy 的最終輸出。
-接著在 API 容器執行：
 
 ```bash
 docker compose exec -T api python - <<'PY'
@@ -93,39 +102,7 @@ with psycopg.connect(connect_timeout=5) as conn:
 PY
 ```
 
-使用者分兩次執行上述查詢，分別得到：
-
 ```text
 ('fabflow', 'fabflow')
 ('completed_runs',)
 ```
-
-這驗證 Python 驅動程式、Compose 服務連線、帳密與表可見性，
-尚未實作或測試 RunStore.save/get 的 PostgreSQL adapter。
-
-## 敏感設定、檢查與觀念
-
-`git check-ignore .env` 回傳 .env，且使用者提供的 git status 沒有 .env。
-`.env.example` 以佔位值提交；不記錄或提交真實開發密碼。
-Compose config --quiet 通過；git diff --check 曾指出 postgres_data 行尾空白，
-使用者回報已修正。交付前再由助理檢查並補齊文字檔末尾換行。
-
-使用者確認初始化腳本不會在既有資料目錄重啟時重跑。
-容器與 volume 的生命週期問答最初答錯，補充後使用者確認：
-容器重建但原 volume 未刪除，資料仍保留。普通 down 保留 volume；
-down -v 會刪除具名 volume，本次未執行刪除。
-
-交付時同步在 CI containers job 設定僅供一次性測試 DB 的密碼，避免新增的
-Compose 非空檢查阻斷既有容器驗收；README 與 runbook 補上 .env 設定步驟。
-這不使用或公開本機真實憑證，遠端 CI 結果另以實際 workflow 為準。
-
-單實例本機 DB 與 volume 不等於備份或高可用。原始 Excel 尚未同步
-Day 8–10 狀態，完成紀錄以各課 Markdown 為準。下一課 Day 11
-逐步實作完整結果寫入，確認提交成功後才回 201；仍依一步一步教學方式進行。
-
-## 交付前本機驗證
-
-助理執行 Ruff lint、format check、pytest -q、git diff --check 與
-Compose config --quiet，皆通過。Pytest 為 179 passed，使用既有 Python 3.14
-虛擬環境；有一項上游 TestClient/HTTPX 棄用警告。本次未重跑 Python 3.12、
-容器 HTTP smoke 或瀏覽器驗收。Ruff 另補齊 Day 9 Python 範例的空行格式。
